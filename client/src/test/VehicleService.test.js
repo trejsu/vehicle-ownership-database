@@ -1,8 +1,10 @@
 import VehicleService from "../services/VehicleService";
 import Web3 from "web3";
+import truffleConfig from "../../../truffle-config";
 
-// todo: get host from config
-const provider = new Web3.providers.HttpProvider("http://127.0.0.1:7545");
+const host = truffleConfig.networks.develop.host;
+const port = truffleConfig.networks.develop.port;
+const provider = new Web3.providers.HttpProvider('http://' + host + ':' + port);
 const web3 = new Web3(provider);
 
 it('should fail when instantiated through constructor', () => {
@@ -18,8 +20,19 @@ it('addCar should return promise with transaction', async () => {
 });
 
 // todo: change tests to be independent
-it('getPendingApprovals should return list of vehicle ids', async () => {
+// todo: assert retrned objects
+it('getPendingApprovals should return list of vehicles', async () => {
   const service = await VehicleService.init(web3);
   const pendings = await service.getPendingApprovals();
   console.log(pendings);
+  expect(pendings.every(p => p.length < 7)).toBeTruthy();
+});
+
+// todo: change tests to be independent
+// todo: assert returned objects
+it('getUserPendingApprovals should return list of vehicles owned by current user', async () => {
+  const service = await VehicleService.init(web3);
+  const pendings = await service.getUserPendingApprovals();
+  console.log(pendings);
+  expect(pendings.every(p => p.length < 7)).toBeTruthy();
 });
