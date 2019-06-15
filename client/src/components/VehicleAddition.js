@@ -18,11 +18,40 @@ class VehicleAddition extends Component {
         });
     };
 
+    handleModelChanged = (event) => {
+        this.setState({
+            vehicleModel: event.target.value
+        })
+    };
+
+    handleCarVinChanged = (event) => {
+        this.setState({
+            carVin: event.target.value
+        })
+    };
+
+    handleBikeSerialChanged = (event) => {
+        this.setState({
+            bikeSerial: event.target.value
+        })
+    };
+
     handleRequestClicked = () => {
-        console.log("request", {
-            type: this.state.vehicleType,
-            model: this.state.vehicleModel
-        });
+        switch (this.state.vehicleType) {
+            case "car":
+                console.log("requestCar",
+                    (({vehicleType, vehicleModel, carVin}) =>
+                        ({vehicleType, vehicleModel, carVin}))(this.state));
+                break;
+            case "bike":
+                console.log("requestBike",
+                    (({vehicleType, vehicleModel, bikeSerial}) =>
+                        ({vehicleType, vehicleModel, bikeSerial}))(this.state));
+                break;
+            default:
+                console.log("error with state: ", this.state.vehicleType);
+
+        }
     };
 
     render() {
@@ -41,19 +70,51 @@ class VehicleAddition extends Component {
                             <option value="car">Car</option>
                             <option value="bike">Bike</option>
                         </select>
+
+                        <div>
+                            <input
+                                placeholder={"Model"}
+                                defaultValue={this.state.vehicleModel}
+                                onChange={this.handleModelChanged}/>
+                        </div>
+
+                        {this.state.vehicleType === 'car' &&
+                        <div>
+                            <input
+                                placeholder={"VIN"}
+                                defaultValue={this.state.carVin}
+                                onChange={this.handleCarVinChanged}/>
+                        </div>}
+
+                        {this.state.vehicleType === 'bike' &&
+                        <div>
+                            <input
+                                placeholder={"Serial number"}
+                                defaultValue={this.state.bikeSerial}
+                                onChange={this.handleBikeSerialChanged}/>
+                        </div>}
                     </div>
                 </div>
                 <div>
                     {this.state.vehicleType &&
                     <div>
                         Selected vehicle type = '{this.state.vehicleType}'
-                    </div>
-                    }
+                    </div>}
+
                     {this.state.vehicleModel &&
                     <div>
                         Selected vehicle model = '{this.state.vehicleModel}'
-                    </div>
-                    }
+                    </div>}
+
+                    {this.state.vehicleType === 'car' && this.state.carVin &&
+                    <div>
+                        VIN = '{this.state.carVin}
+                    </div>}
+
+                    {this.state.vehicleType === 'bike' && this.state.bikeSerial &&
+                    <div>
+                        Serial = '{this.state.bikeSerial}
+                    </div>}
                 </div>
 
                 <button type={"button"}
