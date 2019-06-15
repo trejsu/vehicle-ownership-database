@@ -3,6 +3,7 @@ import React, {Component} from "react";
 export default class VehicleAddition extends Component {
     state = {};
     defaultVehicleType = "car";
+    vehicleService = this.props.vehicleService;
 
     componentDidMount = async () => {
         this.setState({
@@ -35,20 +36,22 @@ export default class VehicleAddition extends Component {
     };
 
     handleRequestClicked = () => {
+        console.log(((({vehicleType, vehicleModel, carVin}) =>
+            ({vehicleType, vehicleModel, carVin}))(this.state)));
+
         switch (this.state.vehicleType) {
             case "car":
-                console.log("requestCar",
+                this.vehicleService.addCar(
                     (({vehicleType, vehicleModel, carVin}) =>
                         ({vehicleType, vehicleModel, carVin}))(this.state));
                 break;
             case "bike":
-                console.log("requestBike",
+                this.vehicleService.addBike(
                     (({vehicleType, vehicleModel, bikeSerial}) =>
                         ({vehicleType, vehicleModel, bikeSerial}))(this.state));
                 break;
             default:
                 console.log("error with state: ", this.state.vehicleType);
-
         }
     };
 
