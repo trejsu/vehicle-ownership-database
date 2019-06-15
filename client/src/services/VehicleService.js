@@ -34,7 +34,7 @@ export default class VehicleService {
     return this.web3.eth.getAccounts()
     .then(accounts =>
       this.contract.methods.addVehicle(
-        this.web3.toASCII(id),
+        this.web3.utils.fromAscii(id),
         vehicle.vehicleModel,
         this.typeMapper.getVehicleCode(vehicle.vehicleType)
       ).send({from: accounts[0]}));
