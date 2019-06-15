@@ -3,12 +3,10 @@ import React, {Component} from "react";
 export default class VehicleAddition extends Component {
     state = {};
     defaultVehicleType = "car";
-    defaultVehicleModel = undefined;
 
     componentDidMount = async () => {
         this.setState({
-            vehicleType: this.defaultVehicleType,
-            vehicleModel: this.defaultVehicleModel
+            vehicleType: this.defaultVehicleType
         });
     };
 
