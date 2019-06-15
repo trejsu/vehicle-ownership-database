@@ -26,15 +26,15 @@ export default class VehicleService {
     });
   }
 
-  addCar = car => this.addVehicle(car, car => car.carVin);
+  addCar = car => this.addVehicle(car, car.carVin);
 
-  addBike = bike => this.addVehicle(bike, bike => bike.bikeSerial);
+  addBike = bike => this.addVehicle(bike, bike.bikeSerial);
 
-  addVehicle(vehicle, idExtractor) {
+  addVehicle(vehicle, id) {
     return this.web3.eth.getAccounts()
     .then(accounts =>
       this.contract.methods.addVehicle(
-        idExtractor(),
+        id,
         vehicle.vehicleModel,
         this.typeMapper.getVehicleCode(vehicle.vehicleType)
       ).send({from: accounts[0]}));
