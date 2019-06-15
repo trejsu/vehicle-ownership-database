@@ -30,7 +30,7 @@ export default class VehicleService {
 
     addBike = bike => this.addVehicle(bike, bike.bikeSerial);
 
-    async addVehicle(vehicle, id) {
+    addVehicle(vehicle, id) {
         return this.web3.eth.getAccounts()
             .then(accounts => {
                 return this.contract.methods.addVehicle(
