@@ -59,7 +59,7 @@ export default class VehicleService {
 
   async getUserPendingApprovals() {
     const owner = (await this.web3.eth.getAccounts())[0];
-    return this.getPendingApprovals()
+    return (await this.getPendingApprovals())
       .filter(vehicle => vehicle.owner === owner);
   }
 }
