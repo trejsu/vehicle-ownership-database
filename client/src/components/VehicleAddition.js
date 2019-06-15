@@ -3,13 +3,26 @@ import React, {Component} from "react";
 class VehicleAddition extends Component {
     state = {};
     defaultVehicleType = "car";
+    defaultVehicleModel = undefined;
 
     componentDidMount = async () => {
-        this.setState({vehicleType: this.defaultVehicleType})
+        this.setState({
+            vehicleType: this.defaultVehicleType,
+            vehicleModel: this.defaultVehicleModel
+        });
     };
 
     handleVehicleTypeChanged = (event) => {
-        this.setState({vehicleType: event.target.value})
+        this.setState({
+            vehicleType: event.target.value
+        });
+    };
+
+    handleRequestClicked = () => {
+        console.log("request", {
+            type: this.state.vehicleType,
+            model: this.state.vehicleModel
+        });
     };
 
     render() {
@@ -19,11 +32,11 @@ class VehicleAddition extends Component {
                         <span>
                             Select type of vehicle
                         </span>
-                    <div className="col-sm-3">
+                    <div className="col-sm-">
                         <select
                             className="form-control"
-                            onChange={this.handleVehicleTypeChanged}
                             defaultValue={this.state.vehicleType}
+                            onChange={this.handleVehicleTypeChanged}
                         >
                             <option value="car">Car</option>
                             <option value="bike">Bike</option>
@@ -31,8 +44,25 @@ class VehicleAddition extends Component {
                     </div>
                 </div>
                 <div>
-                    Selected type of vehicle = '{this.state.vehicleType}'
+                    {this.state.vehicleType &&
+                    <div>
+                        Selected vehicle type = '{this.state.vehicleType}'
+                    </div>
+                    }
+                    {this.state.vehicleModel &&
+                    <div>
+                        Selected vehicle model = '{this.state.vehicleModel}'
+                    </div>
+                    }
                 </div>
+
+                <button type={"button"}
+                        className={"btn btn-primary"}
+                        style={{margin: "20px"}}
+                        onClick={this.handleRequestClicked}
+                >
+                    Request
+                </button>
             </div>
         );
     }
