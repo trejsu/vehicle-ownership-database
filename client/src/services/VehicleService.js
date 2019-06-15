@@ -1,4 +1,4 @@
-import SimpleStorageContract from "../contracts/SimpleStorage";
+import VehicleOwnershipDatabase from "../contracts/VehicleOwnershipDatabase";
 import VehicleTypeMapper from "../utils/vehicleTypeMapper";
 
 export default class VehicleService {
@@ -18,9 +18,9 @@ export default class VehicleService {
 
   static initContract(web3) {
     return web3.eth.net.getId().then(networkId => {
-      const deployedNetwork = SimpleStorageContract.networks[networkId];
+      const deployedNetwork = VehicleOwnershipDatabase.networks[networkId];
       return new web3.eth.Contract(
-        SimpleStorageContract.abi,
+        VehicleOwnershipDatabase.abi,
         deployedNetwork && deployedNetwork.address,
       );
     });
