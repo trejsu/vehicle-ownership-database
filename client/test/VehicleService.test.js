@@ -1,4 +1,4 @@
-import VehicleService from "../services/VehicleService";
+import VehicleService from "../src/services/VehicleService";
 
 it('has addCar and addBike methods', () => {
   const service = new VehicleService();
