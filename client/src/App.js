@@ -1,9 +1,11 @@
 import React, {Component} from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import getWeb3 from "./utils/getWeb3";
 
 import VehicleService from "./services/VehicleService";
-
 import VehicleAddition from "./components/VehicleAddition";
+import AllPendingVehicles from "./components/AllPendingVehicles";
 import "./App.css";
 
 class App extends Component {
@@ -26,9 +28,26 @@ class App extends Component {
 
     render() {
         if (!this.state.web3) {
-            return <div>Loading Web3, accounts, and contract...</div>;
+            return (
+                <div>
+                    Loading Web3, accounts, and contract...
+                </div>
+            );
         } else {
-            return <VehicleAddition vehicleService={this.state.vehicleService}/>
+            return (
+                <div className={"row"}>
+                    <div className={"col-sm-4"}>
+                        <VehicleAddition
+                            vehicleService={this.state.vehicleService}
+                        />
+                    </div>
+                    <div className={"col-sm-4"}>
+                        <AllPendingVehicles
+                            vehicleService={this.state.vehicleService}
+                        />
+                    </div>
+                </div>
+            )
         }
     }
 }

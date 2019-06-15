@@ -54,72 +54,66 @@ export default class VehicleAddition extends Component {
 
     render() {
         return (
-            <div className={"row"}>
-                <div style={{margin: "20px"}}>
+            <div className={"col-sm-6 offset-sm-3"}>
                         <span>
                             Select type of vehicle
                         </span>
-                    <div className="col-sm-">
-                        <select
-                            className="form-control"
-                            defaultValue={this.state.vehicleType}
-                            onChange={this.handleVehicleTypeChanged}
-                        >
-                            <option value="car">Car</option>
-                            <option value="bike">Bike</option>
-                        </select>
-
-                        <div>
-                            <input
-                                placeholder={"Model"}
-                                defaultValue={this.state.vehicleModel}
-                                onChange={this.handleModelChanged}/>
-                        </div>
-
-                        {this.state.vehicleType === 'car' &&
-                        <div>
-                            <input
-                                placeholder={"VIN"}
-                                defaultValue={this.state.carVin}
-                                onChange={this.handleCarVinChanged}/>
-                        </div>}
-
-                        {this.state.vehicleType === 'bike' &&
-                        <div>
-                            <input
-                                placeholder={"Serial number"}
-                                defaultValue={this.state.bikeSerial}
-                                onChange={this.handleBikeSerialChanged}/>
-                        </div>}
-                    </div>
-                </div>
                 <div>
-                    {this.state.vehicleType &&
+                    <select
+                        className="form-control"
+                        defaultValue={this.state.vehicleType}
+                        onChange={this.handleVehicleTypeChanged}
+                    >
+                        <option value="car">Car</option>
+                        <option value="bike">Bike</option>
+                    </select>
+
                     <div>
-                        Selected vehicle type = '{this.state.vehicleType}'
+                        <input
+                            placeholder={"Model"}
+                            defaultValue={this.state.vehicleModel}
+                            onChange={this.handleModelChanged}/>
+                    </div>
+
+                    {this.state.vehicleType === 'car' &&
+                    <div>
+                        <input
+                            placeholder={"VIN"}
+                            defaultValue={this.state.carVin}
+                            onChange={this.handleCarVinChanged}/>
                     </div>}
 
-                    {this.state.vehicleModel &&
+                    {this.state.vehicleType === 'bike' &&
                     <div>
-                        Selected vehicle model = '{this.state.vehicleModel}'
-                    </div>}
-
-                    {this.state.vehicleType === 'car' && this.state.carVin &&
-                    <div>
-                        VIN = '{this.state.carVin}
-                    </div>}
-
-                    {this.state.vehicleType === 'bike' && this.state.bikeSerial &&
-                    <div>
-                        Serial = '{this.state.bikeSerial}
+                        <input
+                            placeholder={"Serial number"}
+                            defaultValue={this.state.bikeSerial}
+                            onChange={this.handleBikeSerialChanged}/>
                     </div>}
                 </div>
+                {this.state.vehicleType &&
+                <div>
+                    Selected vehicle type = '{this.state.vehicleType}'
+                </div>}
+
+                {this.state.vehicleModel &&
+                <div>
+                    Selected vehicle model = '{this.state.vehicleModel}'
+                </div>}
+
+                {this.state.vehicleType === 'car' && this.state.carVin &&
+                <div>
+                    VIN = '{this.state.carVin}
+                </div>}
+
+                {this.state.vehicleType === 'bike' && this.state.bikeSerial &&
+                <div>
+                    Serial = '{this.state.bikeSerial}
+                </div>}
 
                 <button type={"button"}
                         className={"btn btn-primary"}
-                        style={{margin: "20px"}}
-                        onClick={this.handleRequestClicked}
-                >
+                        onClick={this.handleRequestClicked}>
                     Request
                 </button>
             </div>
