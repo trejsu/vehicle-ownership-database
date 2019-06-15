@@ -1,16 +1,19 @@
 import SimpleStorageContract from "../contracts/SimpleStorage";
+import VehicleTypeMapper from "../utils/vehicleTypeMapper";
 
 export default class VehicleService {
-  constructor(contract) {
-    if (typeof contract === 'undefined') {
+  constructor(web3, contract) {
+    if (typeof web3 === 'undefined') {
       throw new Error('Cannot instantiate VehicleService directly. Use init function instead.');
     }
+    this.web3 = web3;
     this.contract = contract;
+    this.typeMapper = new VehicleTypeMapper();
   }
 
   static init(web3) {
     return VehicleService.initContract(web3)
-    .then(contract => new VehicleService(contract));
+    .then(contract => new VehicleService(web3, contract));
   }
 
   static initContract(web3) {
@@ -23,11 +26,18 @@ export default class VehicleService {
     });
   }
 
-  addCar(car) {
-    console.log('Adding car.');
+  addCar = car => this.addVehicle(car, car => car.carVim);
+
+  addBike = bike => this.addVehicle(bike, bike => bike.bikeSerial);
+
+  addVehicle(vehicle, idExtractor) {
+    return this.web3.eth.getAccounts()
+    .then(accounts =>
+      this.contract.methods.addVehicle(
+        idExtractor(),
+        vehicle.vehicleModel,
+        this.typeMapper.getVehicleCode(vehicle.vehicleType)
+      ).send({from: accounts[0]}));
   }
 
-  addBike(bike) {
-    console.log('Adding bike.');
-  }
 }
