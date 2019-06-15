@@ -43,12 +43,23 @@ export default class VehicleService {
   }
 
   async getPendingApprovals() {
-    return (await this.contract.methods.getPendingIds().call())
-      .map(this.web3.utils.toAscii)
-      .map(id => id.replace(/\u0000/g, ''));
+    const pendingIds = (await this.contract.methods.getPendingIds().call());
+    const vehicles = [];
+    for (let i = 0; i < pendingIds.length; i++) {
+      const vehicle = await this.contract.methods.waitingForApprovals(pendingIds[i]).call();
+      vehicles.push({
+        id: this.web3.utils.toAscii(pendingIds[i]).replace(/\u0000/g, ''),
+        type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
+        model: vehicle[1],
+        owner: vehicle[2]
+      });
+    }
+    return vehicles;
   }
 
-  getUserPendingApprovals() {
-
+  async getUserPendingApprovals() {
+    const owner = (await this.web3.eth.getAccounts())[0];
+    return this.getPendingApprovals()
+      .filter(vehicle => vehicle.owner === owner);
   }
 }
