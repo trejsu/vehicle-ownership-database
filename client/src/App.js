@@ -9,7 +9,7 @@ import AllPendingVehicles from "./components/AllPendingVehicles";
 import "./App.css";
 
 class App extends Component {
-    state = {web3: null, vehicleService: null};
+    state = {web3: null, vehicleService: null, adding: false, browsing: false};
 
     componentDidMount = async () => {
         try {
@@ -26,14 +26,22 @@ class App extends Component {
         }
     };
 
-    render() {
-        if (!this.state.web3) {
-            return (
-                <div>
-                    Loading Web3, accounts, and contract...
-                </div>
-            );
-        } else {
+    chooseAdding = () => {
+        this.setState({
+            adding: true,
+            browsing: false
+        })
+    };
+
+    chooseBrowsing = () => {
+        this.setState({
+            browsing: true,
+            adding: false
+        })
+    };
+
+    getProperComponents = () => {
+        if (this.state.browsing) {
             return (
                 <div className={"row"}>
                     <div className={"col-sm-6"}>
@@ -46,6 +54,40 @@ class App extends Component {
                             vehicleService={this.state.vehicleService}
                         />
                     </div>
+                </div>
+            )
+        }
+    };
+
+
+    render() {
+        if (!this.state.web3) {
+            return (
+                <div>
+                    Loading Web3, accounts, and contract...
+                </div>
+            );
+        } else {
+
+            return (
+                <div>
+                    <div className={"row"}>
+                        <div className={"col-sm-4"}>
+                            <button type={"button"}
+                                    className={"btn btn-primary"}
+                                    onClick={this.chooseAdding}>
+                                Add
+                            </button>
+                        </div>
+                        <div className={"col-sm-4"}>
+                            <button type={"button"}
+                                    className={"btn btn-primary"}
+                                    onClick={this.chooseBrowsing}>
+                                Browse
+                            </button>
+                        </div>
+                    </div>
+                    {this.getProperComponents()}
                 </div>
             )
         }
