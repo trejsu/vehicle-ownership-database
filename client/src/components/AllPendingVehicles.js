@@ -1,29 +1,35 @@
 import React, {Component} from "react";
 
+import VehicleInfo from "./VehicleInfo";
+
 export default class AllPendingVehicles extends Component {
+    state = {pendingApprovalVehicles: []};
+    vehicleService = this.props.vehicleService;
 
     componentDidMount = async () => {
-        this.somePromise()
-            .then((response) => {
-                console.log(response);
-            })
-            .catch(err => {
-                console.log(err);
+        console.log(this.vehicleService);
+        this.vehicleService.getPendingApprovals()
+            .then(response => {
+                this.setState({pendingApprovalVehicles: response});
             });
-    };
-
-    somePromise = () => {
-        return new Promise(function (resolve, reject) {
-            setTimeout(function () {
-                resolve(45);
-            }, 2000);
-        })
     };
 
     render() {
         return (
             <div>
-                Something went wrong?
+                <div className={"all-pending-vehicles-title"}>
+                    List of all pending approvals
+                </div>
+                {this.state.pendingApprovalVehicles.length > 0 &&
+                <div>
+                    {this.state.pendingApprovalVehicles.map(vehicle =>
+                        <VehicleInfo key={vehicle.id} vehicle={vehicle}/>)}
+                </div>}
+
+                {this.state.pendingApprovalVehicles.length === 0 &&
+                <div>
+                    Something went wrong?
+                </div>}
             </div>
         );
     }

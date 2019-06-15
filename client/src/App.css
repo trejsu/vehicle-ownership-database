@@ -1,0 +1,14 @@
+.vehicle-addition-panel {
+    width: 204px;
+}
+
+.all-pending-vehicles-title {
+    text-align: center;
+    font-size: 20px;
+}
+
+.vehicle-info {
+    padding: 10px;
+    background-color: #00F000;
+    border: 5px solid black;
+}

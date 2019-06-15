@@ -36,12 +36,12 @@ class App extends Component {
         } else {
             return (
                 <div className={"row"}>
-                    <div className={"col-sm-4"}>
+                    <div className={"col-sm-6"}>
                         <VehicleAddition
                             vehicleService={this.state.vehicleService}
                         />
                     </div>
-                    <div className={"col-sm-4"}>
+                    <div className={"col-sm-6"}>
                         <AllPendingVehicles
                             vehicleService={this.state.vehicleService}
                         />

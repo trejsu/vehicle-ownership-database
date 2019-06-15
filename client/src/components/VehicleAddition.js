@@ -58,7 +58,7 @@ export default class VehicleAddition extends Component {
                         <span>
                             Select type of vehicle
                         </span>
-                <div>
+                <div className={"vehicle-addition-panel"}>
                     <select
                         className="form-control"
                         defaultValue={this.state.vehicleType}
