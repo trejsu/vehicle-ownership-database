@@ -43,12 +43,12 @@ export default class VehicleAddition extends Component {
             case "car":
                 this.vehicleService.addCar(
                     (({vehicleType, vehicleModel, carVin}) =>
-                        ({vehicleType, vehicleModel, carVin}))(this.state));
+                        ({vehicleType, vehicleModel, carVin}))(this.state)).then(result => console.log(result));
                 break;
             case "bike":
                 this.vehicleService.addBike(
                     (({vehicleType, vehicleModel, bikeSerial}) =>
-                        ({vehicleType, vehicleModel, bikeSerial}))(this.state));
+                        ({vehicleType, vehicleModel, bikeSerial}))(this.state)).then(result => console.log(result));
                 break;
             default:
                 console.log("error with state: ", this.state.vehicleType);

@@ -38,9 +38,6 @@ export default class VehicleService {
                     vehicle.vehicleModel,
                     this.typeMapper.getVehicleCode(vehicle.vehicleType)
                 ).send({from: accounts[0]})
-                    .on("transactionHash", (hash) => {
-                        console.log("hash", hash)
-                    })
             });
     }
 
