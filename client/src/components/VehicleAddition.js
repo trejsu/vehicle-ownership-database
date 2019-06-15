@@ -36,9 +36,6 @@ export default class VehicleAddition extends Component {
     };
 
     handleRequestClicked = () => {
-        console.log(((({vehicleType, vehicleModel, carVin}) =>
-            ({vehicleType, vehicleModel, carVin}))(this.state)));
-
         switch (this.state.vehicleType) {
             case "car":
                 this.vehicleService.addCar(
