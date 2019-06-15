@@ -7,7 +7,7 @@ const web3 = new Web3(provider);
 
 it('has addCar and addBike methods', async () => {
   const service = await VehicleService.init(web3);
-  service.addCar({vehicleType: "car", vehicleModel: "model", carVim: "xxx"});
+  service.addCar({vehicleType: "car", vehicleModel: "model", carVin: "xxx"});
   service.addBike({vehicleType: "bike", vehicleModel: "model", bikeSerial: "xxx"});
 });
 

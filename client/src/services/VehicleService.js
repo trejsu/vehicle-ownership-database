@@ -26,7 +26,7 @@ export default class VehicleService {
     });
   }
 
-  addCar = car => this.addVehicle(car, car => car.carVim);
+  addCar = car => this.addVehicle(car, car => car.carVin);
 
   addBike = bike => this.addVehicle(bike, bike => bike.bikeSerial);
 
