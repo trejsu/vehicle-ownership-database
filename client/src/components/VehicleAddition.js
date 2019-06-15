@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 
-class VehicleAddition extends Component {
+export default class VehicleAddition extends Component {
     state = {};
     defaultVehicleType = "car";
     defaultVehicleModel = undefined;
@@ -128,5 +128,3 @@ class VehicleAddition extends Component {
         );
     }
 }
-
-export default VehicleAddition;
