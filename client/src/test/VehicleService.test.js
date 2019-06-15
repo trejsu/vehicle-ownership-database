@@ -16,3 +16,10 @@ it('addCar should return promise with transaction', async () => {
   return service.addCar({vehicleType: "car", vehicleModel: "model", carVin: carVin})
     .then(tx => expect(tx).not.toBeUndefined());
 });
+
+// todo: change tests to be independent
+it('getPendingApprovals should return list of vehicle ids', async () => {
+  const service = await VehicleService.init(web3);
+  const pendings = await service.getPendingApprovals();
+  console.log(pendings);
+});
