@@ -13,10 +13,14 @@ contract("VehicleOwnershipDatabase", accounts => {
     await vehicleOwnershipDatabaseInstance.addVehicle(id, carModel, vehicleType, { from: accounts[0] });
 
     const storedVehicle = await vehicleOwnershipDatabaseInstance.waitingForApprovals.call(id);
+    const pendingIds = await vehicleOwnershipDatabaseInstance.getPendingIds.call();
+    const returnedId = web3.utils.toAscii(pendingIds[0]).replace(/\u0000/g, '');
+    console.log(returnedId);
 
     assert.equal(storedVehicle[0].toNumber(), 0, "Car type should be stored.");
     assert.equal(storedVehicle[1], carModel, "Car model should be stored.");
     assert.equal(storedVehicle[2], accounts[0], "Car owner should be stored.");
     assert.equal(storedVehicle[3], true, "Car should exist.");
+    assert.equal(returnedId, carVin, "Vin should be added to ids list.");
   });
 });
