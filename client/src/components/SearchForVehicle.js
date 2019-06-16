@@ -90,7 +90,7 @@ export default class SearchForVehicle extends Component {
                         <button type={"button"}
                                 className={"btn btn-primary"}
                                 onClick={this.handleRequestClicked}>
-                            Request
+                            Search
                         </button>
                     </div>
 
