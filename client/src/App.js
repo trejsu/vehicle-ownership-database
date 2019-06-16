@@ -41,7 +41,7 @@ class App extends Component {
             );
         } else {
             return (
-                <div className={"row"}>
+                <div className={"row"} id={"main"}>
                     <div className={"col-lg-8 offset-lg-2 col-md-8 offset-md-2 col-sm-10 offset-sm-1 col-xs-12"}>
                         <NavigationBar
                             onNavigationChange={this.onNavigationChange.bind(this)}

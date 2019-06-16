@@ -61,7 +61,7 @@ export default class NavigationBar extends Component {
     render() {
         return (
             <div className={"row navigation-panel"}>
-                <div className={"col-sm-4 offset-sm-4"}>
+                <div className={"col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-6 offset-sm-3 col-xs-12"}>
                     <div className={"row"}>
                         {this.navigationOptions.map(option =>
                             this.getElement(option))
