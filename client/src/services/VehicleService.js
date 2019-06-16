@@ -51,7 +51,6 @@ export default class VehicleService {
         return ids.map(x => this.fromBytesWithReplace(x));
     }
 
-
     async getPendingApprovals() {
         console.log('[VEHICLE SERVICE] Retrieving all pending approvals...');
         const pendingIds = (await this.contract.methods.getPendingIds().call());
@@ -224,6 +223,15 @@ export default class VehicleService {
             .then(response => {
                 return !response.includes(id);
             });
+    }
+
+    async isIdAvailable(id) {
+        const registeredIds = (await this.getRegisteredIdsWithReplaced());
+        const pendingIds = (await this.getPendingIdsWithReplaced());
+
+        return !registeredIds
+            .concat(pendingIds)
+            .includes(id);
     }
 
     toBytes = x => this.web3.utils.fromAscii(x);

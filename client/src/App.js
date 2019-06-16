@@ -17,7 +17,7 @@ class App extends Component {
         this.state = {
             web3: null,
             vehicleService: null,
-            page: "private",
+            page: null,
             account: null,
             intervalId: null
         };

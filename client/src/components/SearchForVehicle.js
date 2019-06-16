@@ -125,9 +125,8 @@ export default class SearchForVehicle extends Component {
                 this.getNotFound() :
                 this.getErrorMessage()) :
             (this.state.downloaded ?
-                (this.state.vehicle ?
-                    this.getVehicleInfo() :
-                    this.getVehicleNotFoundInfo()) :
+                (this.state.vehicle &&
+                    this.getVehicleInfo()) :
                 null);
     };
 
