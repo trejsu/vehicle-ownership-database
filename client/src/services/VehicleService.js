@@ -138,19 +138,34 @@ export default class VehicleService {
         return vehiclesToApprove;
     }
 
-    // todo: implement instead of stub
     async searchForVehicle(id) {
-        const currentUser = (await this.web3.eth.getAccounts())[0];
-        return new Promise((resolve) => {
-            const owner = "0x1673A70D48E4aB1eB7c3391EF69DF5eb818147a5";
-            resolve({
-                id: id,
-                type: "car",
-                model: "model1",
-                owner: owner,
-                approvable: currentUser !== owner
-            })
-        });
+        const vehicleFromRegistry = await this.contract.methods.vehicleRegistry(this.toBytes(id)).call();
+
+        if(vehicleFromRegistry[3]) {
+            return this.formatVehicle(id, vehicleFromRegistry, false)
+        }
+
+        const vehicleFromPendings = await this.contract.methods.waitingForApprovals(this.toBytes(id)).call();
+
+        if(vehicleFromPendings[3]) {
+            const currentUser = (await this.web3.eth.getAccounts())[0];
+
+            const isApprovable = currentUser !== vehicleFromPendings[2];
+
+            return this.formatVehicle(id, vehicleFromPendings, isApprovable)
+        }
+
+        return null;
+    }
+
+    formatVehicle(id, vehicle, approve) {
+        return {
+            id: id,
+            type: this.typeMapper.getVehicleName(vehicle[0]),
+            model: vehicle[1],
+            owner: vehicle[2],
+            approvable: approve
+        }
     }
 
     async transferVehicle(id, address) {
