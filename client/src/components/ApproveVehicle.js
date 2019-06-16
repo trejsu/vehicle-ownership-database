@@ -13,7 +13,7 @@ export default class ApproveVehicle extends Component {
         return (
             <div className={"vehicle-approve-action row"}>
                 <button type={"button"}
-                        className={"btn btn-info"}
+                        className={"btn btn-success"}
                         id={this.vehicleId}
                         onClick={this.onApproveClicked}>
                     Approve

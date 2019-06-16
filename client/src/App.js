@@ -11,22 +11,46 @@ import Content from "./components/Content";
 import "./App.css";
 
 class App extends Component {
-    state = {web3: null, vehicleService: null, page: null};
 
-    componentDidMount = async () => {
+    constructor(props) {
+        super(props);
+        this.state = {
+            web3: null,
+            vehicleService: null,
+            page: null,
+            account: null,
+            intervalId: null
+        };
+    }
+
+    async componentDidMount() {
         try {
-            // Get network provider and web3 instance.
             const web3 = await getWeb3();
             const vehicleService = await VehicleService.init(web3);
-            this.setState({web3: web3, vehicleService: vehicleService});
+            const account = (await web3.eth.getAccounts())[0];
+            this.setState({
+                web3: web3,
+                vehicleService: vehicleService,
+                account: account
+            });
         } catch (error) {
-            // Catch any errors for any of the above operations.
             alert(
                 `Failed to load web3, accounts, or contract. Check console for details.`,
             );
             console.error(error);
         }
+        const intervalId = setInterval(this.timer.bind(this), 1000);
+        this.setState({intervalId: intervalId});
     };
+
+    componentWillUnmount() {
+        clearInterval(this.state.intervalId);
+    }
+
+    async timer() {
+        const account = (await this.state.web3.eth.getAccounts())[0];
+        this.setState({account});
+    }
 
     onNavigationChange = (page) => {
         this.setState({page: page});
@@ -47,7 +71,8 @@ class App extends Component {
                             onNavigationChange={this.onNavigationChange.bind(this)}/>
                         <Content
                             vehicleService={this.state.vehicleService}
-                            page={this.state.page}/>
+                            page={this.state.page}
+                            account={this.state.account}/>
                     </div>
                 </div>
             )

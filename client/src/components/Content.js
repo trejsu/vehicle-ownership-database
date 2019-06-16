@@ -16,6 +16,13 @@ export default class Content extends Component {
 
     componentWillReceiveProps(nextProps, nextContext) {
         this.setState({page: nextProps.page});
+        if (this.accountChanged(nextProps)) {
+            this.onVehicleAdditionChange();
+        }
+    }
+
+    accountChanged(nextProps) {
+        return nextProps.account !== this.props.account;
     }
 
     getAddingComponent = () => {
