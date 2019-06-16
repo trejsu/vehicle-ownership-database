@@ -7,10 +7,7 @@ export default class AllPendingVehicles extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            pendingApprovalVehicles: [],
-            utilizedApprovalVehicles: []
-        };
+        this.state = {pendingApprovalVehicles: []};
         this.vehicleService = this.props.vehicleService;
     }
 
@@ -31,37 +28,15 @@ export default class AllPendingVehicles extends Component {
     loadData() {
         this.vehicleService.getAllPendingApprovalsPossibleToApprove()
             .then(response => {
-                console.log(response);
                 this.setState({
-                    pendingApprovalVehicles: response
+                    pendingApprovalVehicles: response,
+                    downloaded: true,
                 });
             })
             .catch(() => {
                 this.setState({
+                    downloaded: true,
                     error: true
-                })
-            })
-            .finally(() => {
-                this.setState({
-                    downloadedPending: true
-                })
-            });
-
-        this.vehicleService.getAllUtilizationApprovalsPossibleToApprove()
-            .then(response => {
-                console.log(response);
-                this.setState({
-                    utilizationApprovalVehicles: response
-                });
-            })
-            .catch(() => {
-                this.setState({
-                    error: true
-                })
-            })
-            .finally(() => {
-                this.setState({
-                    downloadedUtilization: true
                 })
             });
     }
@@ -95,16 +70,11 @@ export default class AllPendingVehicles extends Component {
     };
 
     getPendingApprovalVehicleInfos = () => {
-        const pendingVehicles = this.state.pendingApprovalVehicles
-            .map(vehicle => ({...vehicle, status: "pending"}));
-        const utilizeVehicles = this.state.utilizationApprovalVehicles
-            .map(vehicle => ({...vehicle, status: "utilized"}));
-
-        const vehicles = pendingVehicles.concat(utilizeVehicles);
-
-        console.log(vehicles);
         return (
-            vehicles.map(vehicle => this.getVehicleToApprove(vehicle))
+            this.state.pendingApprovalVehicles
+            // todo: will need to change after adding utilize to approve
+                .map(vehicle => ({...vehicle, status: "pending"}))
+                .map(vehicle => this.getVehicleToApprove(vehicle))
         );
     };
 
@@ -149,7 +119,7 @@ export default class AllPendingVehicles extends Component {
     };
 
     render() {
-        const content = this.state.downloadedPending && this.state.downloadedUtilization ?
+        const content = this.state.downloaded ?
             (this.state.error ?
                 this.getAllPendingApprovalsDownloadError() :
                 this.getVehicles()) :

@@ -69,45 +69,6 @@ export default class VehicleService {
         return vehicles;
     }
 
-    async getUtilizationApprovals() {
-        console.log('[VEHICLE SERVICE] Retrieving all pending approvals...');
-        const utilizedIds = (await this.contract.methods.getUtilizationIds().call());
-        const vehicles = [];
-
-        for (let i = 0; i < utilizedIds.length; i++) {
-            console.log("somethin");
-            const vehicle = await this.contract.methods.vehicleForUtilization(utilizedIds[i]).call();
-            console.log(vehicle);
-            vehicles.push({
-                id: this.fromBytesWithReplace(utilizedIds[i]),
-                type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
-                model: vehicle[1],
-                owner: vehicle[2]
-            });
-
-        }
-        console.log("[VEHICLE SERVICE] Found %d pending approvals", vehicles.length);
-        return vehicles;
-    }
-
-    async getUserUtilizedVehicles() {
-        const getUtilizedIds = (await this.contract.methods.getUtilizationIds().call());
-        const currentUser = (await this.web3.eth.getAccounts())[0];
-        const vehicles = [];
-        for (let i = 0; i < getUtilizedIds.length; i++) {
-            const vehicle = await this.contract.methods.vehicleForUtilization(getUtilizedIds[i]).call();
-            if (currentUser === vehicle[2]) {
-                vehicles.push({
-                    id: this.fromBytesWithReplace(getUtilizedIds[i]),
-                    type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
-                    model: vehicle[1],
-                    owner: vehicle[2]
-                });
-            }
-        }
-        return vehicles;
-    }
-
     async getUserRegisteredVehicles() {
         const getRegisteredIds = (await this.contract.methods.getRegisteredIds().call());
         const currentUser = (await this.web3.eth.getAccounts())[0];
@@ -155,7 +116,7 @@ export default class VehicleService {
     }
 
     async getAllPendingApprovalsPossibleToApprove() {
-        console.log('[VEHICLE SERVICE] Retrieving pending approvals possible to approve...');
+        console.log('[VEHICLE SERVICE] Retrieving approvals possible to approve...');
 
         const currentUser = (await this.web3.eth.getAccounts())[0];
         const vehicles = (await this.getPendingApprovals());
@@ -177,33 +138,6 @@ export default class VehicleService {
                 currentUser);
 
             if (notApprovedByCurrentUser && vehicle.owner !== currentUser) {
-                console.log('[VEHICLE SERVICE] Approve possible');
-                vehiclesToApprove.push(vehicle);
-            } else {
-                console.log('[VEHICLE SERVICE] Approve not possible');
-            }
-        }
-
-        console.log("[VEHICLE SERVICE] Filtered %d approvals", vehiclesToApprove.length);
-        return vehiclesToApprove;
-    }
-
-    async getAllUtilizationApprovalsPossibleToApprove() {
-        console.log('[VEHICLE SERVICE] Retrieving utilization approvals possible to approve...');
-
-        const currentUser = (await this.web3.eth.getAccounts())[0];
-        const vehicles = (await this.getUtilizationApprovals());
-
-        console.log(vehicles);
-
-        const vehiclesToApprove = [];
-
-        for (let i = 0; i < vehicles.length; i++) {
-            let vehicle = vehicles[i];
-
-            console.log('[VEHICLE SERVICE] Checking if vehicle %s is approvable by %s', vehicle.id, currentUser);
-
-            if (vehicle.owner !== currentUser) {
                 console.log('[VEHICLE SERVICE] Approve possible');
                 vehiclesToApprove.push(vehicle);
             } else {
