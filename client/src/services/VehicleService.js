@@ -133,10 +133,12 @@ export default class VehicleService {
         });
     }
 
-    async transferVehicle(address, id) {
-        return new Promise((resolve) => {
-            resolve();
-        });
+    async transferVehicle(id, address) {
+        return this.web3.eth.getAccounts()
+            .then(accounts => {
+                return this.contract.methods.transferVehicle(this.toBytes(id), address)
+                    .send({from: accounts[0], gas: 3000000})
+            });
     }
 
     async approveVehicle(id) {
@@ -149,9 +151,13 @@ export default class VehicleService {
 
     async getTransferIds() {
         console.log('Retrieving all transfer id...');
-        return (await this.contract.methods.getTransferIds().call());
+        return this.contract.methods.getTransferIds().call()
+            .then(response => {
+                return response.map(id => this.fromBytesWithReplace(id));
+            })
     }
 
     toBytes = x => this.web3.utils.fromAscii(x);
     fromBytes = x => this.web3.utils.toAscii(x);
+    fromBytesWithReplace = x => this.fromBytes(x).replace(/\u0000/g, '');
 }

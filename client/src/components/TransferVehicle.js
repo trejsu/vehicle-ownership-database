@@ -16,7 +16,7 @@ export default class TransferVehicle extends Component {
         const id = this.state.id;
         const address = this.state.address;
         this.setState({id: null, address: null, error: false, transferred: false});
-        this.vehicleService.transferVehicle(address, id)
+        this.vehicleService.transferVehicle(id, address)
             .then(() => {
                 this.setState({transferred: true})
             })
