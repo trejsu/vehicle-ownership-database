@@ -67,12 +67,12 @@ export default class VehicleService {
 
         const vehiclesToApprove = [];
 
-        for (let i=0; i < vehicles.length; i++) {
+        for (let i = 0; i < vehicles.length; i++) {
             let vehicle = vehicles[i];
             let vehicleId = this.web3.utils.fromAscii(vehicle.id);
             const result = await this.contract.methods.notApprovingYet(vehicleId).call();
 
-            if(result && vehicle.owner !== owner) {
+            if (result && vehicle.owner !== owner) {
                 vehiclesToApprove.push(vehicle);
             }
         }
@@ -96,5 +96,14 @@ export default class VehicleService {
         return new Promise((resolve) => {
             resolve();
         });
+    }
+
+    async approveVehicle(id) {
+        return this.web3.eth.getAccounts()
+            .then(accounts => {
+                return this.contract.methods.approveVehicle(
+                    this.web3.utils.fromAscii(id)
+                ).send({from: accounts[0], gas: 3000000})
+            });
     }
 }
