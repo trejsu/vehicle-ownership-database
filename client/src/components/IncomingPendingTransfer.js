@@ -32,6 +32,7 @@ export default class IncomingPendingTransfer extends Component {
     loadData() {
         this.vehicleService.getIncomingPendingTransfer()
             .then(response => {
+                console.log('incoming pending transfer then');
                 this.setState({
                     vehicles: response
                 });
@@ -42,6 +43,7 @@ export default class IncomingPendingTransfer extends Component {
                 })
             })
             .finally(() => {
+                console.log('incoming pending transfer finally');
                 this.setState({
                     download: true
                 });
@@ -60,6 +62,7 @@ export default class IncomingPendingTransfer extends Component {
         this.vehicleService.approveTransfer(id)
             .then(() => {
                 console.log("transfer approved ", id);
+                this.props.onChange();
             });
     };
 

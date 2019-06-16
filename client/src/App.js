@@ -49,7 +49,9 @@ class App extends Component {
 
     async timer() {
         const account = (await this.state.web3.eth.getAccounts())[0];
-        this.setState({account});
+        if (account !== this.state.account) {
+            this.setState({account});
+        }
     }
 
     onNavigationChange = (page) => {

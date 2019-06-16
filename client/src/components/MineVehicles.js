@@ -24,7 +24,7 @@ export default class MineVehicles extends Component {
     };
 
     componentWillReceiveProps(nextProps) {
-        console.log('MineVehicles will receive props');
+        console.log('MineVehicles will receive props', nextProps);
         if (this.propsChanged(nextProps)) {
             console.log('props changed');
             this.loadData();
@@ -32,6 +32,7 @@ export default class MineVehicles extends Component {
     }
 
     loadData() {
+        console.log('Load data');
         this.getUserPendingApprovals();
         this.getUserRegisteredVehicles();
         this.getTransferIds();
@@ -44,6 +45,7 @@ export default class MineVehicles extends Component {
                 this.setState({
                     transferedVehicleIds: response
                 })
+
             })
             .catch((err) => {
                 console.log(err);
@@ -118,6 +120,7 @@ export default class MineVehicles extends Component {
     };
 
     getMinePendingApprovalVehicleInfos = (vehicles) => {
+        console.log();
         return (
             vehicles.map(vehicle =>
                 <div key={vehicle.id}>
@@ -159,6 +162,8 @@ export default class MineVehicles extends Component {
         const vehicles = pendingVehicles
             .concat(registeredVehicles)
             .concat(transferedVehicles);
+
+        console.log('vehicles', vehicles);
 
         return vehicles && vehicles.length > 0 ?
             this.getVehiclesContent(vehicles) :

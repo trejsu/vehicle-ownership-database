@@ -27,6 +27,7 @@ export default class TransferVehicle extends Component {
     transfer(id, address) {
         return this.vehicleService.transferVehicle(id, address)
             .then(() => {
+                console.log('transfer then');
                 this.setState({
                     transferred: true
                 });
@@ -38,6 +39,7 @@ export default class TransferVehicle extends Component {
                 });
             })
             .finally(() => {
+                console.log('transfer finally');
                 this.setState({
                     id: "",
                     address: "",

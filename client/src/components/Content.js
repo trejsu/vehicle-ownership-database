@@ -8,17 +8,25 @@ import MineVehicles from "./MineVehicles";
 import IncomingPendingTransfer from "./IncomingPendingTransfer";
 
 export default class Content extends Component {
-    vehicleService = this.props.vehicleService;
-    state = {
-        page: this.props.page,
-        addingComponentChange: true,
-        browsingComponentChange: true,
-        privateComponentChange: true
-    };
+
+    constructor(props) {
+        super(props);
+        this.vehicleService = this.props.vehicleService;
+        this.state = {
+            page: this.props.page,
+            addingComponentChange: true,
+            browsingComponentChange: true,
+            privateComponentChange: true
+        };
+    }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        this.setState({page: nextProps.page});
+        console.log('Content will receive props.');
+        if (nextProps.page !== this.state.page) {
+            this.setState({page: nextProps.page});
+        }
         if (this.accountChanged(nextProps)) {
+            console.log('Account changed');
             this.onAddingComponentChange();
             this.onBrowsingComponentChange();
             this.onPrivateComponentChange();
@@ -79,7 +87,8 @@ export default class Content extends Component {
                     <div className={"col-xs-12"}>
                         <IncomingPendingTransfer
                             vehicleService={this.vehicleService}
-                            change={this.state.privateComponentChange}/>
+                            change={this.state.privateComponentChange}
+                            onChange={this.onPrivateComponentChange.bind(this)}/>
                     </div>
                 </div>
             </div>
@@ -99,6 +108,7 @@ export default class Content extends Component {
     }
 
     onPrivateComponentChange() {
+        console.log('onPrivateComponentChange');
         this.setState(prevState => ({
             privateComponentChange: !prevState.privateComponentChange
         }));
