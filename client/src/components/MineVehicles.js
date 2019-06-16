@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 
 import VehicleInfo from "./VehicleInfo";
+import VehicleUtilization from "./VehicleUtilization";
 
 export default class MineVehicles extends Component {
 
@@ -76,6 +77,7 @@ export default class MineVehicles extends Component {
             });
     }
 
+
     getUserPendingApprovals() {
         this.vehicleService.getUserPendingApprovals()
             .then(response => {
@@ -107,12 +109,27 @@ export default class MineVehicles extends Component {
         )
     };
 
+    handleUtilization = (id) => {
+        this.vehicleService.utilizeVehicle(id)
+            .then(response => {
+                console.log("Utilized vehicle", response);
+                this.loadData();
+            });
+    };
+
     getMinePendingApprovalVehicleInfos = (vehicles) => {
         return (
             vehicles.map(vehicle =>
-                <VehicleInfo
-                    key={vehicle.id}
-                    vehicle={vehicle}/>)
+                <div key={vehicle.id}>
+                    <VehicleInfo
+                        vehicle={vehicle}/>
+                    {vehicle.status === "registered" &&
+                    <VehicleUtilization
+                        vehicleId={vehicle.id}
+                        handleUtilization={this.handleUtilization}/>
+                    }
+                </div>
+            )
         );
     };
 

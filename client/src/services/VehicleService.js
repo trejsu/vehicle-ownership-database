@@ -201,6 +201,12 @@ export default class VehicleService {
             });
     }
 
+    async utilizeVehicle(id) {
+        return new Promise((resolve) => {
+            resolve();
+        });
+    }
+
     async approveTransfer(id) {
         return this.web3.eth.getAccounts()
             .then(accounts => {
