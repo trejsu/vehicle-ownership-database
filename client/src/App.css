@@ -28,7 +28,7 @@
 .pending {
     background-color: #ffc107;
 }
-.utilized {
+.utilize {
     background: #a19da0;
 }
 
@@ -127,7 +127,7 @@
     font-weight: bold;
 }
 
-.utilized-label {
+.utilize-label {
     color: white;
     font-weight: bold;
 }

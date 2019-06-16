@@ -88,24 +88,24 @@ export default class VehicleService {
         console.log("[VEHICLE SERVICE] Found %d pending approvals", vehicles.length);
         return vehicles;
     }
-    //
-    // async getUserUtilizedVehicles() {
-    //     const getUtilizedIds = (await this.contract.methods.getUtilizationIds().call());
-    //     const currentUser = (await this.web3.eth.getAccounts())[0];
-    //     const vehicles = [];
-    //     for (let i = 0; i < getUtilizedIds.length; i++) {
-    //         const vehicle = await this.contract.methods.vehicleForUtilization(getUtilizedIds[i]).call();
-    //         if (currentUser === vehicle[2]) {
-    //             vehicles.push({
-    //                 id: this.fromBytesWithReplace(getUtilizedIds[i]),
-    //                 type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
-    //                 model: vehicle[1],
-    //                 owner: vehicle[2]
-    //             });
-    //         }
-    //     }
-    //     return vehicles;
-    // }
+
+    async getUserUtilizedVehicles() {
+        const getUtilizedIds = (await this.contract.methods.getUtilizationIds().call());
+        const currentUser = (await this.web3.eth.getAccounts())[0];
+        const vehicles = [];
+        for (let i = 0; i < getUtilizedIds.length; i++) {
+            const vehicle = await this.contract.methods.vehicleForUtilization(getUtilizedIds[i]).call();
+            if (currentUser === vehicle[2]) {
+                vehicles.push({
+                    id: this.fromBytesWithReplace(getUtilizedIds[i]),
+                    type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
+                    model: vehicle[1],
+                    owner: vehicle[2]
+                });
+            }
+        }
+        return vehicles;
+    }
 
     async getUserRegisteredVehicles() {
         const getRegisteredIds = (await this.contract.methods.getRegisteredIds().call());

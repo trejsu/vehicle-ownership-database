@@ -96,7 +96,7 @@ export default class AllPendingVehicles extends Component {
                 vehicleId={vehicle.id}
                 handleApproveClicked={this.handleApproveClicked}/>
             :
-            (vehicle.status === "utilized" ?
+            (vehicle.status === "utilize" ?
                     <ApproveVehicle
                         vehicleId={vehicle.id}
                         handleApproveClicked={this.handleUtilizationClicked}/>
@@ -117,7 +117,7 @@ export default class AllPendingVehicles extends Component {
         const pendingVehicles = this.state.pendingApprovalVehicles
             .map(vehicle => ({...vehicle, status: "pending"}));
         const utilizeVehicles = this.state.utilizationApprovalVehicles
-            .map(vehicle => ({...vehicle, status: "utilized"}));
+            .map(vehicle => ({...vehicle, status: "utilize"}));
 
         console.log(pendingVehicles);
         console.log(utilizeVehicles);
