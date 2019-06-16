@@ -6,13 +6,15 @@ export default class TransferVehicle extends Component {
         transferred: false,
         address: "",
         id: "",
+        transferPossible: true,
         blocked: false
     };
     vehicleService = this.props.vehicleService;
 
     handleIdChanged = (event) => {
         this.setState({
-            id: event.target.value
+            id: event.target.value,
+            transferPossible: true
         })
     };
 
@@ -22,20 +24,9 @@ export default class TransferVehicle extends Component {
         })
     };
 
-    handleRequestClicked() {
-        const id = this.state.id;
-        const address = this.state.address;
-
-        this.setState({
-            id: "",
-            address: ""
-        });
-
-        // this.setState({
-        //     blocked: true
-        // });
-
-        this.vehicleService.transferVehicle(id, address)
+    transfer(id, address) {
+        console.log("transfer");
+        return this.vehicleService.transferVehicle(id, address)
             .then(() => {
                 this.setState({
                     transferred: true
@@ -53,6 +44,38 @@ export default class TransferVehicle extends Component {
                     blocked: false
                 });
             })
+    }
+
+    handleRequestClicked() {
+        const id = this.state.id;
+        const address = this.state.address;
+
+        this.setState({
+            id: "",
+            address: ""
+        });
+
+        // this.setState({
+        //     blocked: true
+        // });
+
+        this.vehicleService.isTransferPossible()
+            .then((response) => {
+                console.log(response);
+                if (response === true) {
+                    console.log("mozna transfer")
+                    return this.transfer(id, address);
+                } else {
+                    this.setState({
+                        transferPossible: false
+                    })
+                }
+            })
+            .catch(() => {
+                this.setState({
+                    error: true
+                })
+            });
     };
 
     getTransferPositiveInfo = () => {
@@ -64,16 +87,22 @@ export default class TransferVehicle extends Component {
     };
 
     getErrorMessage = () => {
-        return (
-            <div>
-                There was some error...
-            </div>
-        );
+        return !this.state.transferPossible ?
+            (
+                <div>
+                    Cannot transfer vehicle {this.state.id}
+                </div>
+            ) :
+            (
+                <div>
+                    There was some error...
+                </div>
+            );
     };
 
     getTransferResult() {
         return this.state.transferred ?
-            (this.state.error ?
+            (this.state.error || !this.state.transferPossible ?
                 this.getErrorMessage() :
                 this.getTransferPositiveInfo()) :
             null;

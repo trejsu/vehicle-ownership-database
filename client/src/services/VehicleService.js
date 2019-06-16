@@ -3,6 +3,7 @@ import VehicleTypeMapper from "../utils/vehicleTypeMapper";
 
 export default class VehicleService {
     GAS = "3000000";
+
     constructor(web3, contract) {
         if (typeof web3 === 'undefined') {
             throw new Error('Cannot instantiate VehicleService directly. Use init function instead.');
@@ -141,13 +142,13 @@ export default class VehicleService {
     async searchForVehicle(id) {
         const vehicleFromRegistry = await this.contract.methods.vehicleRegistry(this.toBytes(id)).call();
 
-        if(vehicleFromRegistry[3]) {
+        if (vehicleFromRegistry[3]) {
             return this.formatVehicle(id, vehicleFromRegistry, false)
         }
 
         const vehicleFromPendings = await this.contract.methods.waitingForApprovals(this.toBytes(id)).call();
 
-        if(vehicleFromPendings[3]) {
+        if (vehicleFromPendings[3]) {
             const currentUser = (await this.web3.eth.getAccounts())[0];
 
             const isNotVehicleOwner = currentUser !== vehicleFromPendings[2];
@@ -204,6 +205,14 @@ export default class VehicleService {
             .then(response => {
                 return response.map(id => this.fromBytesWithReplace(id));
             })
+    }
+
+    async isTransferPossible(id) {
+        console.log('Check if transfer possible');
+        return this.contract.methods.getTransferIds().call()
+            .then(response => {
+                return !response.includes(id);
+            });
     }
 
     toBytes = x => this.web3.utils.fromAscii(x);
