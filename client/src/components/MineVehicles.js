@@ -11,8 +11,10 @@ export default class MineVehicles extends Component {
             downloadPending: false,
             downloadRegistered: false,
             downloadTransfered: false,
+            downloadUtilized: false,
             error: false,
             pendingVehicles: [],
+            utilizedVehicles: [],
             registeredVehicles: [],
             transferedVehicleIds: []
         };
@@ -31,6 +33,7 @@ export default class MineVehicles extends Component {
 
     loadData() {
         this.getUserPendingApprovals();
+        this.getUserUtilizedVehicles();
         this.getUserRegisteredVehicles();
         this.getTransferIds();
     }
@@ -95,6 +98,25 @@ export default class MineVehicles extends Component {
             });
     }
 
+    getUserUtilizedVehicles() {
+        this.vehicleService.getUserUtilizedVehicles()
+            .then(response => {
+                this.setState({
+                    utilizedVehicles: response
+                });
+            })
+            .catch(() => {
+                this.setState({
+                    error: true
+                })
+            })
+            .finally(() => {
+                this.setState({
+                    downloadUtilized: true
+                });
+            });
+    }
+
     propsChanged(nextProps) {
         return this.props.change !== nextProps.change;
     }
@@ -147,6 +169,9 @@ export default class MineVehicles extends Component {
         const pendingVehicles = this.state.pendingVehicles
             .map(vehicle => ({...vehicle, status: "pending"}));
 
+        const utilizedVehicles = this.state.utilizedVehicles
+            .map(vehicle => ({...vehicle, status: "utilized"}));
+
         const registeredVehicles = this.state.registeredVehicles
             .filter(vehicle => !this.state.transferedVehicleIds.includes(vehicle.id))
             .map(vehicle => ({...vehicle, status: "registered"}));
@@ -156,6 +181,7 @@ export default class MineVehicles extends Component {
             .map(vehicle => ({...vehicle, status: "transfer"}));
 
         const vehicles = pendingVehicles
+            .concat(utilizedVehicles)
             .concat(registeredVehicles)
             .concat(transferedVehicles);
 
@@ -183,7 +209,10 @@ export default class MineVehicles extends Component {
     };
 
     render() {
-        return this.state.downloadRegistered && this.state.downloadPending && this.state.downloadTransfered ?
+        return this.state.downloadRegistered &&
+        this.state.downloadPending &&
+        this.state.downloadTransfered &&
+        this.state.downloadUtilized ?
             (this.state.error ?
                 this.getVehiclesDownloadError() :
                 this.getVehicles()) :
