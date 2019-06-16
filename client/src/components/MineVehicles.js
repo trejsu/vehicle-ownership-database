@@ -102,11 +102,11 @@ export default class MineVehicles extends Component {
             .map(vehicle => ({...vehicle, status: "pending"}));
 
         const registeredVehicles = this.state.registeredVehicles
-            .filter(vehicle => !this.state.transferedVehicleIds.contains(vehicle.id))
+            .filter(vehicle => !this.state.transferedVehicleIds.includes(vehicle.id))
             .map(vehicle => ({...vehicle, status: "registered"}));
 
         const transferedVehicles = this.state.registeredVehicles
-            .filter(vehicle => this.state.transferedVehicleIds.contains(vehicle.id))
+            .filter(vehicle => this.state.transferedVehicleIds.includes(vehicle.id))
             .map(vehicle => ({...vehicle, status: "transfer"}));
 
         const vehicles = pendingVehicles
@@ -137,7 +137,7 @@ export default class MineVehicles extends Component {
     };
 
     render() {
-        return this.state.downloadRegistered || this.state.downloadPending ?
+        return this.state.downloadRegistered && this.state.downloadPending && this.state.downloadTransfered ?
             (this.state.error ?
                 this.getVehiclesDownloadError() :
                 this.getVehicles()) :
