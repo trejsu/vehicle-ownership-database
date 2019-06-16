@@ -70,4 +70,10 @@ export default class VehicleService {
             })
         });
     }
+
+    async transferVehicle(address, id) {
+        return new Promise((resolve) => {
+            resolve();
+        });
+    }
 }

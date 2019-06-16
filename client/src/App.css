@@ -8,15 +8,6 @@
     text-align: center;
 }
 
-.vehicle-addition-title {
-    text-align: center;
-    font-size: 20px;
-}
-
-.vehicle-addition-panel {
-    width: 204px;
-}
-
 .mine-vehicles-title {
     text-align: center;
     font-size: 20px;
@@ -31,4 +22,35 @@
     padding: 10px;
     background-color: #00F000;
     border: 5px solid black;
+}
+
+.transfer-vehicle-title {
+    text-align: center;
+    font-size: 20px;
+}
+
+.transfer-vehicle-panel {
+    text-align: center;
+}
+
+.search-for-vehicle-title {
+    text-align: center;
+    font-size: 20px;
+}
+
+.search-for-vehicle-panel {
+    text-align: center;
+}
+
+.vehicle-addition-title {
+    text-align: center;
+    font-size: 20px;
+}
+
+.vehicle-addition-panel {
+    text-align: center;
+}
+
+.vehicle-addition-select {
+    width: 204px;
 }

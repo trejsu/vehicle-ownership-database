@@ -71,16 +71,15 @@ export default class VehicleAddition extends Component {
 
     render() {
         return (
-            <div className={"col-sm-6 offset-sm-3"}>
+            <div>
                 <div className={"vehicle-addition-title"}>
                     Select type of vehicle
                 </div>
                 <div className={"vehicle-addition-panel"}>
                     <select
-                        className="form-control"
+                        className={"vehicle-addition-select"}
                         defaultValue={this.state.vehicleType}
-                        onChange={this.handleVehicleTypeChanged}
-                    >
+                        onChange={this.handleVehicleTypeChanged}>
                         <option value="car">Car</option>
                         <option value="bike">Bike</option>
                     </select>
@@ -93,13 +92,15 @@ export default class VehicleAddition extends Component {
                     </div>
 
                     {this.getIdInput()}
-                </div>
 
-                <button type={"button"}
-                        className={"btn btn-primary"}
-                        onClick={this.handleRequestClicked}>
-                    Request
-                </button>
+                    <div>
+                        <button type={"button"}
+                                className={"btn btn-primary"}
+                                onClick={this.handleRequestClicked}>
+                            Request
+                        </button>
+                    </div>
+                </div>
             </div>
         );
     }

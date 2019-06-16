@@ -66,10 +66,10 @@ export default class SearchForVehicle extends Component {
     render() {
         return (
             <div>
-                <div>
-                    <div className={"search-for-vehicles-title"}>
-                        Search for vehicle
-                    </div>
+                <div className={"search-for-vehicle-title"}>
+                    Search for vehicle
+                </div>
+                <div className={"search-for-vehicle-panel"}>
                     <div>
                         <input
                             placeholder={"ID"}
@@ -77,13 +77,16 @@ export default class SearchForVehicle extends Component {
                             onChange={this.handleIdChanged}/>
                     </div>
 
-                    <button type={"button"}
-                            className={"btn btn-primary"}
-                            onClick={this.handleRequestClicked}>
-                        Request
-                    </button>
+                    <div>
+                        <button type={"button"}
+                                className={"btn btn-primary"}
+                                onClick={this.handleRequestClicked}>
+                            Request
+                        </button>
+                    </div>
+
+                    {this.getVehicleResult()}
                 </div>
-                {this.getVehicleResult()}
             </div>
         )
     }

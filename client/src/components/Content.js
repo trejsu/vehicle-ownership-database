@@ -2,6 +2,7 @@ import React, {Component} from "react";
 
 import VehicleAddition from "./VehicleAddition";
 import SearchForVehicle from "./SearchForVehicle";
+import TransferVehicle from "./TransferVehicle";
 import AllPendingVehicles from "./AllPendingVehicles";
 import MineVehicles from "./MineVehicles";
 
@@ -18,8 +19,7 @@ export default class Content extends Component {
             <div className={"row"}>
                 <div className={"col-sm-6"}>
                     <VehicleAddition
-                        vehicleService={this.vehicleService}
-                    />
+                        vehicleService={this.vehicleService}/>
                 </div>
             </div>
         );
@@ -30,13 +30,11 @@ export default class Content extends Component {
             <div className={"row"}>
                 <div className={"col-sm-6"}>
                     <SearchForVehicle
-                        vehicleService={this.vehicleService}
-                    />
+                        vehicleService={this.vehicleService}/>
                 </div>
                 <div className={"col-sm-6"}>
                     <AllPendingVehicles
-                        vehicleService={this.vehicleService}
-                    />
+                        vehicleService={this.vehicleService}/>
                 </div>
             </div>
         );
@@ -47,8 +45,11 @@ export default class Content extends Component {
             <div className={"row"}>
                 <div className={"col-sm-6"}>
                     <MineVehicles
-                        vehicleService={this.vehicleService}
-                    />
+                        vehicleService={this.vehicleService}/>
+                </div>
+                <div className={"col-sm-6"}>
+                    <TransferVehicle
+                        vehicleService={this.vehicleService}/>
                 </div>
             </div>
         );
