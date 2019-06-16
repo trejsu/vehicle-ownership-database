@@ -23,41 +23,58 @@ export default class VehicleAddition extends Component {
         })
     };
 
-    handleCarVinChanged = (event) => {
+    handleIdChanged = (event) => {
         this.setState({
-            carVin: event.target.value
-        })
-    };
-
-    handleBikeSerialChanged = (event) => {
-        this.setState({
-            bikeSerial: event.target.value
+            id: event.target.value
         })
     };
 
     handleRequestClicked = () => {
         switch (this.state.vehicleType) {
             case "car":
-                this.vehicleService.addCar(
-                    (({vehicleType, vehicleModel, carVin}) =>
-                        ({vehicleType, vehicleModel, carVin}))(this.state)).then(result => console.log(result));
-                break;
             case "bike":
-                this.vehicleService.addBike(
-                    (({vehicleType, vehicleModel, bikeSerial}) =>
-                        ({vehicleType, vehicleModel, bikeSerial}))(this.state)).then(result => console.log(result));
+                this.vehicleService.addVehicle(
+                    (({vehicleType, vehicleModel, id}) =>
+                        ({vehicleType, vehicleModel, id}))(this.state))
+                    .then(result => console.log(result));
                 break;
             default:
                 console.log("error with state: ", this.state.vehicleType);
         }
     };
 
+    getIdInputWithPlaceholder = placeholder => {
+        return (
+            <div>
+                <input
+                    placeholder={placeholder}
+                    defaultValue={this.state.carVin}
+                    onChange={this.handleIdChanged}/>
+            </div>
+        )
+    };
+
+
+    getIdInput = () => {
+        if (this.state.vehicleType === "car") {
+            return this.getIdInputWithPlaceholder("VIN");
+        } else if (this.state.vehicleType === "bike") {
+            return this.getIdInputWithPlaceholder("Serial");
+        } else {
+            return (
+                <div>
+                    There should be something!
+                </div>
+            )
+        }
+    };
+
     render() {
         return (
             <div className={"col-sm-6 offset-sm-3"}>
-                        <span>
-                            Select type of vehicle
-                        </span>
+                <div className={"vehicle-addition-title"}>
+                    Select type of vehicle
+                </div>
                 <div className={"vehicle-addition-panel"}>
                     <select
                         className="form-control"
@@ -75,41 +92,8 @@ export default class VehicleAddition extends Component {
                             onChange={this.handleModelChanged}/>
                     </div>
 
-                    {this.state.vehicleType === 'car' &&
-                    <div>
-                        <input
-                            placeholder={"VIN"}
-                            defaultValue={this.state.carVin}
-                            onChange={this.handleCarVinChanged}/>
-                    </div>}
-
-                    {this.state.vehicleType === 'bike' &&
-                    <div>
-                        <input
-                            placeholder={"Serial number"}
-                            defaultValue={this.state.bikeSerial}
-                            onChange={this.handleBikeSerialChanged}/>
-                    </div>}
+                    {this.getIdInput()}
                 </div>
-                {this.state.vehicleType &&
-                <div>
-                    Selected vehicle type = '{this.state.vehicleType}'
-                </div>}
-
-                {this.state.vehicleModel &&
-                <div>
-                    Selected vehicle model = '{this.state.vehicleModel}'
-                </div>}
-
-                {this.state.vehicleType === 'car' && this.state.carVin &&
-                <div>
-                    VIN = '{this.state.carVin}
-                </div>}
-
-                {this.state.vehicleType === 'bike' && this.state.bikeSerial &&
-                <div>
-                    Serial = '{this.state.bikeSerial}
-                </div>}
 
                 <button type={"button"}
                         className={"btn btn-primary"}

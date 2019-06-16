@@ -58,14 +58,20 @@ export default class NavigationBar extends Component {
         );
     };
 
+    getNavigationBar = () => {
+        return (
+            this.navigationOptions.map(option =>
+                this.getElement(option))
+        );
+    };
+
+
     render() {
         return (
             <div className={"row navigation-panel"}>
-                <div className={"col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-6 offset-sm-3 col-xs-12"}>
+                <div className={"col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12 col-xs-12"}>
                     <div className={"row"}>
-                        {this.navigationOptions.map(option =>
-                            this.getElement(option))
-                        }
+                        {this.getNavigationBar()}
                     </div>
                 </div>
             </div>

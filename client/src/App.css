@@ -8,6 +8,11 @@
     text-align: center;
 }
 
+.vehicle-addition-title {
+    text-align: center;
+    font-size: 20px;
+}
+
 .vehicle-addition-panel {
     width: 204px;
 }

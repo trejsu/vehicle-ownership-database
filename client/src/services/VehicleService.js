@@ -31,11 +31,11 @@ export default class VehicleService {
   addBike = bike => this.addVehicle(bike, bike.bikeSerial);
 
   // todo: validation of id
-  addVehicle(vehicle, id) {
+  addVehicle(vehicle) {
     return this.web3.eth.getAccounts()
     .then(accounts => {
       return this.contract.methods.addVehicle(
-        this.web3.utils.fromAscii(id),
+        this.web3.utils.fromAscii(vehicle.id),
         vehicle.vehicleModel,
         this.typeMapper.getVehicleCode(vehicle.vehicleType)
       ).send({from: accounts[0], gas: 3000000})
