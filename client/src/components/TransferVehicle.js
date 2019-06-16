@@ -25,7 +25,6 @@ export default class TransferVehicle extends Component {
     };
 
     transfer(id, address) {
-        console.log("transfer");
         return this.vehicleService.transferVehicle(id, address)
             .then(() => {
                 this.setState({
@@ -64,7 +63,6 @@ export default class TransferVehicle extends Component {
             .then((response) => {
                 console.log(response);
                 if (response === true) {
-                    console.log("mozna transfer")
                     return this.transfer(id, address);
                 } else {
                     this.setState({
