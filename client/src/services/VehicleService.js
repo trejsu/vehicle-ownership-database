@@ -157,6 +157,12 @@ export default class VehicleService {
             })
     }
 
+    async getIncomingPendingTransfer() {
+        return new Promise((resolve) => {
+            resolve([]);
+        });
+    }
+
     toBytes = x => this.web3.utils.fromAscii(x);
     fromBytes = x => this.web3.utils.toAscii(x);
     fromBytesWithReplace = x => this.fromBytes(x).replace(/\u0000/g, '');

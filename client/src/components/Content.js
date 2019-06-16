@@ -5,6 +5,7 @@ import SearchForVehicle from "./SearchForVehicle";
 import TransferVehicle from "./TransferVehicle";
 import AllPendingVehicles from "./AllPendingVehicles";
 import MineVehicles from "./MineVehicles";
+import IncomingPendingTransfer from "./IncomingPendingTransfer";
 
 export default class Content extends Component {
     vehicleService = this.props.vehicleService;
@@ -52,8 +53,14 @@ export default class Content extends Component {
                         vehicleService={this.vehicleService}/>
                 </div>
                 <div className={"col-sm-6"}>
-                    <TransferVehicle
-                        vehicleService={this.vehicleService}/>
+                    <div className={"col-xs-12"}>
+                        <TransferVehicle
+                            vehicleService={this.vehicleService}/>
+                    </div>
+                    <div className={"col-xs-12"}>
+                        <IncomingPendingTransfer
+                            vehicleService={this.vehicleService}/>
+                    </div>
                 </div>
             </div>
         );
