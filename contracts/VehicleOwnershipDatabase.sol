@@ -20,10 +20,18 @@ contract VehicleOwnershipDatabase {
         uint approvalsNumber;
     }
 
+    struct VehicleTransfer {
+        address owner;
+        address nextOwner;
+        bool exists;
+    }
+
     mapping (bytes32 => VehicleTemp) public waitingForApprovals;
+    mapping (bytes32 => VehicleTransfer) public waitingForTransfers;
     mapping (bytes32 => Vehicle) public vehicleRegistry;
     bytes32[] public pendingIds;
     bytes32[] public existingIds;
+    bytes32[] public transferIds;
 
     modifier canBeRegistered(bytes32 _id) {
         require(!waitingForApprovals[_id].exists);
@@ -37,15 +45,22 @@ contract VehicleOwnershipDatabase {
         _;
     }
 
+    modifier canSubmitTransfer(bytes32 _id, address _sender) {
+        require(vehicleRegistry[_id].exists);
+        require(vehicleRegistry[_id].owner == _sender);
+        _;
+    }
+
+    modifier canApproveTransfer(bytes32 _id, address _sender) {
+        require(waitingForTransfers[_id].exists);
+        require(waitingForTransfers[_id].nextOwner == _sender);
+        _;
+    }
 
     function addVehicle(bytes32 _id, string memory _vehicleModel, uint _vehicleType) canBeRegistered(_id) public {
         VehicleTemp memory newVehicle = VehicleTemp(VehicleType(_vehicleType), _vehicleModel, msg.sender, true, 0);
         pendingIds.push(_id);
         waitingForApprovals[_id] = newVehicle;
-    }
-
-    function getPendingIds() public view returns (bytes32[] memory _ids) {
-        return pendingIds;
     }
 
     function approveVehicle(bytes32 _id) canApprove(_id, msg.sender) public {
@@ -84,6 +99,30 @@ contract VehicleOwnershipDatabase {
 
     }
 
+    function transferVehicle(bytes32 _id, address nextOwner) canSubmitTransfer(_id, msg.sender) public {
+        Vehicle storage vehicle = vehicleRegistry[_id];
+        VehicleTransfer memory transfer =  VehicleTransfer(vehicle.owner, nextOwner, true);
+        waitingForTransfers[_id] = transfer;
+        transferIds.push(_id);
+    }
+
+    function approveTransfer(bytes32 _id) canApproveTransfer(_id, msg.sender) public {
+
+        Vehicle storage vehicle = vehicleRegistry[_id];
+        VehicleTransfer memory transfer = waitingForTransfers[_id];
+        vehicle.owner = transfer.nextOwner;
+
+        //removing vehicle from waiting for transfer
+        delete waitingForTransfers[_id];
+
+        //removing vehicle from transferIds list
+        for(uint i=0; i < transferIds.length; i++) {
+            if(transferIds[i] == _id) {
+                delete transferIds[i];
+            }
+        }
+    }
+
     function getRegisteredIds() public view returns (bytes32[] memory ids) {
         return existingIds;
     }
@@ -92,5 +131,13 @@ contract VehicleOwnershipDatabase {
         require(waitingForApprovals[_id].exists);
 
         return !waitingForApprovals[_id].approvals[msg.sender];
+    }
+
+    function getPendingIds() public view returns (bytes32[] memory _ids) {
+        return pendingIds;
+    }
+
+    function getTransferIds() public view returns (bytes32[] memory _ids) {
+        return transferIds;
     }
 }
