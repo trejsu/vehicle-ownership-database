@@ -116,7 +116,7 @@ export default class VehicleService {
     }
 
     async getAllPendingApprovalsPossibleToApprove() {
-        console.log('[VEHICLE SERVICE] Retrieving approvals possible to approve...');
+        console.log('[VEHICLE SERVICE] Retrieving pending approvals possible to approve...');
 
         const currentUser = (await this.web3.eth.getAccounts())[0];
         const vehicles = (await this.getPendingApprovals());

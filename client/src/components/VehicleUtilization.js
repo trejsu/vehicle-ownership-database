@@ -8,13 +8,6 @@ export default class VehicleUtilization extends Component {
     onUtilizationClicked = (event) => {
         this.handleUtilization(event.target.id)
     };
-    handleApproveClicked = (id) => {
-        this.vehicleService.approveVehicle(id)
-            .then(response => {
-                console.log("Approve vehicle response ", response);
-                this.loadData();
-            });
-    };
 
     getUtilizeButton = () => {
         return (
