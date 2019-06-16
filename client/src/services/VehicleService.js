@@ -225,11 +225,13 @@ export default class VehicleService {
             })
     }
 
-    async isTransferPossible(id) {
+    async isTransferPossible(id, address) {
         console.log('[VEHICLE SERVICE] Check if transfer possible');
+        const currentUser = (await this.web3.eth.getAccounts())[0];
+
         return this.contract.methods.getTransferIds().call()
             .then(response => {
-                return !response.includes(id);
+                return !response.includes(id) && currentUser !== address;
             });
     }
 

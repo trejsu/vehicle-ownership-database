@@ -61,13 +61,15 @@ export default class TransferVehicle extends Component {
             blocked: true
         });
 
-        this.vehicleService.isTransferPossible()
+
+        this.vehicleService.isTransferPossible(id, address)
             .then((response) => {
                 console.log(response);
                 if (response === true) {
                     return this.transfer(id, address);
                 } else {
                     this.setState({
+                        transferred : false,
                         transferPossible: false
                     })
                 }

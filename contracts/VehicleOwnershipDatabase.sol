@@ -128,6 +128,9 @@ contract VehicleOwnershipDatabase {
 
 
     function transferVehicle(bytes32 _id, address nextOwner) canSubmitTransfer(_id, msg.sender) public {
+
+        require(nextOwner != msg.sender);
+
         Vehicle storage vehicle = vehicleRegistry[_id];
         VehicleTransfer memory transfer =  VehicleTransfer(vehicle.owner, nextOwner, true);
         waitingForTransfers[_id] = transfer;
