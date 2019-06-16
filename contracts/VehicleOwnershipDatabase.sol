@@ -133,10 +133,6 @@ contract VehicleOwnershipDatabase {
         }
     }
 
-    function getRegisteredIds() public view returns (bytes32[] memory ids) {
-        return existingIds;
-    }
-
     function notApprovingYet(bytes32 _id) public view returns (bool result) {
         require(waitingForApprovals[_id].exists);
 
@@ -149,5 +145,9 @@ contract VehicleOwnershipDatabase {
 
     function getTransferIds() public view returns (bytes32[] memory _ids) {
         return transferIds;
+    }
+
+    function getRegisteredIds() public view returns (bytes32[] memory ids) {
+        return existingIds;
     }
 }
