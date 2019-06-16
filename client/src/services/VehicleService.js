@@ -202,9 +202,11 @@ export default class VehicleService {
     }
 
     async utilizeVehicle(id) {
-        return new Promise((resolve) => {
-            resolve();
-        });
+        return this.web3.eth.getAccounts()
+            .then(accounts => {
+                return this.contract.methods.utilizeVehicle(this.toBytes(id))
+                    .send({from: accounts[0], gas: this.GAS})
+            });
     }
 
     async approveTransfer(id) {
