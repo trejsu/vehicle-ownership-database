@@ -28,6 +28,9 @@
 .pending {
     background-color: #ffc107;
 }
+.utilized {
+    background: lightslategrey;
+}
 
 .registered {
     background-color: #28a745;
