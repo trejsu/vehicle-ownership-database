@@ -37,9 +37,11 @@ export default class SearchForVehicle extends Component {
                 Found vehicle
                 <VehicleInfo
                     vehicle={this.state.vehicle}/>
+                {this.state.vehicle.approvable &&
                 <ApproveVehicle
                     vehicleId={this.state.vehicle.id}
                     handleApproveClicked={this.handleApproveClicked}/>
+                }
             </div>
         );
     };

@@ -96,12 +96,17 @@ export default class VehicleService {
 
     // todo: implement instead of stub
     async searchForVehicle(id) {
+        const owner = (await this.web3.eth.getAccounts())[0];
         return new Promise((resolve) => {
+            const responseOwner = "0x1673A70D48E4aB1eB7c3391EF69DF5eb818147a5";
+            console.log(owner !== responseOwner);
+            console.log(owner);
             resolve({
                 id: id,
                 type: "car",
                 model: "model1",
-                owner: "adddd"
+                owner: responseOwner,
+                approvable: owner !== responseOwner
             })
         });
     }
