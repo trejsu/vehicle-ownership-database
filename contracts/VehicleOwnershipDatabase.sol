@@ -151,15 +151,16 @@ contract VehicleOwnershipDatabase {
         Vehicle storage vehicle = vehicleRegistry[_id];
         vehicleForUtilization[_id] = vehicle;
         utilizationIds.push(_id);
+
+        delete vehicleRegistry[_id];
+        removeIdFromList(existingIds, _id);
     }
 
     function approveUtilization(bytes32 _id) canApproveUtilization(_id, msg.sender) public {
 
-        delete vehicleRegistry[_id];
         delete vehicleForUtilization[_id];
 
         removeIdFromList(utilizationIds, _id);
-        removeIdFromList(existingIds, _id);
     }
 
     function notApprovingYet(bytes32 _id) public view returns (bool result) {
