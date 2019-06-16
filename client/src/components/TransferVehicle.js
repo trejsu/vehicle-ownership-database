@@ -30,7 +30,8 @@ export default class TransferVehicle extends Component {
             .then(() => {
                 this.setState({
                     transferred: true
-                })
+                });
+                this.props.onChange();
             })
             .catch(() => {
                 this.setState({

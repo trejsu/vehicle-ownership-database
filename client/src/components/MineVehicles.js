@@ -23,7 +23,9 @@ export default class MineVehicles extends Component {
     };
 
     componentWillReceiveProps(nextProps) {
+        console.log('MineVehicles will receive props');
         if (this.propsChanged(nextProps)) {
+            console.log('props changed');
             this.loadData();
         }
     }

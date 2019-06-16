@@ -4,14 +4,32 @@ import VehicleInfo from "./VehicleInfo";
 import ApproveVehicle from "./ApproveVehicle";
 
 export default class IncomingPendingTransfer extends Component {
-    state = {
-        download: false,
-        error: false,
-        vehicles: [],
-    };
-    vehicleService = this.props.vehicleService;
 
-    componentDidMount = async () => {
+    constructor(props) {
+        super(props);
+        this.state = {
+            download: false,
+            error: false,
+            vehicles: [],
+        };
+        this.vehicleService = this.props.vehicleService;
+    }
+
+    componentDidMount() {
+        this.loadData();
+    };
+
+    componentWillReceiveProps(nextProps) {
+        if (this.propsChanged(nextProps)) {
+            this.loadData();
+        }
+    }
+
+    propsChanged(nextProps) {
+        return this.props.change !== nextProps.change;
+    }
+
+    loadData() {
         this.vehicleService.getIncomingPendingTransfer()
             .then(response => {
                 this.setState({
@@ -28,7 +46,7 @@ export default class IncomingPendingTransfer extends Component {
                     download: true
                 });
             });
-    };
+    }
 
     getVehiclesDownloadError = () => {
         return (

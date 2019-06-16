@@ -13,7 +13,7 @@ let contract;
 beforeAll(() => {
     console.log('Setting up ganache and web3...');
     const provider = ganache.provider();
-    provider.setMaxListeners(20);
+    provider.setMaxListeners(21);
     web3 = new Web3(provider);
 });
 

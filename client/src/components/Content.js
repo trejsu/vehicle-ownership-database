@@ -46,24 +46,6 @@ export default class Content extends Component {
         );
     };
 
-    onAddingComponentChange() {
-        this.setState(prevState => ({
-            addingComponentChange: !prevState.addingComponentChange
-        }));
-    }
-
-    onBrowsingComponentChange() {
-        this.setState(prevState => ({
-            browsingComponentChange: !prevState.browsingComponentChange
-        }));
-    }
-
-    onPrivateComponentChange() {
-        this.setState(prevState => ({
-            privateComponentChange: !prevState.privateComponentChange
-        }));
-    }
-
     getBrowsingComponent = () => {
         return (
             <div className={"row"}>
@@ -85,21 +67,42 @@ export default class Content extends Component {
             <div className={"row"}>
                 <div className={"col-sm-6"}>
                     <MineVehicles
-                        vehicleService={this.vehicleService}/>
+                        vehicleService={this.vehicleService}
+                        change={this.state.privateComponentChange}/>
                 </div>
                 <div className={"col-sm-6"}>
                     <div className={"col-xs-12"}>
                         <TransferVehicle
-                            vehicleService={this.vehicleService}/>
+                            vehicleService={this.vehicleService}
+                            onChange={this.onPrivateComponentChange.bind(this)}/>
                     </div>
                     <div className={"col-xs-12"}>
                         <IncomingPendingTransfer
-                            vehicleService={this.vehicleService}/>
+                            vehicleService={this.vehicleService}
+                            change={this.state.privateComponentChange}/>
                     </div>
                 </div>
             </div>
         );
     };
+
+    onAddingComponentChange() {
+        this.setState(prevState => ({
+            addingComponentChange: !prevState.addingComponentChange
+        }));
+    }
+
+    onBrowsingComponentChange() {
+        this.setState(prevState => ({
+            browsingComponentChange: !prevState.browsingComponentChange
+        }));
+    }
+
+    onPrivateComponentChange() {
+        this.setState(prevState => ({
+            privateComponentChange: !prevState.privateComponentChange
+        }));
+    }
 
     getDefaultComponent = () => {
         return (
