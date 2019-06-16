@@ -7,7 +7,6 @@ export default class AllPendingVehicles extends Component {
     vehicleService = this.props.vehicleService;
 
     componentDidMount = async () => {
-        console.log(this.vehicleService);
         this.vehicleService.getPendingApprovals()
             .then(response => {
                 this.setState({pendingApprovalVehicles: response});
@@ -20,6 +19,7 @@ export default class AllPendingVehicles extends Component {
                 <div className={"all-pending-vehicles-title"}>
                     List of all pending approvals
                 </div>
+
                 {this.state.pendingApprovalVehicles.length > 0 &&
                 <div>
                     {this.state.pendingApprovalVehicles.map(vehicle =>
