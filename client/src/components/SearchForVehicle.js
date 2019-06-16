@@ -80,7 +80,6 @@ export default class SearchForVehicle extends Component {
             });
     };
 
-
     getVehicleInfo = () => {
         return (
             <div>
