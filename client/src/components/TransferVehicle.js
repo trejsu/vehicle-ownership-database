@@ -69,9 +69,10 @@ export default class TransferVehicle extends Component {
                     return this.transfer(id, address);
                 } else {
                     this.setState({
-                        transferred : false,
-                        transferPossible: false
-                    })
+                        transferPossible: false,
+                        blocked: false
+                    });
+                    throw Error();
                 }
             })
             .catch(() => {
@@ -104,11 +105,9 @@ export default class TransferVehicle extends Component {
     };
 
     getTransferResult() {
-        return this.state.transferred ?
-            (this.state.error || !this.state.transferPossible ?
-                this.getErrorMessage() :
-                this.getTransferPositiveInfo()) :
-            null;
+        return this.state.error ?
+            this.getErrorMessage() :
+            (this.state.transferred ? this.getTransferPositiveInfo() : null);
     };
 
     render() {
