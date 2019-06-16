@@ -2,6 +2,7 @@ import VehicleOwnershipDatabase from "../contracts/VehicleOwnershipDatabase";
 import VehicleTypeMapper from "../utils/vehicleTypeMapper";
 
 export default class VehicleService {
+    GAS = "3000000";
     constructor(web3, contract) {
         if (typeof web3 === 'undefined') {
             throw new Error('Cannot instantiate VehicleService directly. Use init function instead.');
@@ -35,7 +36,7 @@ export default class VehicleService {
                     this.toBytes(vehicle.id),
                     vehicle.vehicleModel,
                     this.typeMapper.getVehicleCode(vehicle.vehicleType)
-                ).send({from: accounts[0], gas: 3000000})
+                ).send({from: accounts[0], gas: this.GAS})
             });
     }
 
@@ -46,7 +47,7 @@ export default class VehicleService {
         for (let i = 0; i < pendingIds.length; i++) {
             const vehicle = await this.contract.methods.waitingForApprovals(pendingIds[i]).call();
             vehicles.push({
-                id: this.fromBytes(pendingIds[i]).replace(/\u0000/g, ''),
+                id: this.fromBytesWithReplace(pendingIds[i]),
                 type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
                 model: vehicle[1],
                 owner: vehicle[2]
@@ -65,7 +66,26 @@ export default class VehicleService {
             const vehicle = await this.contract.methods.vehicleRegistry(getRegisteredIds[i]).call();
             if (currentUser === vehicle[2]) {
                 vehicles.push({
-                    id: this.fromBytes(getRegisteredIds[i]).replace(/\u0000/g, ''),
+                    id: this.fromBytesWithReplace(getRegisteredIds[i]),
+                    type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
+                    model: vehicle[1],
+                    owner: vehicle[2]
+                });
+            }
+        }
+        return vehicles;
+    }
+
+    async getIncomingPendingTransfer() {
+        const transferIds = (await this.contract.methods.getTransferIds().call());
+        const currentUser = (await this.web3.eth.getAccounts())[0];
+        const vehicles = [];
+        for (let i = 0; i < transferIds.length; i++) {
+            const vehicleTransfer = await this.contract.methods.waitingForTransfers(transferIds[i]).call();
+            const vehicle = await this.contract.methods.vehicleRegistry(transferIds[i]).call();
+            if (currentUser === vehicleTransfer[1]) {
+                vehicles.push({
+                    id: this.fromBytesWithReplace(transferIds[i]),
                     type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
                     model: vehicle[1],
                     owner: vehicle[2]
@@ -137,7 +157,7 @@ export default class VehicleService {
         return this.web3.eth.getAccounts()
             .then(accounts => {
                 return this.contract.methods.transferVehicle(this.toBytes(id), address)
-                    .send({from: accounts[0], gas: 3000000})
+                    .send({from: accounts[0], gas: this.GAS})
             });
     }
 
@@ -145,7 +165,15 @@ export default class VehicleService {
         return this.web3.eth.getAccounts()
             .then(accounts => {
                 return this.contract.methods.approveVehicle(this.toBytes(id))
-                    .send({from: accounts[0], gas: 3000000})
+                    .send({from: accounts[0], gas: this.GAS})
+            });
+    }
+
+    async approveTransfer(id) {
+        return this.web3.eth.getAccounts()
+            .then(accounts => {
+                return this.contract.methods.approveTransfer(this.toBytes(id))
+                    .send({from: accounts[0], gas: this.GAS})
             });
     }
 
@@ -155,12 +183,6 @@ export default class VehicleService {
             .then(response => {
                 return response.map(id => this.fromBytesWithReplace(id));
             })
-    }
-
-    async getIncomingPendingTransfer() {
-        return new Promise((resolve) => {
-            resolve([]);
-        });
     }
 
     toBytes = x => this.web3.utils.fromAscii(x);

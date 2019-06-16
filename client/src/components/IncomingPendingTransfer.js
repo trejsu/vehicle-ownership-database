@@ -39,21 +39,20 @@ export default class IncomingPendingTransfer extends Component {
     };
 
     handleApproveClicked = (id) => {
-        this.vehicleService.approveVehicle(id)
+        this.vehicleService.approveTransfer(id)
             .then(() => {
-                console.log("approved ", id);
+                console.log("transfer approved ", id);
             });
     };
 
     getIncomingPendingTransferVehicleInfos = (vehicles) => {
         return (
             vehicles.map(vehicle =>
-                <div>
+                <div key={vehicle.id}>
                     <VehicleInfo
-                        key={vehicle.id}
                         vehicle={vehicle}/>
                     <ApproveVehicle
-                        vehicleId={this.state.vehicle.id}
+                        vehicleId={vehicle.id}
                         handleApproveClicked={this.handleApproveClicked}/>
                 </div>
             )
