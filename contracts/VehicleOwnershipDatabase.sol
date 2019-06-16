@@ -29,9 +29,11 @@ contract VehicleOwnershipDatabase {
     mapping (bytes32 => VehicleTemp) public waitingForApprovals;
     mapping (bytes32 => VehicleTransfer) public waitingForTransfers;
     mapping (bytes32 => Vehicle) public vehicleRegistry;
+    mapping (bytes32 => Vehicle) public vehicleForUtilization;
     bytes32[] public pendingIds;
     bytes32[] public existingIds;
     bytes32[] public transferIds;
+    bytes32[] public utilizationIds;
 
     modifier canBeRegistered(bytes32 _id) {
         require(!waitingForApprovals[_id].exists);
@@ -55,6 +57,20 @@ contract VehicleOwnershipDatabase {
     modifier canApproveTransfer(bytes32 _id, address _sender) {
         require(waitingForTransfers[_id].exists);
         require(waitingForTransfers[_id].nextOwner == _sender);
+        _;
+    }
+
+    modifier canBeUtilized(bytes32 _id, address _sender) {
+        require(vehicleRegistry[_id].exists);
+        require(!vehicleForUtilization[_id].exists);
+        require(!waitingForTransfers[_id].exists);
+        require(vehicleRegistry[_id].owner == _sender);
+        _;
+    }
+
+    modifier canApproveUtilization(bytes32 _id, address _sender) {
+        require(vehicleForUtilization[_id].exists);
+        require(vehicleForUtilization[_id].owner != _sender);
         _;
     }
 
@@ -91,23 +107,25 @@ contract VehicleOwnershipDatabase {
             delete waitingForApprovals[_id];
 
             //removing vehicle from pendingIds list
-            for(uint i=0; i < pendingIds.length; i++) {
-                if(pendingIds[i] == _id) {
-                    removeIdFromList(pendingIds, i);
-                    return;
+            removeIdFromList(pendingIds, _id);
+        }
+
+    }
+
+    function removeIdFromList(bytes32[] storage _list, bytes32 _id) private {
+
+        for(uint i=0; i < _list.length; i++) {
+
+            if(_list[i] == _id) {
+                if( _list.length > 1 ) {
+                    _list[i] = _list[_list.length-1];
                 }
+                _list.length--;
+                return;
             }
         }
-
     }
 
-    function removeIdFromList(bytes32[] storage _list, uint _ind) private {
-
-        if( _list.length > 1 ) {
-            _list[_ind] = _list[_list.length-1];
-        }
-        _list.length--;
-    }
 
     function transferVehicle(bytes32 _id, address nextOwner) canSubmitTransfer(_id, msg.sender) public {
         Vehicle storage vehicle = vehicleRegistry[_id];
@@ -126,12 +144,22 @@ contract VehicleOwnershipDatabase {
         delete waitingForTransfers[_id];
 
         //removing vehicle from transferIds list
-        for(uint i=0; i < transferIds.length; i++) {
-            if(transferIds[i] == _id) {
-                removeIdFromList(transferIds, i);
-                return;
-            }
-        }
+        removeIdFromList(transferIds, _id);
+    }
+
+    function utilizeVehicle(bytes32 _id) canBeUtilized(_id, msg.sender) public {
+        Vehicle storage vehicle = vehicleRegistry[_id];
+        vehicleForUtilization[_id] = vehicle;
+        utilizationIds.push(_id);
+    }
+
+    function approveUtilization(bytes32 _id) canApproveUtilization(_id, msg.sender) public {
+
+        delete vehicleRegistry[_id];
+        delete vehicleForUtilization[_id];
+
+        removeIdFromList(utilizationIds, _id);
+        removeIdFromList(existingIds, _id);
     }
 
     function notApprovingYet(bytes32 _id) public view returns (bool result) {
@@ -150,5 +178,9 @@ contract VehicleOwnershipDatabase {
 
     function getRegisteredIds() public view returns (bytes32[] memory ids) {
         return existingIds;
+    }
+
+    function getUtilizationIds() public view returns (bytes32[] memory ids) {
+        return utilizationIds;
     }
 }
