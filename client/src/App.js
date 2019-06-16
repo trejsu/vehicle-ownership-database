@@ -4,12 +4,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import getWeb3 from "./utils/getWeb3";
 
 import VehicleService from "./services/VehicleService";
-import VehicleAddition from "./components/VehicleAddition";
-import AllPendingVehicles from "./components/AllPendingVehicles";
+
+import NavigationBar from "./components/NavigationBar";
+import Content from "./components/Content";
+
 import "./App.css";
 
 class App extends Component {
-    state = {web3: null, vehicleService: null, adding: false, browsing: false};
+    state = {web3: null, vehicleService: null, page: null};
 
     componentDidMount = async () => {
         try {
@@ -26,39 +28,9 @@ class App extends Component {
         }
     };
 
-    chooseAdding = () => {
-        this.setState({
-            adding: true,
-            browsing: false
-        })
+    onNavigationChange = (page) => {
+        this.setState({page: page});
     };
-
-    chooseBrowsing = () => {
-        this.setState({
-            browsing: true,
-            adding: false
-        })
-    };
-
-    getProperComponents = () => {
-        if (this.state.browsing) {
-            return (
-                <div className={"row"}>
-                    <div className={"col-sm-6"}>
-                        <VehicleAddition
-                            vehicleService={this.state.vehicleService}
-                        />
-                    </div>
-                    <div className={"col-sm-6"}>
-                        <AllPendingVehicles
-                            vehicleService={this.state.vehicleService}
-                        />
-                    </div>
-                </div>
-            )
-        }
-    };
-
 
     render() {
         if (!this.state.web3) {
@@ -68,26 +40,17 @@ class App extends Component {
                 </div>
             );
         } else {
-
             return (
-                <div>
-                    <div className={"row"}>
-                        <div className={"col-sm-4"}>
-                            <button type={"button"}
-                                    className={"btn btn-primary"}
-                                    onClick={this.chooseAdding}>
-                                Add
-                            </button>
-                        </div>
-                        <div className={"col-sm-4"}>
-                            <button type={"button"}
-                                    className={"btn btn-primary"}
-                                    onClick={this.chooseBrowsing}>
-                                Browse
-                            </button>
-                        </div>
+                <div className={"row"}>
+                    <div className={"col-lg-8 offset-lg-2 col-md-8 offset-md-2 col-sm-10 offset-sm-1 col-xs-12"}>
+                        <NavigationBar
+                            onNavigationChange={this.onNavigationChange.bind(this)}
+                        />
+                        <Content
+                            vehicleService={this.state.vehicleService}
+                            page={this.state.page}
+                        />
                     </div>
-                    {this.getProperComponents()}
                 </div>
             )
         }
