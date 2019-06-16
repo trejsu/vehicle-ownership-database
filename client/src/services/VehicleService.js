@@ -215,15 +215,19 @@ export default class VehicleService {
     }
 
     async searchForVehicle(id) {
+        console.log('[VEHICLE SERVICE] Searching for vehicle %s', id);
         const vehicleFromRegistry = await this.contract.methods.vehicleRegistry(this.toBytes(id)).call();
 
         if (vehicleFromRegistry[3]) {
+            console.log('[VEHICLE SERVICE] Vehicle found in registry: ', vehicleFromRegistry);
             return this.formatVehicle(id, vehicleFromRegistry, false)
         }
 
         const vehicleFromPendings = await this.contract.methods.waitingForApprovals(this.toBytes(id)).call();
 
         if (vehicleFromPendings[3]) {
+            console.log('[VEHICLE SERVICE] Vehicle found in pendings: ', vehicleFromPendings);
+
             const currentUser = (await this.web3.eth.getAccounts())[0];
 
             const isNotVehicleOwner = currentUser !== vehicleFromPendings[2];
@@ -237,13 +241,14 @@ export default class VehicleService {
             return this.formatVehicle(id, vehicleFromPendings, isApprovable)
         }
 
+        console.log('[VEHICLE SERVICE] Vehicle %s not found!', id);
         return null;
     }
 
     formatVehicle(id, vehicle, approve) {
         return {
             id: id,
-            type: this.typeMapper.getVehicleName(vehicle[0]),
+            type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
             model: vehicle[1],
             owner: vehicle[2],
             approvable: approve

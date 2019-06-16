@@ -35,6 +35,7 @@ export default class SearchForVehicle extends Component {
         console.log('[SEARCH FOR VEHICLE] Searching for %s', id);
         this.vehicleService.searchForVehicle(id)
             .then(response => {
+                console.log('[SEARCH FOR VEHICLE] Search for vehicle response', response);
                 this.setState({
                     vehicle: response,
                     downloaded: true

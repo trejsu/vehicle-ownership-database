@@ -49,7 +49,7 @@ export default class AllPendingVehicles extends Component {
 
         this.vehicleService.getAllUtilizationApprovalsPossibleToApprove()
             .then(response => {
-                console.log(response);
+                console.log('[ALL PENDING VEHICLES] Utilization approvals possible to approve', response);
                 this.setState({
                     utilizationApprovalVehicles: response
                 });

@@ -41,7 +41,7 @@ export default class MineVehicles extends Component {
     getTransferIds() {
         this.vehicleService.getTransferIds()
             .then(response => {
-                console.log('transferred vehicle ids', response);
+                console.log('[MINE VEHICLES] Transferred vehicles ids', response);
                 this.setState({
                     transferedVehicleIds: response
                 })
