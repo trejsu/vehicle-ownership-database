@@ -14,7 +14,7 @@ export default class MineVehicles extends Component {
                     downloaded: true,
                 });
             })
-            .catch(error => {
+            .catch(() => {
                 this.setState({
                     downloaded: true,
                     error: true
