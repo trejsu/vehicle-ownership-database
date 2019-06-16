@@ -29,7 +29,7 @@
     background-color: #ffc107;
 }
 .utilized {
-    background: lightslategrey;
+    background: #a19da0;
 }
 
 .registered {
@@ -125,6 +125,12 @@
     color: #ba8a07;
     font-weight: bold;
 }
+
+.utilized-label {
+    color: white;
+    font-weight: bold;
+}
+
 .registered-label {
     color: #73de7d;
     font-weight: bold;
