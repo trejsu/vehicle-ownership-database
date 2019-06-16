@@ -92,11 +92,20 @@ contract VehicleOwnershipDatabase {
             //removing vehicle from pendingIds list
             for(uint i=0; i < pendingIds.length; i++) {
                 if(pendingIds[i] == _id) {
-                    delete pendingIds[i];
+                    removeIdFromList(pendingIds, i);
+                    return;
                 }
             }
         }
 
+    }
+
+    function removeIdFromList(bytes32[] storage _list, uint _ind) private {
+
+        if( _list.length > 1 ) {
+            _list[_ind] = _list[_list.length-1];
+        }
+        _list.length--;
     }
 
     function transferVehicle(bytes32 _id, address nextOwner) canSubmitTransfer(_id, msg.sender) public {
@@ -118,7 +127,8 @@ contract VehicleOwnershipDatabase {
         //removing vehicle from transferIds list
         for(uint i=0; i < transferIds.length; i++) {
             if(transferIds[i] == _id) {
-                delete transferIds[i];
+                removeIdFromList(transferIds, i);
+                return;
             }
         }
     }
