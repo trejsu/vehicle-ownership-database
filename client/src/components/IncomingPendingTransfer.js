@@ -101,7 +101,7 @@ export default class IncomingPendingTransfer extends Component {
     getDefault = () => {
         return (
             <div>
-                <div className={"incoming-pending-transfer-vehicles"}>
+                <div className="alert alert-info incoming-pending-transfer-vehicles" role="alert">
                     List of incoming pending vehicle transfer is empty
                 </div>
             </div>
