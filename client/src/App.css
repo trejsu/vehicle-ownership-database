@@ -21,6 +21,7 @@
 .vehicle-info {
     padding: 20px;
     border-radius: 20px;
+    text-align: left;
 }
 
 .pending {
