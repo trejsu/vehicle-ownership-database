@@ -15,7 +15,7 @@ export default class VehicleInfo extends Component {
     getBikeInfo = () => {
         return (
             <div>
-                SERIAL: {this.vehicle.id}
+                <b>SERIAL:</b> {this.vehicle.id}
             </div>
         )
     };

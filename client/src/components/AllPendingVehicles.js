@@ -103,8 +103,8 @@ export default class AllPendingVehicles extends Component {
     getDefault = () => {
         return (
             <div>
-                <div className={"mine-vehicles"}>
-                    List of all pending approvals is empty
+                <div className="alert alert-info mine-vehicles" role="alert">
+                    There are no pending approvals at the moment.
                 </div>
             </div>
         )
