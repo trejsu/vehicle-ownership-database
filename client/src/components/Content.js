@@ -21,6 +21,10 @@ export default class Content extends Component {
                     <VehicleAddition
                         vehicleService={this.vehicleService}/>
                 </div>
+                <div className={"col-sm-6"}>
+                    <MineVehicles
+                        vehicleService={this.vehicleService}/>
+                </div>
             </div>
         );
     };

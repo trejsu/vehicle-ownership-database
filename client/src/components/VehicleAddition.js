@@ -30,13 +30,25 @@ export default class VehicleAddition extends Component {
     };
 
     handleRequestClicked = () => {
-        switch (this.state.vehicleType) {
+        const elem = {
+            id: this.state.id,
+            vehicleModel: this.state.vehicleModel,
+            vehicleType: this.state.vehicleType,
+        };
+        console.log(this.state);
+        const el = this.defaultVehicleType;
+        this.setState({
+            // vehicleType: el,
+            vehicleModel: null
+            // id: null
+        });
+        console.log(this.state);
+        switch (elem.vehicleType) {
             case "car":
             case "bike":
-                this.vehicleService.addVehicle(
-                    (({vehicleType, vehicleModel, id}) =>
-                        ({vehicleType, vehicleModel, id}))(this.state))
-                    .then(result => console.log(result));
+                this.vehicleService.addVehicle(elem)
+                    .then(result => console.log(result))
+                    .catch(() => console.log("addition err"));
                 break;
             default:
                 console.log("error with state: ", this.state.vehicleType);
@@ -48,7 +60,7 @@ export default class VehicleAddition extends Component {
             <div>
                 <input
                     placeholder={placeholder}
-                    defaultValue={this.state.carVin}
+                    defaultValue={this.state.id}
                     onChange={this.handleIdChanged}/>
             </div>
         )
