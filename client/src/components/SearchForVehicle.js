@@ -4,23 +4,73 @@ import VehicleInfo from "./VehicleInfo";
 import ApproveVehicle from "./ApproveVehicle";
 
 export default class SearchForVehicle extends Component {
-    state = {error: false, downloaded: false};
+    state = {error: false, notFound: false, downloaded: false, blocked: false, id: ""};
     vehicleService = this.props.vehicleService;
 
     handleIdChanged = (event) => {
         this.setState({id: event.target.value})
     };
 
-    handleRequestClicked = () => {
-        const id = this.state.id;
-        this.setState({id: null, vehicle: null, error: false, downloaded: false});
+    search = (id) => {
         this.vehicleService.searchForVehicle(id)
             .then(response => {
-                this.setState({vehicle: response, downloaded: true})
+                this.setState({
+                    vehicle: response,
+                    downloaded: true
+                })
             })
             .catch(() => {
-                this.setState({error: true, downloaded: true});
+                this.setState({
+                    error: true,
+                    downloaded: true
+                });
+            })
+            .finally(() => {
+                this.setState({
+                    id: ""
+                });
             });
+    };
+
+    handleRequestClicked = () => {
+        const id = this.state.id;
+
+        this.setState({
+            vehicle: null,
+            error: false,
+            downloaded: false,
+            blocked: true
+        });
+
+        let registeredIds;
+        let pendingIds;
+
+        this.vehicleService.getRegisteredIdsWithReplaced()
+            .then(response => {
+                registeredIds = response;
+                return this.vehicleService.getPendingIdsWithReplaced();
+            })
+            .then(response => {
+                pendingIds = response;
+                if (registeredIds.includes(id) || pendingIds.includes(id)) {
+                    return this.search(id);
+                } else {
+                    this.setState({
+                        notFound: true
+                    });
+                    throw Error();
+                }
+            })
+            .catch(() => {
+                this.setState({
+                    error: true
+                })
+            })
+            .finally(() => {
+                this.setState({
+                    blocked: false
+                });
+            })
     };
 
     handleApproveClicked = (id) => {
@@ -54,6 +104,14 @@ export default class SearchForVehicle extends Component {
         )
     };
 
+    getNotFound = () => {
+        return (
+            <div>
+                ID not found
+            </div>
+        );
+    };
+
     getErrorMessage = () => {
         return (
             <div>
@@ -63,13 +121,15 @@ export default class SearchForVehicle extends Component {
     };
 
     getVehicleResult() {
-        return this.state.downloaded ?
-            (this.state.error ?
-                this.getErrorMessage() :
+        return this.state.error ?
+            (this.state.notFound ?
+                this.getNotFound() :
+                this.getErrorMessage()) :
+            (this.state.downloaded ?
                 (this.state.vehicle ?
                     this.getVehicleInfo() :
-                    this.getVehicleNotFoundInfo())) :
-            null;
+                    this.getVehicleNotFoundInfo()) :
+                null);
     };
 
     render() {
@@ -82,12 +142,14 @@ export default class SearchForVehicle extends Component {
                     <div>
                         <input
                             placeholder={"ID"}
-                            defaultValue={this.state.id}
+                            disabled={this.state.blocked}
+                            value={this.state.id}
                             onChange={this.handleIdChanged}/>
                     </div>
 
                     <div>
                         <button type={"button"}
+                                disabled={this.state.blocked}
                                 className={"btn btn-primary"}
                                 onClick={this.handleRequestClicked}>
                             Search
