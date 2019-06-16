@@ -9,7 +9,10 @@ import IncomingPendingTransfer from "./IncomingPendingTransfer";
 
 export default class Content extends Component {
     vehicleService = this.props.vehicleService;
-    state = {page: this.props.page, addingComponentChange: true};
+    state = {
+        page: this.props.page,
+        addingComponentChange: true
+    };
 
     componentWillReceiveProps(nextProps, nextContext) {
         this.setState({page: nextProps.page});
@@ -37,7 +40,6 @@ export default class Content extends Component {
             addingComponentChange: !prevState.addingComponentChange
         }));
     }
-
 
     getBrowsingComponent = () => {
         return (

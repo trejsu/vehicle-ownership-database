@@ -8,6 +8,10 @@ export default class AllPendingVehicles extends Component {
     vehicleService = this.props.vehicleService;
 
     componentDidMount = async () => {
+        this.loadData();
+    };
+
+    loadData() {
         this.vehicleService.getAllPendingApprovalsPossibleToApprove()
             .then(response => {
                 this.setState({
@@ -21,7 +25,7 @@ export default class AllPendingVehicles extends Component {
                     error: true
                 })
             });
-    };
+    }
 
     getAllPendingApprovalsDownloadError = () => {
         return (
@@ -33,8 +37,9 @@ export default class AllPendingVehicles extends Component {
 
     handleApproveClicked = (id) => {
         this.vehicleService.approveVehicle(id)
-            .then(() => {
-                console.log("approved ", id);
+            .then(response => {
+                console.log("Approve vehicle response ", response);
+                this.loadData();
             });
     };
 

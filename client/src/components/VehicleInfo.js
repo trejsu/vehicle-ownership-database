@@ -7,7 +7,7 @@ export default class VehicleInfo extends Component {
     getCarInfo = () => {
         return (
             <div>
-                VIN = {this.vehicle.id}
+                VIN: {this.vehicle.id}
             </div>
         )
     };
@@ -15,7 +15,7 @@ export default class VehicleInfo extends Component {
     getBikeInfo = () => {
         return (
             <div>
-                Serial = {this.vehicle.id}
+                SERIAL: {this.vehicle.id}
             </div>
         )
     };
