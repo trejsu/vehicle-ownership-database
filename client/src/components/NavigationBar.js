@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 
 export default class NavigationBar extends Component {
-    state = {page: null};
+    state = {page: this.props.page};
 
     navigationOptions = [{
         pageKey: "private",
