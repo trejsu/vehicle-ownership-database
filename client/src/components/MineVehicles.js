@@ -30,16 +30,22 @@ export default class MineVehicles extends Component {
         )
     };
 
+    getMinePendingApprovalVehicleInfos = () => {
+        return (
+            this.state.vehicles.map(vehicle =>
+                <VehicleInfo
+                    key={vehicle.id}
+                    vehicle={vehicle}/>)
+        );
+    };
+
     getVehiclesContent = () => {
         return (
             <div>
                 <div className={"mine-vehicles-title"}>
                     List of mine vehicles
                 </div>
-                {this.state.vehicles.map(vehicle =>
-                    <VehicleInfo
-                        key={vehicle.id}
-                        vehicle={vehicle}/>)}
+                {this.getMinePendingApprovalVehicleInfos()}
             </div>
         );
     };

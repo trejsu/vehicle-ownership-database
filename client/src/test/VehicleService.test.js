@@ -14,8 +14,8 @@ it('should fail when instantiated through constructor', () => {
 // todo: change random strings to new contract with every test run
 it('addCar should return promise with transaction', async () => {
   const service = await VehicleService.init(web3);
-  const carVin = Math.random().toString(36).substring(7);
-  return service.addCar({vehicleType: "car", vehicleModel: "model", carVin: carVin})
+  const id = Math.random().toString(36).substring(7);
+  return service.addVehicle({vehicleType: "car", vehicleModel: "model", id: id})
     .then(tx => expect(tx).not.toBeUndefined());
 });
 

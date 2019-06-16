@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 
 import VehicleAddition from "./VehicleAddition";
+import SearchForVehicle from "./SearchForVehicle";
 import AllPendingVehicles from "./AllPendingVehicles";
 import MineVehicles from "./MineVehicles";
 
@@ -27,6 +28,11 @@ export default class Content extends Component {
     getBrowsingComponent = () => {
         return (
             <div className={"row"}>
+                <div className={"col-sm-6"}>
+                    <SearchForVehicle
+                        vehicleService={this.vehicleService}
+                    />
+                </div>
                 <div className={"col-sm-6"}>
                     <AllPendingVehicles
                         vehicleService={this.vehicleService}
