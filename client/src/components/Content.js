@@ -21,12 +21,10 @@ export default class Content extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
-        console.log('Content will receive props.');
         if (nextProps.page !== this.state.page) {
             this.setState({page: nextProps.page});
         }
         if (this.accountChanged(nextProps)) {
-            console.log('Account changed');
             this.onAddingComponentChange();
             this.onBrowsingComponentChange();
             this.onPrivateComponentChange();
