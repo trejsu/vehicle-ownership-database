@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 
 import VehicleInfo from "./VehicleInfo";
+import ApproveVehicle from "./ApproveVehicle";
 
 export default class SearchForVehicle extends Component {
     state = {error: false, downloaded: false};
@@ -22,6 +23,14 @@ export default class SearchForVehicle extends Component {
             });
     };
 
+    handleApproveClicked = (id) => {
+        this.vehicleService.approveVehicle(id)
+            .then(() => {
+                console.log("approved ", id);
+            });
+    };
+
+
     getVehicleInfo = () => {
         return (
             <div>
@@ -29,6 +38,9 @@ export default class SearchForVehicle extends Component {
                 <VehicleInfo
                     key={this.state.vehicle.id}
                     vehicle={this.state.vehicle}/>
+                <ApproveVehicle
+                    vehicleId={this.state.vehicle.id}
+                    handleApproveClicked={this.handleApproveClicked}/>
             </div>
         );
     };

@@ -4,7 +4,6 @@ export default class VehicleInfo extends Component {
     state = {};
     vehicle = this.props.vehicle;
 
-
     getCarInfo = () => {
         return (
             <div>
