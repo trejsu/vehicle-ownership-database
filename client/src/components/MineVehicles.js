@@ -3,22 +3,48 @@ import React, {Component} from "react";
 import VehicleInfo from "./VehicleInfo";
 
 export default class MineVehicles extends Component {
-    state = {downloaded: false};
+    state = {
+        downloadPending: false,
+        downloadRegistered: false,
+        error: false,
+        pendingVehicles: [],
+        registeredVehicles: []
+    };
     vehicleService = this.props.vehicleService;
 
     componentDidMount = async () => {
         this.vehicleService.getUserPendingApprovals()
             .then(response => {
                 this.setState({
-                    vehicles: response,
-                    downloaded: true,
+                    pendingVehicles: response
                 });
             })
             .catch(() => {
                 this.setState({
-                    downloaded: true,
                     error: true
                 })
+            })
+            .finally(() => {
+                this.setState({
+                    downloadPending: true
+                });
+            });
+
+        this.vehicleService.getUserRegisteredVehicles()
+            .then(response => {
+                this.setState({
+                    registeredVehicles: response
+                });
+            })
+            .catch(() => {
+                this.setState({
+                    error: true
+                })
+            })
+            .finally(() => {
+                this.setState({
+                    downloadRegistered: true
+                });
             });
     };
 
@@ -30,29 +56,31 @@ export default class MineVehicles extends Component {
         )
     };
 
-    getMinePendingApprovalVehicleInfos = () => {
+    getMinePendingApprovalVehicleInfos = (vehicles) => {
         return (
-            this.state.vehicles.map(vehicle =>
+            vehicles.map(vehicle =>
                 <VehicleInfo
                     key={vehicle.id}
                     vehicle={vehicle}/>)
         );
     };
 
-    getVehiclesContent = () => {
+    getVehiclesContent = (vehicles) => {
         return (
             <div>
                 <div className={"mine-vehicles-title"}>
                     List of mine vehicles
                 </div>
-                {this.getMinePendingApprovalVehicleInfos()}
+                {this.getMinePendingApprovalVehicleInfos(vehicles)}
             </div>
         );
     };
 
     getVehicles = () => {
-        return this.state.vehicles && this.state.vehicles.length > 0 ?
-            this.getVehiclesContent() :
+        const vehicles = this.state.pendingVehicles.concat(this.state.registeredVehicles);
+
+        return vehicles && vehicles.length > 0 ?
+            this.getVehiclesContent(vehicles) :
             this.getDefault();
     };
 
@@ -75,7 +103,7 @@ export default class MineVehicles extends Component {
     };
 
     render() {
-        return this.state.downloaded ?
+        return this.state.downloadRegistered || this.state.downloadPending ?
             (this.state.error ?
                 this.getVehiclesDownloadError() :
                 this.getVehicles()) :

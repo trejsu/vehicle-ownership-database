@@ -57,6 +57,12 @@ export default class VehicleService {
         return vehicles;
     }
 
+    async getUserRegisteredVehicles() {
+        return new Promise((resolve) => {
+            resolve([]);
+        });
+    }
+
     async getUserPendingApprovals() {
         console.log('Retrieving current user approvals...');
         const owner = (await this.web3.eth.getAccounts())[0];
