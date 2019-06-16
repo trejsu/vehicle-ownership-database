@@ -36,7 +36,6 @@ export default class SearchForVehicle extends Component {
             <div>
                 Found vehicle
                 <VehicleInfo
-                    key={this.state.vehicle.id}
                     vehicle={this.state.vehicle}/>
                 <ApproveVehicle
                     vehicleId={this.state.vehicle.id}

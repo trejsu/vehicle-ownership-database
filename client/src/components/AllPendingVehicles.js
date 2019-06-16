@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 
 import VehicleInfo from "./VehicleInfo";
+import ApproveVehicle from "./ApproveVehicle";
 
 export default class AllPendingVehicles extends Component {
     state = {pendingApprovalVehicles: []};
@@ -30,12 +31,29 @@ export default class AllPendingVehicles extends Component {
         )
     };
 
+    handleApproveClicked = (id) => {
+        this.vehicleService.approveVehicle(id)
+            .then(() => {
+                console.log("approved ", id);
+            });
+    };
+
+    getVehicleToApprove = (vehicle) => {
+        return (
+            <div key={vehicle.id}>
+                <VehicleInfo
+                    vehicle={vehicle}/>
+                <ApproveVehicle
+                    vehicleId={vehicle.id}
+                    handleApproveClicked={this.handleApproveClicked}/>
+            </div>
+        );
+    };
+
     getPendingApprovalVehicleInfos = () => {
         return (
             this.state.pendingApprovalVehicles.map(vehicle =>
-                <VehicleInfo
-                    key={vehicle.id}
-                    vehicle={vehicle}/>)
+                this.getVehicleToApprove(vehicle))
         );
     };
 
