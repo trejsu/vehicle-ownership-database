@@ -58,9 +58,21 @@ export default class VehicleService {
     }
 
     async getUserRegisteredVehicles() {
-        return new Promise((resolve) => {
-            resolve([]);
-        });
+        const getRegisteredIds = (await this.contract.methods.getRegisteredIds().call());
+        const currentUser = (await this.web3.eth.getAccounts())[0];
+        const vehicles = [];
+        for (let i = 0; i < getRegisteredIds.length; i++) {
+            const vehicle = await this.contract.methods.vehicleRegistry(getRegisteredIds[i]).call();
+            if(currentUser === vehicle[2]) {
+                vehicles.push({
+                    id: this.fromBytes(getRegisteredIds[i]).replace(/\u0000/g, ''),
+                    type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
+                    model: vehicle[1],
+                    owner: vehicle[2]
+                });
+            }
+        }
+        return vehicles;
     }
 
     async getUserPendingApprovals() {
