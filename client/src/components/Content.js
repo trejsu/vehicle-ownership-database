@@ -9,7 +9,7 @@ import IncomingPendingTransfer from "./IncomingPendingTransfer";
 
 export default class Content extends Component {
     vehicleService = this.props.vehicleService;
-    state = {page: this.props.page};
+    state = {page: this.props.page, addingComponentChange: true};
 
     componentWillReceiveProps(nextProps, nextContext) {
         this.setState({page: nextProps.page});
@@ -20,15 +20,24 @@ export default class Content extends Component {
             <div className={"row"}>
                 <div className={"col-sm-6"}>
                     <VehicleAddition
-                        vehicleService={this.vehicleService}/>
+                        vehicleService={this.vehicleService}
+                        onChange={this.onVehicleAdditionChange.bind(this)}/>
                 </div>
                 <div className={"col-sm-6"}>
                     <MineVehicles
-                        vehicleService={this.vehicleService}/>
+                        vehicleService={this.vehicleService}
+                        change={this.state.addingComponentChange}/>
                 </div>
             </div>
         );
     };
+
+    onVehicleAdditionChange() {
+        this.setState(prevState => ({
+            addingComponentChange: !prevState.addingComponentChange
+        }));
+    }
+
 
     getBrowsingComponent = () => {
         return (

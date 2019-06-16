@@ -4,9 +4,6 @@ export default class VehicleAddition extends Component {
     state = {id: "", vehicleModel: "", vehicleType: "car"};
     vehicleService = this.props.vehicleService;
 
-    componentDidMount = async () => {
-    };
-
     handleVehicleTypeChanged = (event) => {
         this.setState({
             vehicleType: event.target.value
@@ -26,18 +23,16 @@ export default class VehicleAddition extends Component {
     };
 
     handleRequestClicked = () => {
-        const elem = {
-            id: this.state.id,
-            vehicleModel: this.state.vehicleModel,
-            vehicleType: this.state.vehicleType,
-        };
-        this.setState({
-            vehicleModel: "",
-            id: ""
-        });
-        this.vehicleService.addVehicle(elem)
-            .then(result => console.log(result))
-            .catch(() => console.log("addition err"));
+        this.vehicleService.addVehicle(this.state)
+            .then(result => {
+                console.log('Add vehicle result', result);
+                this.setState({
+                    vehicleModel: "",
+                    id: ""
+                });
+                this.props.onChange();
+            })
+            .catch(error => console.log("Error occurred during adding vehicle", error));
     };
 
     getIdInputWithPlaceholder = placeholder => {
@@ -69,7 +64,7 @@ export default class VehicleAddition extends Component {
         return (
             <div>
                 <div className={"vehicle-addition-title"}>
-                    Select type of vehicle
+                    Request new vehicle
                 </div>
                 <div className={"vehicle-addition-panel"}>
                     <select

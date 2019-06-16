@@ -5,13 +5,13 @@ export default class NavigationBar extends Component {
 
     navigationOptions = [{
         pageKey: "private",
-        description: "Private"
+        description: "My vehicles"
     }, {
         pageKey: "adding",
-        description: "Adding"
+        description: "Add vehicle"
     }, {
         pageKey: "browsing",
-        description: "Browsing"
+        description: "Browse vehicles"
     }];
 
     componentDidMount() {
@@ -64,7 +64,6 @@ export default class NavigationBar extends Component {
                 this.getElement(option))
         );
     };
-
 
     render() {
         return (

@@ -59,14 +59,14 @@ export default class TransferVehicle extends Component {
                     <div className={"transfer-vehicle-panel"}>
                         <div>
                             <input
-                                placeholder={"Address"}
+                                placeholder={"Receiver address"}
                                 defaultValue={this.state.address}
                                 onChange={this.handleAddressChanged}/>
                         </div>
 
                         <div>
                             <input
-                                placeholder={"ID"}
+                                placeholder={"Vehicle ID"}
                                 defaultValue={this.state.id}
                                 onChange={this.handleIdChanged}/>
                         </div>

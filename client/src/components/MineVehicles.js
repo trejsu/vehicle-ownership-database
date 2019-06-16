@@ -3,35 +3,59 @@ import React, {Component} from "react";
 import VehicleInfo from "./VehicleInfo";
 
 export default class MineVehicles extends Component {
-    state = {
-        downloadPending: false,
-        downloadRegistered: false,
-        downloadTransfered: false,
-        error: false,
-        pendingVehicles: [],
-        registeredVehicles: [],
-        transferedVehicleIds: []
-    };
-    vehicleService = this.props.vehicleService;
 
-    componentDidMount = async () => {
-        this.vehicleService.getUserPendingApprovals()
+    constructor(props) {
+        super(props);
+        this.state = {
+            downloadPending: false,
+            downloadRegistered: false,
+            downloadTransfered: false,
+            error: false,
+            pendingVehicles: [],
+            registeredVehicles: [],
+            transferedVehicleIds: []
+        };
+        this.vehicleService = this.props.vehicleService;
+    }
+
+    componentDidMount() {
+        this.loadData();
+    };
+
+    componentWillReceiveProps(nextProps) {
+        if (this.propsChanged(nextProps)) {
+            this.loadData();
+        }
+    }
+
+    loadData() {
+        this.getUserPendingApprovals();
+        this.getUserRegisteredVehicles();
+        this.getTransferIds();
+    }
+
+    getTransferIds() {
+        this.vehicleService.getTransferIds()
             .then(response => {
+                console.log('transferred vehicle ids', response);
                 this.setState({
-                    pendingVehicles: response
-                });
+                    transferedVehicleIds: response
+                })
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log(err);
                 this.setState({
                     error: true
                 })
             })
             .finally(() => {
                 this.setState({
-                    downloadPending: true
+                    downloadTransfered: true
                 });
             });
+    }
 
+    getUserRegisteredVehicles() {
         this.vehicleService.getUserRegisteredVehicles()
             .then(response => {
                 this.setState({
@@ -48,26 +72,30 @@ export default class MineVehicles extends Component {
                     downloadRegistered: true
                 });
             });
+    }
 
-        this.vehicleService.getTransferIds()
+    getUserPendingApprovals() {
+        this.vehicleService.getUserPendingApprovals()
             .then(response => {
-                console.log(response);
                 this.setState({
-                    transferedVehicleIds: response
-                })
+                    pendingVehicles: response
+                });
             })
-            .catch((err) => {
-                console.log(err);
+            .catch(() => {
                 this.setState({
                     error: true
                 })
             })
             .finally(() => {
                 this.setState({
-                    downloadTransfered: true
+                    downloadPending: true
                 });
             });
-    };
+    }
+
+    propsChanged(nextProps) {
+        return this.props.change !== nextProps.change;
+    }
 
     getVehiclesDownloadError = () => {
         return (
@@ -90,7 +118,7 @@ export default class MineVehicles extends Component {
         return (
             <div>
                 <div className={"mine-vehicles-title"}>
-                    List of mine vehicles
+                    My vehicles
                 </div>
                 {this.getMinePendingApprovalVehicleInfos(vehicles)}
             </div>
@@ -122,7 +150,7 @@ export default class MineVehicles extends Component {
         return (
             <div>
                 <div className={"mine-vehicles"}>
-                    List of mine vehicles is empty
+                    You don't have any vehicles registered yet.
                 </div>
             </div>
         )
