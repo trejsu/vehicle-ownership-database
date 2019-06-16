@@ -28,7 +28,7 @@ export default class VehicleService {
 
     // todo: validation of id
     addVehicle(vehicle) {
-        console.log(vehicle);
+        console.log('Adding vehicle', vehicle);
         return this.web3.eth.getAccounts()
             .then(accounts => {
                 return this.contract.methods.addVehicle(
@@ -40,6 +40,7 @@ export default class VehicleService {
     }
 
     async getPendingApprovals() {
+        console.log('Retrieving all pending approvals...');
         const pendingIds = (await this.contract.methods.getPendingIds().call());
         const vehicles = [];
         for (let i = 0; i < pendingIds.length; i++) {
@@ -52,6 +53,7 @@ export default class VehicleService {
             });
 
         }
+        console.log("Found %d pending approvals",vehicles.length);
         return vehicles;
     }
 

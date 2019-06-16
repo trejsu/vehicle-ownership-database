@@ -41,19 +41,28 @@ describe('VehicleService', () => {
       .then(tx => expect(tx).not.toBeUndefined());
   });
 
-  // // todo: assert retrned objects
-  // it('getPendingApprovals should return list of all pending vehicles', async () => {
-  //   const service = new VehicleService(web3, vehicleDb);
-  //   const vehicle = {
-  //     vehicleType: "car",
-  //     vehicleModel: "model",
-  //     id: 'abcd'
-  //   };
-  //   await
-  //   const pendings = await service.getPendingApprovals();
-  //   console.log(pendings);
-  //   expect(pendings.every(p => p.length < 7)).toBeTruthy();
-  // });
+  it('getPendingApprovals should return list containing pending vehicles objects', async () => {
+    // given
+    const service = new VehicleService(web3, vehicleDb);
+    const vehicle = {
+      vehicleType: "car",
+      vehicleModel: "model",
+      id: 'abcd'
+    };
+    const expectedVehicle = {
+      id: 'abcd',
+      model: "model",
+      owner: accounts[0],
+      type: "car"
+    };
+    await service.addVehicle(vehicle);
+
+    // when
+    const pendings = await service.getPendingApprovals();
+
+    // then
+    expect(pendings).toEqual([expectedVehicle]);
+  });
 
 });
 
