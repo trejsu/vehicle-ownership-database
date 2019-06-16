@@ -91,3 +91,13 @@
 .vehicle-addition-panel button {
   width: 100%;
 }
+
+.search-for-vehicle-panel input {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.search-for-vehicle-panel button {
+  width: 100%;
+}
