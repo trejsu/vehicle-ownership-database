@@ -41,32 +41,20 @@ export default class VehicleService {
             });
     }
 
-    async getPendingIds() {
-        return (await this.contract.methods.getPendingIds().call());
-    }
-
-    async getRegisteredIds() {
-        return (await this.contract.methods.getRegisteredIds().call());
-    }
-
     async getPendingIdsWithReplaced() {
-        return this.getPendingIds()
-            .then((response) => {
-                return response.map(x => this.fromBytesWithReplace(x))
-            })
+        const ids = (await this.contract.methods.getPendingIds().call());
+        return ids.map(x => this.fromBytesWithReplace(x));
     }
 
     async getRegisteredIdsWithReplaced() {
-        return this.getRegisteredIds()
-            .then((response) => {
-                return response.map(x => this.fromBytesWithReplace(x))
-            })
+        const ids = (await this.contract.methods.getRegisteredIds().call());
+        return ids.map(x => this.fromBytesWithReplace(x));
     }
 
 
     async getPendingApprovals() {
         console.log('Retrieving all pending approvals...');
-        const pendingIds = this.getPendingIds();
+        const pendingIds = (await this.contract.methods.getPendingIds().call());
         const vehicles = [];
         for (let i = 0; i < pendingIds.length; i++) {
             const vehicle = await this.contract.methods.waitingForApprovals(pendingIds[i]).call();
@@ -83,7 +71,7 @@ export default class VehicleService {
     }
 
     async getUserRegisteredVehicles() {
-        const getRegisteredIds = this.getRegisteredIds();
+        const getRegisteredIds = (await this.contract.methods.getRegisteredIds().call());
         const currentUser = (await this.web3.eth.getAccounts())[0];
         const vehicles = [];
         for (let i = 0; i < getRegisteredIds.length; i++) {
