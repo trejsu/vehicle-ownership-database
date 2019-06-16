@@ -1,8 +1,31 @@
 import React, {Component} from "react";
 
-export default class AllPendingVehicles extends Component {
+export default class VehicleInfo extends Component {
     state = {};
     vehicle = this.props.vehicle;
+
+
+    getCarInfo = () => {
+        return (
+            <div>
+                VIN = {this.vehicle.id}
+            </div>
+        )
+    };
+
+    getBikeInfo = () => {
+        return (
+            <div>
+                Serial = {this.vehicle.id}
+            </div>
+        )
+    };
+
+    getIdInfo = () => {
+        return this.vehicle.type === "car" ?
+            this.getCarInfo() :
+            this.getBikeInfo();
+    };
 
     render() {
         return (
@@ -15,15 +38,7 @@ export default class AllPendingVehicles extends Component {
                     Model = {this.vehicle.model}
                 </div>
 
-                {this.vehicle.type === "car" &&
-                <div>
-                    VIN = {this.vehicle.id}
-                </div>}
-
-                {this.vehicle.type === "bike" &&
-                <div>
-                    Serial = {this.vehicle.id}
-                </div>}
+                {this.getIdInfo()}
             </div>
         );
     }

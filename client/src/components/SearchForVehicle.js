@@ -50,17 +50,13 @@ export default class SearchForVehicle extends Component {
     };
 
     getVehicleResult() {
-        const content = this.state.downloaded ?
+        return this.state.downloaded ?
             (this.state.error ?
                 this.getErrorMessage() :
                 (this.state.vehicle ?
                     this.getVehicleInfo() :
                     this.getVehicleNotFoundInfo())) :
             null;
-
-        return (
-            content
-        );
     };
 
     render() {

@@ -42,15 +42,11 @@ export default class TransferVehicle extends Component {
     };
 
     getTransferResult() {
-        const content = this.state.transferred ?
+        return this.state.transferred ?
             (this.state.error ?
                 this.getErrorMessage() :
                 this.getTransferPositiveInfo()) :
             null;
-
-        return (
-            content
-        );
     };
 
     render() {

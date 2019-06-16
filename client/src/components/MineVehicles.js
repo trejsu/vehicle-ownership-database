@@ -51,13 +51,9 @@ export default class MineVehicles extends Component {
     };
 
     getVehicles = () => {
-        const content = this.state.vehicles && this.state.vehicles.length > 0 ?
+        return this.state.vehicles && this.state.vehicles.length > 0 ?
             this.getVehiclesContent() :
             this.getDefault();
-
-        return (
-            content
-        )
     };
 
     getDefault = () => {
@@ -79,14 +75,10 @@ export default class MineVehicles extends Component {
     };
 
     render() {
-        const content = this.state.downloaded ?
+        return this.state.downloaded ?
             (this.state.error ?
                 this.getVehiclesDownloadError() :
                 this.getVehicles()) :
             this.getWait();
-
-        return (
-            content
-        );
     }
 }
