@@ -26,13 +26,24 @@ export default class VehicleInfo extends Component {
             this.getBikeInfo();
     };
 
+    getStateLabel = () => {
+        if(this.vehicle.status) {
+            return this.vehicle.status.toUpperCase();
+        }
+    };
+
     render() {
         return (
             <div className={"vehicle-info " + this.vehicle.status}>
-                <div>
-                    Type = {this.vehicle.type}
-                </div>
+                <div className={"vehicle-info-first-row"}>
+                    <div className={"vehicle-type-label"}>
+                        Type = {this.vehicle.type}
+                    </div>
+                    <div className={"vehicle-status-label " + this.vehicle.status + "-label"}>
+                        {this.getStateLabel()}
+                    </div>
 
+                </div>
                 <div>
                     Model = {this.vehicle.model}
                 </div>

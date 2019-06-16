@@ -101,3 +101,29 @@
 .search-for-vehicle-panel button {
     width: 100%;
 }
+
+.vehicle-info-first-row {
+    overflow: hidden;
+}
+
+.vehicle-type-label {
+    float:left;
+}
+
+.vehicle-status-label {
+    float: right;
+}
+
+.pending-label {
+    color: #cc5200;
+    font-weight: bold;
+}
+.registered-label {
+    color: #009933;
+    font-weight: bold;
+}
+
+.transfer-label {
+    color: #0033cc;
+    font-weight: bold;
+}
