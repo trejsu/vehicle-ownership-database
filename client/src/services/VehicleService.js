@@ -63,7 +63,7 @@ export default class VehicleService {
         const vehicles = [];
         for (let i = 0; i < getRegisteredIds.length; i++) {
             const vehicle = await this.contract.methods.vehicleRegistry(getRegisteredIds[i]).call();
-            if(currentUser === vehicle[2]) {
+            if (currentUser === vehicle[2]) {
                 vehicles.push({
                     id: this.fromBytes(getRegisteredIds[i]).replace(/\u0000/g, ''),
                     type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
@@ -98,7 +98,10 @@ export default class VehicleService {
 
             console.log('Checking if vehicle %s is approvable by %s', vehicle.id, currentUser);
 
-            const notApprovedByCurrentUser = await this.contract.methods.notApprovingYet(vehicleId).call({from : currentUser});
+            const notApprovedByCurrentUser = await this.contract.methods.notApprovingYet(vehicleId).call(
+                {from: currentUser});
+            console.log('Vehicle %s approved by %s already.', notApprovedByCurrentUser ? 'was not' : 'was',
+                currentUser);
 
             if (notApprovedByCurrentUser && vehicle.owner !== currentUser) {
                 console.log('Approve possible');
