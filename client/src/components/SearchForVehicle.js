@@ -4,14 +4,35 @@ import VehicleInfo from "./VehicleInfo";
 import ApproveVehicle from "./ApproveVehicle";
 
 export default class SearchForVehicle extends Component {
-    state = {error: false, notFound: false, downloaded: false, blocked: false, id: ""};
-    vehicleService = this.props.vehicleService;
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            error: false,
+            notFound: false,
+            downloaded: false,
+            blocked: false,
+            id: ""
+        };
+        this.vehicleService = this.props.vehicleService;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.propsChanged(nextProps)) {
+            this.search(this.state.id);
+        }
+    }
+
+    propsChanged(nextProps) {
+        return this.props.change !== nextProps.change;
+    }
 
     handleIdChanged = (event) => {
         this.setState({id: event.target.value})
     };
 
     search = (id) => {
+        console.log('[SEARCH FOR VEHICLE] Searching for %s', id);
         this.vehicleService.searchForVehicle(id)
             .then(response => {
                 this.setState({
@@ -23,11 +44,6 @@ export default class SearchForVehicle extends Component {
                 this.setState({
                     error: true,
                     downloaded: true
-                });
-            })
-            .finally(() => {
-                this.setState({
-                    id: ""
                 });
             });
     };
@@ -76,7 +92,9 @@ export default class SearchForVehicle extends Component {
     handleApproveClicked = (id) => {
         this.vehicleService.approveVehicle(id)
             .then(() => {
-                console.log("approved ", id);
+                console.log("[SEARCH FOR VEHICLE] Approved %s", id);
+                this.setState({downloaded: false});
+                this.props.onChange();
             });
     };
 

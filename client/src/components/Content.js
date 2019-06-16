@@ -57,12 +57,15 @@ export default class Content extends Component {
             <div className={"row"}>
                 <div className={"col-sm-6"}>
                     <SearchForVehicle
-                        vehicleService={this.vehicleService}/>
+                        vehicleService={this.vehicleService}
+                        change={this.state.browsingComponentChange}
+                        onChange={this.onBrowsingComponentChange.bind(this)}/>
                 </div>
                 <div className={"col-sm-6"}>
                     <AllPendingVehicles
                         vehicleService={this.vehicleService}
-                        change={this.state.browsingComponentChange}/>
+                        change={this.state.browsingComponentChange}
+                        onChange={this.onBrowsingComponentChange.bind(this)}/>
                 </div>
             </div>
         );

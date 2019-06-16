@@ -77,8 +77,8 @@ export default class AllPendingVehicles extends Component {
     handleApproveClicked = (id) => {
         this.vehicleService.approveVehicle(id)
             .then(response => {
-                console.log("Approve vehicle response ", response);
-                this.loadData();
+                console.log("[ALL PENDING VEHICLES] Approve vehicle response ", response);
+                this.props.onChange();
             });
     };
 
