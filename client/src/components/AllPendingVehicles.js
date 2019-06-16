@@ -8,7 +8,8 @@ export default class AllPendingVehicles extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pendingApprovalVehicles: []
+            pendingApprovalVehicles: [],
+            utilizedApprovalVehicles: []
         };
         this.vehicleService = this.props.vehicleService;
     }
@@ -45,6 +46,24 @@ export default class AllPendingVehicles extends Component {
                     downloadedPending: true
                 })
             });
+
+        this.vehicleService.getAllUtilizationApprovalsPossibleToApprove()
+            .then(response => {
+                console.log(response);
+                this.setState({
+                    utilizationApprovalVehicles: response
+                });
+            })
+            .catch(() => {
+                this.setState({
+                    error: true
+                })
+            })
+            .finally(() => {
+                this.setState({
+                    downloadedUtilization: true
+                })
+            });
     }
 
     getAllPendingApprovalsDownloadError = () => {
@@ -78,8 +97,13 @@ export default class AllPendingVehicles extends Component {
     getPendingApprovalVehicleInfos = () => {
         const pendingVehicles = this.state.pendingApprovalVehicles
             .map(vehicle => ({...vehicle, status: "pending"}));
-        const vehicles = pendingVehicles.concat([]);
+        const utilizeVehicles = this.state.utilizationApprovalVehicles
+            .map(vehicle => ({...vehicle, status: "utilized"}));
 
+        console.log(pendingVehicles);
+        console.log(utilizeVehicles);
+
+        const vehicles = pendingVehicles.concat(utilizeVehicles);
         console.log(vehicles);
         return (
             vehicles.map(vehicle => this.getVehicleToApprove(vehicle))
@@ -127,7 +151,7 @@ export default class AllPendingVehicles extends Component {
     };
 
     render() {
-        const content = this.state.downloadedPending?
+        const content = this.state.downloadedPending && this.state.downloadedUtilization ?
             (this.state.error ?
                 this.getAllPendingApprovalsDownloadError() :
                 this.getVehicles()) :
