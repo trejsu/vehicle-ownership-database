@@ -1,14 +1,10 @@
 import React, {Component} from "react";
 
 export default class VehicleAddition extends Component {
-    state = {};
-    defaultVehicleType = "car";
+    state = {id: "", vehicleModel: "", vehicleType: "car"};
     vehicleService = this.props.vehicleService;
 
     componentDidMount = async () => {
-        this.setState({
-            vehicleType: this.defaultVehicleType
-        });
     };
 
     handleVehicleTypeChanged = (event) => {
@@ -35,24 +31,13 @@ export default class VehicleAddition extends Component {
             vehicleModel: this.state.vehicleModel,
             vehicleType: this.state.vehicleType,
         };
-        console.log(this.state);
-        const el = this.defaultVehicleType;
         this.setState({
-            // vehicleType: el,
-            vehicleModel: null
-            // id: null
+            vehicleModel: "",
+            id: ""
         });
-        console.log(this.state);
-        switch (elem.vehicleType) {
-            case "car":
-            case "bike":
-                this.vehicleService.addVehicle(elem)
-                    .then(result => console.log(result))
-                    .catch(() => console.log("addition err"));
-                break;
-            default:
-                console.log("error with state: ", this.state.vehicleType);
-        }
+        this.vehicleService.addVehicle(elem)
+            .then(result => console.log(result))
+            .catch(() => console.log("addition err"));
     };
 
     getIdInputWithPlaceholder = placeholder => {
@@ -60,12 +45,11 @@ export default class VehicleAddition extends Component {
             <div>
                 <input
                     placeholder={placeholder}
-                    defaultValue={this.state.id}
+                    value={this.state.id}
                     onChange={this.handleIdChanged}/>
             </div>
         )
     };
-
 
     getIdInput = () => {
         if (this.state.vehicleType === "car") {
@@ -90,7 +74,7 @@ export default class VehicleAddition extends Component {
                 <div className={"vehicle-addition-panel"}>
                     <select
                         className={"vehicle-addition-select"}
-                        defaultValue={this.state.vehicleType}
+                        value={this.state.vehicleType}
                         onChange={this.handleVehicleTypeChanged}>
                         <option value="car">Car</option>
                         <option value="bike">Bike</option>
@@ -99,7 +83,7 @@ export default class VehicleAddition extends Component {
                     <div>
                         <input
                             placeholder={"Model"}
-                            defaultValue={this.state.vehicleModel}
+                            value={this.state.vehicleModel}
                             onChange={this.handleModelChanged}/>
                     </div>
 

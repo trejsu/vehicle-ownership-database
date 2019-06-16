@@ -28,6 +28,7 @@ export default class VehicleService {
 
     // todo: validation of id
     addVehicle(vehicle) {
+        console.log(vehicle);
         return this.web3.eth.getAccounts()
             .then(accounts => {
                 return this.contract.methods.addVehicle(
