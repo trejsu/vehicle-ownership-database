@@ -150,7 +150,13 @@ export default class VehicleService {
         if(vehicleFromPendings[3]) {
             const currentUser = (await this.web3.eth.getAccounts())[0];
 
-            const isApprovable = currentUser !== vehicleFromPendings[2];
+            const isNotVehicleOwner = currentUser !== vehicleFromPendings[2];
+
+            const notApprovedByUser = await this.contract.methods
+                .notApprovingYet(this.toBytes(id))
+                .call({from: currentUser});
+
+            const isApprovable = isNotVehicleOwner && notApprovedByUser;
 
             return this.formatVehicle(id, vehicleFromPendings, isApprovable)
         }

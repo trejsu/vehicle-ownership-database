@@ -46,6 +46,7 @@ contract VehicleOwnershipDatabase {
     }
 
     modifier canSubmitTransfer(bytes32 _id, address _sender) {
+        require(!waitingForTransfers[_id].exists);
         require(vehicleRegistry[_id].exists);
         require(vehicleRegistry[_id].owner == _sender);
         _;
