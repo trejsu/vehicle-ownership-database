@@ -18,7 +18,6 @@ export default class TransferVehicle extends Component {
         this.setState({id: null, address: null, error: false, transferred: false});
         this.vehicleService.transferVehicle(address, id)
             .then(() => {
-                console.log("TU");
                 this.setState({transferred: true})
             })
             .catch(() => {
@@ -48,8 +47,6 @@ export default class TransferVehicle extends Component {
                 this.getErrorMessage() :
                 this.getTransferPositiveInfo()) :
             null;
-
-        console.log(content);
 
         return (
             content
