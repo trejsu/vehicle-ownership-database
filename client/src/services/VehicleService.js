@@ -98,9 +98,12 @@ export default class VehicleService {
 
             console.log('Checking if vehicle %s is approvable by %s', vehicle.id, currentUser);
 
-            const notApprovedByCurrentUser = await this.contract.methods.notApprovingYet(vehicleId).call(
-                {from: currentUser});
-            console.log('Vehicle %s approved by %s already.', notApprovedByCurrentUser ? 'was not' : 'was',
+            const notApprovedByCurrentUser = await this.contract.methods
+                .notApprovingYet(vehicleId)
+                .call({from: currentUser});
+
+            console.log('Vehicle %s approved by %s already.',
+                notApprovedByCurrentUser ? 'was not' : 'was',
                 currentUser);
 
             if (notApprovedByCurrentUser && vehicle.owner !== currentUser) {
