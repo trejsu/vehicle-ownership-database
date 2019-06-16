@@ -20,8 +20,19 @@
 
 .vehicle-info {
     padding: 10px;
-    background-color: #00F000;
     border: 5px solid black;
+}
+
+.pending {
+    background-color: orange;
+}
+
+.registered {
+    background-color: greenyellow;
+}
+
+.transfer {
+    background-color: deepskyblue;
 }
 
 .transfer-vehicle-title {

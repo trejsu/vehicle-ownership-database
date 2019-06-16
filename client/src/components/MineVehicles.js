@@ -6,9 +6,11 @@ export default class MineVehicles extends Component {
     state = {
         downloadPending: false,
         downloadRegistered: false,
+        downloadTransfered: false,
         error: false,
         pendingVehicles: [],
-        registeredVehicles: []
+        registeredVehicles: [],
+        transferedVehicleIds: []
     };
     vehicleService = this.props.vehicleService;
 
@@ -46,6 +48,25 @@ export default class MineVehicles extends Component {
                     downloadRegistered: true
                 });
             });
+
+        this.vehicleService.getTransferIds()
+            .then(response => {
+                console.log(response);
+                this.setState({
+                    transferedVehicleIds: response
+                })
+            })
+            .catch((err) => {
+                console.log(err);
+                this.setState({
+                    error: true
+                })
+            })
+            .finally(() => {
+                this.setState({
+                    downloadTransfered: true
+                });
+            });
     };
 
     getVehiclesDownloadError = () => {
@@ -77,7 +98,20 @@ export default class MineVehicles extends Component {
     };
 
     getVehicles = () => {
-        const vehicles = this.state.pendingVehicles.concat(this.state.registeredVehicles);
+        const pendingVehicles = this.state.pendingVehicles
+            .map(vehicle => ({...vehicle, status: "pending"}));
+
+        const registeredVehicles = this.state.registeredVehicles
+            .filter(vehicle => !this.state.transferedVehicleIds.contains(vehicle.id))
+            .map(vehicle => ({...vehicle, status: "registered"}));
+
+        const transferedVehicles = this.state.registeredVehicles
+            .filter(vehicle => this.state.transferedVehicleIds.contains(vehicle.id))
+            .map(vehicle => ({...vehicle, status: "transfer"}));
+
+        const vehicles = pendingVehicles
+            .concat(registeredVehicles)
+            .concat(transferedVehicles);
 
         return vehicles && vehicles.length > 0 ?
             this.getVehiclesContent(vehicles) :

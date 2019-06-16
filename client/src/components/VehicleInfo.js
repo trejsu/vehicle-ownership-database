@@ -28,7 +28,7 @@ export default class VehicleInfo extends Component {
 
     render() {
         return (
-            <div className={"vehicle-info"}>
+            <div className={"vehicle-info " + this.vehicle.status}>
                 <div>
                     Type = {this.vehicle.type}
                 </div>

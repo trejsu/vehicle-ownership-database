@@ -129,6 +129,11 @@ export default class VehicleService {
             });
     }
 
+    async getTransferIds() {
+        console.log('Retrieving all transfer id...');
+        return (await this.contract.methods.getTransferIds().call());
+    }
+
     toBytes = x => this.web3.utils.fromAscii(x);
     fromBytes = x => this.web3.utils.toAscii(x);
 }
