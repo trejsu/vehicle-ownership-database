@@ -26,15 +26,17 @@
 }
 
 .pending {
-    background-color: orange;
+    background-color: #ffc107;
 }
 
 .registered {
-    background-color: greenyellow;
+    background-color: #28a745;
+    color: white;
 }
 
 .transfer {
-    background-color: deepskyblue;
+    background-color: #007bff;
+    color: white;
 }
 
 .transfer-vehicle-title {
@@ -117,15 +119,19 @@
 }
 
 .pending-label {
-    color: #cc5200;
+    color: #ba8a07;
     font-weight: bold;
 }
 .registered-label {
-    color: #009933;
+    color: #73de7d;
     font-weight: bold;
 }
 
 .transfer-label {
-    color: #0033cc;
+    color: #91b6ff;
     font-weight: bold;
+}
+
+.found-vehicle {
+    margin-top: 30px;
 }

@@ -7,7 +7,7 @@ export default class VehicleInfo extends Component {
     getCarInfo = () => {
         return (
             <div>
-                VIN: {this.vehicle.id}
+                <b>VIN:</b> {this.vehicle.id}
             </div>
         )
     };
@@ -37,7 +37,7 @@ export default class VehicleInfo extends Component {
             <div className={"vehicle-info " + this.vehicle.status}>
                 <div className={"vehicle-info-first-row"}>
                     <div className={"vehicle-type-label"}>
-                        Type = {this.vehicle.type}
+                        <b>Type:</b> {this.vehicle.type}
                     </div>
                     <div className={"vehicle-status-label " + this.vehicle.status + "-label"}>
                         {this.getStateLabel()}
@@ -45,7 +45,7 @@ export default class VehicleInfo extends Component {
 
                 </div>
                 <div>
-                    Model = {this.vehicle.model}
+                    <b>Model:</b> {this.vehicle.model}
                 </div>
 
                 {this.getIdInfo()}

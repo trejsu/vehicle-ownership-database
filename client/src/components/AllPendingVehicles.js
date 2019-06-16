@@ -71,8 +71,10 @@ export default class AllPendingVehicles extends Component {
 
     getPendingApprovalVehicleInfos = () => {
         return (
-            this.state.pendingApprovalVehicles.map(vehicle =>
-                this.getVehicleToApprove(vehicle))
+            this.state.pendingApprovalVehicles
+            // todo: will need to change after adding utilize to approve
+                .map(vehicle => ({...vehicle, status: "pending"}))
+                .map(vehicle => this.getVehicleToApprove(vehicle))
         );
     };
 

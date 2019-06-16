@@ -108,8 +108,8 @@ export default class VehicleAddition extends Component {
 
     getAlreadyExisting = () => {
         return (
-            <div>
-                Already exists
+            <div className="alert alert-danger" role="alert">
+                Vehicle with entered VIN / Serial number already exists.
             </div>
         );
     };
@@ -123,8 +123,8 @@ export default class VehicleAddition extends Component {
     };
 
     getAdded = () => {
-        return <div>
-            Vehicle added
+        return <div className="alert alert-success" role="alert">
+            Vehicle added to pending.
         </div>
     };
 

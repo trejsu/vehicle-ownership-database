@@ -82,7 +82,7 @@ export default class SearchForVehicle extends Component {
 
     getVehicleInfo = () => {
         return (
-            <div>
+            <div className={"found-vehicle"}>
                 Found vehicle
                 <VehicleInfo
                     vehicle={this.state.vehicle}/>
@@ -95,17 +95,9 @@ export default class SearchForVehicle extends Component {
         );
     };
 
-    getVehicleNotFoundInfo = () => {
-        return (
-            <div>
-                Vehicle not found
-            </div>
-        )
-    };
-
     getNotFound = () => {
         return (
-            <div>
+            <div className="alert alert-warning" role="alert">
                 ID not found
             </div>
         );
@@ -113,7 +105,7 @@ export default class SearchForVehicle extends Component {
 
     getErrorMessage = () => {
         return (
-            <div>
+            <div className="alert alert-danger" role="alert">
                 There was some error...
             </div>
         );
