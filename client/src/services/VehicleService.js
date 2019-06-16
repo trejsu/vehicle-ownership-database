@@ -30,7 +30,7 @@ export default class VehicleService {
 
     // todo: validation of id
     addVehicle(vehicle) {
-        console.log('Adding vehicle', vehicle);
+        console.log('[VEHICLE SERVICE] Adding vehicle', vehicle);
         return this.web3.eth.getAccounts()
             .then(accounts => {
                 return this.contract.methods.addVehicle(
@@ -53,7 +53,7 @@ export default class VehicleService {
 
 
     async getPendingApprovals() {
-        console.log('Retrieving all pending approvals...');
+        console.log('[VEHICLE SERVICE] Retrieving all pending approvals...');
         const pendingIds = (await this.contract.methods.getPendingIds().call());
         const vehicles = [];
         for (let i = 0; i < pendingIds.length; i++) {
@@ -66,7 +66,7 @@ export default class VehicleService {
             });
 
         }
-        console.log("Found %d pending approvals", vehicles.length);
+        console.log("[VEHICLE SERVICE] Found %d pending approvals", vehicles.length);
         return vehicles;
     }
 
@@ -108,16 +108,16 @@ export default class VehicleService {
     }
 
     async getUserPendingApprovals() {
-        console.log('Retrieving current user approvals...');
+        console.log('[VEHICLE SERVICE] Retrieving current user approvals...');
         const owner = (await this.web3.eth.getAccounts())[0];
         const filtered = (await this.getPendingApprovals())
             .filter(vehicle => vehicle.owner === owner);
-        console.log("Filtered %d approvals", filtered.length);
+        console.log("[VEHICLE SERVICE] Filtered %d approvals", filtered.length);
         return filtered;
     }
 
     async getAllPendingApprovalsPossibleToApprove() {
-        console.log('Retrieving approvals possible to approve...');
+        console.log('[VEHICLE SERVICE] Retrieving approvals possible to approve...');
 
         const currentUser = (await this.web3.eth.getAccounts())[0];
         const vehicles = (await this.getPendingApprovals());
@@ -128,25 +128,25 @@ export default class VehicleService {
             let vehicle = vehicles[i];
             let vehicleId = this.toBytes(vehicle.id);
 
-            console.log('Checking if vehicle %s is approvable by %s', vehicle.id, currentUser);
+            console.log('[VEHICLE SERVICE] Checking if vehicle %s is approvable by %s', vehicle.id, currentUser);
 
             const notApprovedByCurrentUser = await this.contract.methods
                 .notApprovingYet(vehicleId)
                 .call({from: currentUser});
 
-            console.log('Vehicle %s approved by %s already.',
+            console.log('[VEHICLE SERVICE] Vehicle %s approved by %s already.',
                 notApprovedByCurrentUser ? 'was not' : 'was',
                 currentUser);
 
             if (notApprovedByCurrentUser && vehicle.owner !== currentUser) {
-                console.log('Approve possible');
+                console.log('[VEHICLE SERVICE] Approve possible');
                 vehiclesToApprove.push(vehicle);
             } else {
-                console.log('Approve not possible');
+                console.log('[VEHICLE SERVICE] Approve not possible');
             }
         }
 
-        console.log("Filtered %d approvals", vehiclesToApprove.length);
+        console.log("[VEHICLE SERVICE] Filtered %d approvals", vehiclesToApprove.length);
         return vehiclesToApprove;
     }
 
@@ -211,7 +211,7 @@ export default class VehicleService {
     }
 
     async getTransferIds() {
-        console.log('Retrieving all transfer id...');
+        console.log('[VEHICLE SERVICE] Retrieving all transfer id...');
         return this.contract.methods.getTransferIds().call()
             .then(response => {
                 return response.map(id => this.fromBytesWithReplace(id));
@@ -219,7 +219,7 @@ export default class VehicleService {
     }
 
     async isTransferPossible(id) {
-        console.log('Check if transfer possible');
+        console.log('[VEHICLE SERVICE] Check if transfer possible');
         return this.contract.methods.getTransferIds().call()
             .then(response => {
                 return !response.includes(id);
