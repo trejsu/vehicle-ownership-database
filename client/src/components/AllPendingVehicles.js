@@ -59,7 +59,7 @@ export default class AllPendingVehicles extends Component {
 
     getVehicleToApprove = (vehicle) => {
         return (
-            <div key={vehicle.id}>
+            <div key={vehicle.id + vehicle.status}>
                 <VehicleInfo
                     vehicle={vehicle}/>
                 <ApproveVehicle

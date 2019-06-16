@@ -32,7 +32,6 @@ export default class IncomingPendingTransfer extends Component {
     loadData() {
         this.vehicleService.getIncomingPendingTransfer()
             .then(response => {
-                console.log('incoming pending transfer then');
                 this.setState({
                     vehicles: response
                 });
@@ -43,7 +42,6 @@ export default class IncomingPendingTransfer extends Component {
                 })
             })
             .finally(() => {
-                console.log('incoming pending transfer finally');
                 this.setState({
                     download: true
                 });
@@ -69,7 +67,7 @@ export default class IncomingPendingTransfer extends Component {
     getIncomingPendingTransferVehicleInfos = (vehicles) => {
         return (
             vehicles.map(vehicle =>
-                <div key={vehicle.id}>
+                <div key={vehicle.id + vehicle.status}>
                     <VehicleInfo
                         vehicle={vehicle}/>
                     <ApproveVehicle

@@ -24,15 +24,12 @@ export default class MineVehicles extends Component {
     };
 
     componentWillReceiveProps(nextProps) {
-        console.log('MineVehicles will receive props', nextProps);
         if (this.propsChanged(nextProps)) {
-            console.log('props changed');
             this.loadData();
         }
     }
 
     loadData() {
-        console.log('Load data');
         this.getUserPendingApprovals();
         this.getUserRegisteredVehicles();
         this.getTransferIds();
@@ -79,7 +76,6 @@ export default class MineVehicles extends Component {
             });
     }
 
-
     getUserPendingApprovals() {
         this.vehicleService.getUserPendingApprovals()
             .then(response => {
@@ -120,18 +116,18 @@ export default class MineVehicles extends Component {
     };
 
     getMinePendingApprovalVehicleInfos = (vehicles) => {
-        console.log();
         return (
-            vehicles.map(vehicle =>
-                <div key={vehicle.id}>
-                    <VehicleInfo
-                        vehicle={vehicle}/>
-                    {vehicle.status === "registered" &&
-                    <VehicleUtilization
-                        vehicleId={vehicle.id}
-                        handleUtilization={this.handleUtilization}/>
-                    }
-                </div>
+            vehicles.map(vehicle => {
+                    return (<div key={vehicle.id + vehicle.status}>
+                        <VehicleInfo
+                            vehicle={vehicle}/>
+                        {vehicle.status === "registered" &&
+                        <VehicleUtilization
+                            vehicleId={vehicle.id}
+                            handleUtilization={this.handleUtilization}/>
+                        }
+                    </div>)
+                }
             )
         );
     };
@@ -162,8 +158,6 @@ export default class MineVehicles extends Component {
         const vehicles = pendingVehicles
             .concat(registeredVehicles)
             .concat(transferedVehicles);
-
-        console.log('vehicles', vehicles);
 
         return vehicles && vehicles.length > 0 ?
             this.getVehiclesContent(vehicles) :

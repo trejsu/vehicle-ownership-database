@@ -27,7 +27,7 @@ export default class VehicleInfo extends Component {
     };
 
     getStateLabel = () => {
-        if(this.vehicle.status) {
+        if (this.vehicle.status) {
             return this.vehicle.status.toUpperCase();
         }
     };
