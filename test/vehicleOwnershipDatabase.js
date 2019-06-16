@@ -9,14 +9,13 @@ contract("VehicleOwnershipDatabase", accounts => {
     const vehicleType = 0;
 
     const id = web3.utils.fromAscii(carVin);
-    console.log(id);
 
     await vehicleOwnershipDatabaseInstance.addVehicle(id, carModel, vehicleType, { from: accounts[0] });
 
     const storedVehicle = await vehicleOwnershipDatabaseInstance.waitingForApprovals.call(id);
     const pendingIds = await vehicleOwnershipDatabaseInstance.getPendingIds.call();
     const returnedId = web3.utils.toAscii(pendingIds[0]).replace(/\u0000/g, '');
-    console.log(returnedId);
+    console.log(storedVehicle);
 
     assert.equal(storedVehicle[0].toNumber(), 0, "Car type should be stored.");
     assert.equal(storedVehicle[1], carModel, "Car model should be stored.");
@@ -33,8 +32,6 @@ contract("VehicleOwnershipDatabase", accounts => {
     const vehicleType = 0;
 
     const id = web3.utils.fromAscii(carVin);
-    console.log(id);
-
     // adding car first to pending ids
     await vehicleOwnershipDatabaseInstance.addVehicle(id, carModel, vehicleType, { from: accounts[0] });
 

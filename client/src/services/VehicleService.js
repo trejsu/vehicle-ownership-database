@@ -49,6 +49,7 @@ export default class VehicleService {
                 model: vehicle[1],
                 owner: vehicle[2]
             });
+
         }
         return vehicles;
     }
@@ -57,6 +58,26 @@ export default class VehicleService {
         const owner = (await this.web3.eth.getAccounts())[0];
         return (await this.getPendingApprovals())
             .filter(vehicle => vehicle.owner === owner);
+    }
+
+    async getAllPendingApprovalsPossibleToApprove() {
+
+        const owner = (await this.web3.eth.getAccounts())[0];
+        const vehicles = (await this.getPendingApprovals());
+
+        const vehiclesToApprove = [];
+
+        for (let i=0; i < vehicles.length; i++) {
+            let vehicle = vehicles[i];
+            let vehicleId = this.web3.utils.fromAscii(vehicle.id);
+            const result = await this.contract.methods.notApprovingYet(vehicleId).call();
+
+            if(result && vehicle.owner !== owner) {
+                vehiclesToApprove.push(vehicle);
+            }
+        }
+
+        return vehiclesToApprove;
     }
 
     // todo: implement instead of stub

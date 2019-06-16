@@ -7,7 +7,7 @@ export default class AllPendingVehicles extends Component {
     vehicleService = this.props.vehicleService;
 
     componentDidMount = async () => {
-        this.vehicleService.getPendingApprovals()
+        this.vehicleService.getAllPendingApprovalsPossibleToApprove()
             .then(response => {
                 this.setState({
                     pendingApprovalVehicles: response,
