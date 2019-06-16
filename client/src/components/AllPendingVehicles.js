@@ -82,14 +82,33 @@ export default class AllPendingVehicles extends Component {
             });
     };
 
+    handleUtilizationClicked = (id) => {
+        this.vehicleService.approveUtilization(id)
+            .then(response => {
+                console.log("Approve vehicle utilization response ", response);
+                this.loadData();
+            });
+    };
+
     getVehicleToApprove = (vehicle) => {
+        const approveContent = vehicle.status === "pending" ?
+            <ApproveVehicle
+                vehicleId={vehicle.id}
+                handleApproveClicked={this.handleApproveClicked}/>
+            :
+            (vehicle.status === "utilized" ?
+                    <ApproveVehicle
+                        vehicleId={vehicle.id}
+                        handleApproveClicked={this.handleUtilizationClicked}/>
+                    :
+                    null
+            );
+
         return (
             <div key={vehicle.id + vehicle.status}>
                 <VehicleInfo
                     vehicle={vehicle}/>
-                <ApproveVehicle
-                    vehicleId={vehicle.id}
-                    handleApproveClicked={this.handleApproveClicked}/>
+                {approveContent}
             </div>
         );
     };

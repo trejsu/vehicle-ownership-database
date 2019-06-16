@@ -69,26 +69,25 @@ export default class VehicleService {
         return vehicles;
     }
 
-    // async getUtilizationApprovals() {
-    //     console.log('[VEHICLE SERVICE] Retrieving all pending approvals...');
-    //     const utilizedIds = (await this.contract.methods.getUtilizationIds().call());
-    //     const vehicles = [];
-    //
-    //     for (let i = 0; i < utilizedIds.length; i++) {
-    //         console.log("somethin");
-    //         const vehicle = await this.contract.methods.vehicleForUtilization(utilizedIds[i]).call();
-    //         console.log(vehicle);
-    //         vehicles.push({
-    //             id: this.fromBytesWithReplace(utilizedIds[i]),
-    //             type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
-    //             model: vehicle[1],
-    //             owner: vehicle[2]
-    //         });
-    //
-    //     }
-    //     console.log("[VEHICLE SERVICE] Found %d pending approvals", vehicles.length);
-    //     return vehicles;
-    // }
+    async getUtilizationApprovals() {
+        console.log('[VEHICLE SERVICE] Retrieving all pending approvals...');
+        const utilizedIds = (await this.contract.methods.getUtilizationIds().call());
+        const vehicles = [];
+
+        for (let i = 0; i < utilizedIds.length; i++) {
+            const vehicle = await this.contract.methods.vehicleForUtilization(utilizedIds[i]).call();
+            console.log(vehicle);
+            vehicles.push({
+                id: this.fromBytesWithReplace(utilizedIds[i]),
+                type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
+                model: vehicle[1],
+                owner: vehicle[2]
+            });
+
+        }
+        console.log("[VEHICLE SERVICE] Found %d pending approvals", vehicles.length);
+        return vehicles;
+    }
     //
     // async getUserUtilizedVehicles() {
     //     const getUtilizedIds = (await this.contract.methods.getUtilizationIds().call());
@@ -189,33 +188,30 @@ export default class VehicleService {
     }
 
     async getAllUtilizationApprovalsPossibleToApprove() {
-        return new Promise((resolve) => {
-            resolve([])
-        });
-        // console.log('[VEHICLE SERVICE] Retrieving utilization approvals possible to approve...');
-        //
-        // const currentUser = (await this.web3.eth.getAccounts())[0];
-        // const vehicles = (await this.getUtilizationApprovals());
-        //
-        // console.log(vehicles);
-        //
-        // const vehiclesToApprove = [];
-        //
-        // for (let i = 0; i < vehicles.length; i++) {
-        //     let vehicle = vehicles[i];
-        //
-        //     console.log('[VEHICLE SERVICE] Checking if vehicle %s is approvable by %s', vehicle.id, currentUser);
-        //
-        //     if (vehicle.owner !== currentUser) {
-        //         console.log('[VEHICLE SERVICE] Approve possible');
-        //         vehiclesToApprove.push(vehicle);
-        //     } else {
-        //         console.log('[VEHICLE SERVICE] Approve not possible');
-        //     }
-        // }
-        //
-        // console.log("[VEHICLE SERVICE] Filtered %d approvals", vehiclesToApprove.length);
-        // return vehiclesToApprove;
+        console.log('[VEHICLE SERVICE] Retrieving utilization approvals possible to approve...');
+
+        const currentUser = (await this.web3.eth.getAccounts())[0];
+        const vehicles = (await this.getUtilizationApprovals());
+
+        console.log(vehicles);
+
+        const vehiclesToApprove = [];
+
+        for (let i = 0; i < vehicles.length; i++) {
+            let vehicle = vehicles[i];
+
+            console.log('[VEHICLE SERVICE] Checking if vehicle %s is approvable by %s', vehicle.id, currentUser);
+
+            if (vehicle.owner !== currentUser) {
+                console.log('[VEHICLE SERVICE] Approve possible');
+                vehiclesToApprove.push(vehicle);
+            } else {
+                console.log('[VEHICLE SERVICE] Approve not possible');
+            }
+        }
+
+        console.log("[VEHICLE SERVICE] Filtered %d approvals", vehiclesToApprove.length);
+        return vehiclesToApprove;
     }
 
     async searchForVehicle(id) {
@@ -266,6 +262,14 @@ export default class VehicleService {
         return this.web3.eth.getAccounts()
             .then(accounts => {
                 return this.contract.methods.approveVehicle(this.toBytes(id))
+                    .send({from: accounts[0], gas: this.GAS})
+            });
+    }
+
+    async approveUtilization(id) {
+        return this.web3.eth.getAccounts()
+            .then(accounts => {
+                return this.contract.methods.approveUtilization(this.toBytes(id))
                     .send({from: accounts[0], gas: this.GAS})
             });
     }
