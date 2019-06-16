@@ -11,13 +11,17 @@ export default class Content extends Component {
     vehicleService = this.props.vehicleService;
     state = {
         page: this.props.page,
-        addingComponentChange: true
+        addingComponentChange: true,
+        browsingComponentChange: true,
+        privateComponentChange: true
     };
 
     componentWillReceiveProps(nextProps, nextContext) {
         this.setState({page: nextProps.page});
         if (this.accountChanged(nextProps)) {
-            this.onVehicleAdditionChange();
+            this.onAddingComponentChange();
+            this.onBrowsingComponentChange();
+            this.onPrivateComponentChange();
         }
     }
 
@@ -31,7 +35,7 @@ export default class Content extends Component {
                 <div className={"col-sm-6"}>
                     <VehicleAddition
                         vehicleService={this.vehicleService}
-                        onChange={this.onVehicleAdditionChange.bind(this)}/>
+                        onChange={this.onAddingComponentChange.bind(this)}/>
                 </div>
                 <div className={"col-sm-6"}>
                     <MineVehicles
@@ -42,9 +46,21 @@ export default class Content extends Component {
         );
     };
 
-    onVehicleAdditionChange() {
+    onAddingComponentChange() {
         this.setState(prevState => ({
             addingComponentChange: !prevState.addingComponentChange
+        }));
+    }
+
+    onBrowsingComponentChange() {
+        this.setState(prevState => ({
+            browsingComponentChange: !prevState.browsingComponentChange
+        }));
+    }
+
+    onPrivateComponentChange() {
+        this.setState(prevState => ({
+            privateComponentChange: !prevState.privateComponentChange
         }));
     }
 
@@ -57,7 +73,8 @@ export default class Content extends Component {
                 </div>
                 <div className={"col-sm-6"}>
                     <AllPendingVehicles
-                        vehicleService={this.vehicleService}/>
+                        vehicleService={this.vehicleService}
+                        change={this.state.browsingComponentChange}/>
                 </div>
             </div>
         );
@@ -114,4 +131,6 @@ export default class Content extends Component {
             this.getProperComponents()
         );
     }
+
+
 }

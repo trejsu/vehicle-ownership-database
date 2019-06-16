@@ -4,12 +4,26 @@ import VehicleInfo from "./VehicleInfo";
 import ApproveVehicle from "./ApproveVehicle";
 
 export default class AllPendingVehicles extends Component {
-    state = {pendingApprovalVehicles: []};
-    vehicleService = this.props.vehicleService;
 
-    componentDidMount = async () => {
+    constructor(props) {
+        super(props);
+        this.state = {pendingApprovalVehicles: []};
+        this.vehicleService = this.props.vehicleService;
+    }
+
+    componentDidMount() {
         this.loadData();
     };
+
+    componentWillReceiveProps(nextProps) {
+        if (this.propsChanged(nextProps)) {
+            this.loadData();
+        }
+    }
+
+    propsChanged(nextProps) {
+        return this.props.change !== nextProps.change;
+    }
 
     loadData() {
         this.vehicleService.getAllPendingApprovalsPossibleToApprove()

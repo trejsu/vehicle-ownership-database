@@ -50,14 +50,14 @@ export default class TransferVehicle extends Component {
         const id = this.state.id;
         const address = this.state.address;
 
-        this.setState({
-            id: "",
-            address: ""
-        });
-
         // this.setState({
-        //     blocked: true
+        //     id: "",
+        //     address: ""
         // });
+
+        this.setState({
+            blocked: true
+        });
 
         this.vehicleService.isTransferPossible()
             .then((response) => {
