@@ -30,7 +30,7 @@ export default class IncomingPendingTransfer extends Component {
     }
 
     loadData() {
-        this.vehicleService.getIncomingPendingTransfer()
+        this.vehicleService.getIncomingTransfers()
             .then(response => {
                 this.setState({
                     vehicles: response

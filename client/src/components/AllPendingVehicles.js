@@ -29,9 +29,9 @@ export default class AllPendingVehicles extends Component {
     }
 
     loadData() {
-        this.vehicleService.getAllPendingApprovalsPossibleToApprove()
+        this.vehicleService.getAllRegistrationRequestsPossibleToApprove()
             .then(vehicles => {
-                console.log('[ALL PENDING VEHICLES] Registration approvals possible to approve', vehicles);
+                console.log('[ALL PENDING VEHICLES] Registration requests possible to approve', vehicles);
                 this.setState({
                     pendingApprovalVehicles: vehicles
                 });
@@ -47,9 +47,9 @@ export default class AllPendingVehicles extends Component {
                 })
             });
 
-        this.vehicleService.getAllUtilizationApprovalsPossibleToApprove()
+        this.vehicleService.getAllUtilizationRequestsPossibleToApprove()
             .then(response => {
-                console.log('[ALL PENDING VEHICLES] Utilization approvals possible to approve', response);
+                console.log('[ALL PENDING VEHICLES] Utilization requests possible to approve', response);
                 this.setState({
                     utilizationApprovalVehicles: response
                 });

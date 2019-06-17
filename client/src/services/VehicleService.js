@@ -90,16 +90,17 @@ export default class VehicleService {
         return (await this.web3.eth.getAccounts())[0];
     }
 
-    async getIncomingPendingTransfer() {
+    async getIncomingTransfers() {
         const transferIds = (await this.contract.methods.getTransferIds().call());
-        const currentUser = (await this.web3.eth.getAccounts())[0];
+        const currentUser = await this.getCurrentUser();
         const vehicles = [];
         for (let i = 0; i < transferIds.length; i++) {
-            const vehicleTransfer = await this.contract.methods.waitingForTransfers(transferIds[i]).call();
-            const vehicle = await this.contract.methods.vehicleRegistry(transferIds[i]).call();
+            const transferId = transferIds[i];
+            const vehicleTransfer = await this.contract.methods.waitingForTransfers(transferId).call();
+            const vehicle = await this.contract.methods.vehicleRegistry(transferId).call();
             if (currentUser === vehicleTransfer[1]) {
                 vehicles.push({
-                    id: this.fromBytesWithReplace(transferIds[i]),
+                    id: this.fromBytesWithReplace(transferId),
                     type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
                     model: vehicle[1],
                     owner: vehicle[2]
@@ -118,7 +119,7 @@ export default class VehicleService {
         return filtered;
     }
 
-    async getAllPendingApprovalsPossibleToApprove() {
+    async getAllRegistrationRequestsPossibleToApprove() {
         console.log('[VEHICLE SERVICE] Retrieving pending approvals possible to approve...');
 
         const currentUser = (await this.web3.eth.getAccounts())[0];
@@ -174,7 +175,7 @@ export default class VehicleService {
         return vehicles;
     }
 
-    async getAllUtilizationApprovalsPossibleToApprove() {
+    async getAllUtilizationRequestsPossibleToApprove() {
         console.log('[VEHICLE SERVICE] Retrieving utilization approvals possible to approve...');
 
         const currentUser = (await this.web3.eth.getAccounts())[0];

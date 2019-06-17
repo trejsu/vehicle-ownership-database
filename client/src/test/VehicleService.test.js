@@ -1,8 +1,9 @@
+import VehicleService from '../services/VehicleService';
+import VehicleTypeMapper from '../utils/vehicleTypeMapper';
+
 const ganache = require('ganache-cli');
 const Web3 = require('web3');
 const VehicleOwnershipDatabase = require('../contracts/VehicleOwnershipDatabase');
-import VehicleService from '../services/VehicleService';
-import VehicleTypeMapper from '../utils/vehicleTypeMapper';
 
 const typeMapper = new VehicleTypeMapper();
 
@@ -13,7 +14,7 @@ let contract;
 beforeAll(() => {
     console.log('Setting up ganache and web3...');
     const provider = ganache.provider();
-    provider.setMaxListeners(22);
+    provider.setMaxListeners(24);
     web3 = new Web3(provider);
 });
 
@@ -70,7 +71,7 @@ describe('VehicleService', () => {
             owner: owner,
             type: "car"
         };
-        await addVehicle(vehicle, owner);
+        await register(vehicle, owner);
 
         // when
         const pendings = await service.getPendingApprovals();
@@ -101,8 +102,8 @@ describe('VehicleService', () => {
             type: "car"
         };
 
-        await addVehicle(vehicle1, user1);
-        await addVehicle(vehicle2, user2);
+        await register(vehicle1, user1);
+        await register(vehicle2, user2);
 
         // when
         const pendings = await service.getUserPendingApprovals();
@@ -134,11 +135,11 @@ describe('VehicleService', () => {
             type: "car"
         };
 
-        await addVehicle(vehicle1, user1);
-        await addVehicle(vehicle2, user2);
+        await register(vehicle1, user1);
+        await register(vehicle2, user2);
 
         // when
-        const pendings = await service.getAllPendingApprovalsPossibleToApprove();
+        const pendings = await service.getAllRegistrationRequestsPossibleToApprove();
 
         // then
         expect(pendings.length).toEqual(1);
@@ -168,10 +169,10 @@ describe('VehicleService', () => {
                 type: "car"
             };
 
-            await addVehicle(vehicle1, user2);
-            await addVehicle(vehicle2, user2);
+            await register(vehicle1, user2);
+            await register(vehicle2, user2);
             // when
-            const pendings = await service.getAllPendingApprovalsPossibleToApprove();
+            const pendings = await service.getAllRegistrationRequestsPossibleToApprove();
 
             // then
             expect(pendings.length).toEqual(2);
@@ -179,7 +180,7 @@ describe('VehicleService', () => {
             // when
             await contract.methods.approveVehicle(toBytes(vehicle1Id))
                 .send({from: accounts[0], gas: '5000000'});
-            const pendingAfterApproval = await service.getAllPendingApprovalsPossibleToApprove();
+            const pendingAfterApproval = await service.getAllRegistrationRequestsPossibleToApprove();
 
             // then
             expect(pendingAfterApproval.length).toEqual(1);
@@ -202,21 +203,77 @@ describe('VehicleService', () => {
             type: "car"
         };
 
-        await addVehicle(vehicle, accounts[0]);
-        await approveVehicle(vehicle.id, accounts[1]);
-        await approveVehicle(vehicle.id, accounts[2]);
-        await utilizeVehicle(vehicle.id, accounts[0]);
-
         // when
+        await register(vehicle, accounts[0]);
+        await approveRegistration(vehicle.id, accounts[1]);
+        await approveRegistration(vehicle.id, accounts[2]);
+        await utilize(vehicle.id, accounts[0]);
         const utilizationPendings = await service.getUserUtilizationPendings();
 
         // then
         expect(utilizationPendings).toEqual([expectedVehicle]);
     });
 
+    it('getUserRegisteredVehicles should return user registered vehicles', async () => {
+        // given
+        const service = new VehicleService(web3, contract);
+        const vehicle = {
+            vehicleType: "car",
+            vehicleModel: "model",
+            id: "car123"
+        };
+
+        // when
+        await register(vehicle, accounts[0]);
+        let registered = await service.getUserRegisteredVehicles();
+
+        // then
+        expect(registered.length).toBe(0);
+
+        // when
+        await approveRegistration(vehicle.id, accounts[1]);
+        registered = await service.getUserRegisteredVehicles();
+
+        // then
+        expect(registered.length).toBe(0);
+
+        // when
+        await approveRegistration(vehicle.id, accounts[2]);
+        registered = await service.getUserRegisteredVehicles();
+
+        // then
+        expect(registered.length).toBe(1);
+    });
+
+    it('getIncomingTransfers should return pending transfers for current user', async () => {
+        // given
+        const service = new VehicleService(web3, contract);
+        const vehicle = {
+            vehicleType: "car",
+            vehicleModel: "model",
+            id: "car123"
+        };
+        const expectedVehicle = {
+            id: 'car123',
+            model: "model",
+            owner: accounts[1],
+            type: "car"
+        };
+
+        // when
+        await register(vehicle, accounts[1]);
+        await approveRegistration(vehicle.id, accounts[0]);
+        await approveRegistration(vehicle.id, accounts[2]);
+        await transfer(vehicle.id, accounts[1], accounts[0]);
+        const incomingTransfers = await service.getIncomingTransfers();
+
+        // then
+        expect(incomingTransfers).toEqual([expectedVehicle]);
+    });
+
 });
 
-async function addVehicle(vehicle, user) {
+async function register(vehicle, user) {
     await contract.methods.addVehicle(
         web3.utils.fromAscii(vehicle.id),
         vehicle.vehicleModel,
@@ -224,14 +281,19 @@ async function addVehicle(vehicle, user) {
     ).send({from: user, gas: 3000000});
 }
 
-async function approveVehicle(id, user) {
+async function approveRegistration(id, user) {
     await contract.methods.approveVehicle(web3.utils.fromAscii(id))
         .send({from: user, gas: 3000000});
 }
 
-async function utilizeVehicle(id, user) {
+async function utilize(id, user) {
     await contract.methods.utilizeVehicle(web3.utils.fromAscii(id))
         .send({from: user, gas: 3000000});
+}
+
+async function transfer(id, from, to) {
+    await contract.methods.transferVehicle(web3.utils.fromAscii(id), to)
+        .send({from: from, gas: 3000000});
 }
 
 const toBytes = x => web3.utils.fromAscii(x);
