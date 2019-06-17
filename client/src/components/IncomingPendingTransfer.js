@@ -102,7 +102,7 @@ export default class IncomingPendingTransfer extends Component {
         return (
             <div>
                 <div className="alert alert-info incoming-pending-transfer-vehicles" role="alert">
-                    List of incoming pending vehicle transfer is empty
+                    No transfers to approve at the moment.
                 </div>
             </div>
         )

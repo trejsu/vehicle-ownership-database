@@ -139,7 +139,7 @@ export default class TransferVehicle extends Component {
                                 className={"btn btn-primary"}
                                 disabled={this.state.blocked}
                                 onClick={this.handleRequestClicked.bind(this)}>
-                            Request
+                            Request transfer
                         </button>
                     </div>
 

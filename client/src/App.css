@@ -30,6 +30,7 @@
 }
 .utilize {
     background: #a19da0;
+    color: white;
 }
 
 .registered {
@@ -45,6 +46,7 @@
 .transfer-vehicle-title {
     text-align: center;
     font-size: 20px;
+    margin-bottom: 10px;
 }
 
 .transfer-vehicle-panel {
