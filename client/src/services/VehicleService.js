@@ -295,10 +295,12 @@ export default class VehicleService {
         console.log('[VEHICLE SERVICE] Check if transfer possible');
         const currentUser = (await this.web3.eth.getAccounts())[0];
 
-        return this.contract.methods.getTransferIds().call()
-            .then(response => {
-                return !response.includes(id) && currentUser !== address;
-            });
+        const registeredIds = (await this.contract.methods.getRegisteredIds().call());
+        const transferIds = (await this.contract.methods.getTransferIds().call());
+
+        return registeredIds.includes(this.toBytes(id)) &&
+            !transferIds.includes(this.toBytes(id)) &&
+            currentUser !== address;
     }
 
     async isIdAvailable(id) {
