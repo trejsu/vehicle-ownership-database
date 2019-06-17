@@ -43,5 +43,5 @@ App is unboxed from [Drizzle](https://www.trufflesuite.com/boxes/drizzle) projec
 2. Project has two contracts written in solidity. To compile and deploy it in network type ```truffle migrate --network develop``` from project root. 
 5. If you have successfully deployed contract run the client app from ```client``` directory ```npm start```. 
 6. Project contains tests for contract VehicleOwnershipDatabase contract written in Javascript. 
-   To run tests type ```truffle test ``` from ```root``` directory. Disconnect with running Ganache instance to use Truffle built-in blockchain. 
+   To run tests type ```truffle test ``` from ```root``` directory. Disconnect a running Ganache instance to use Truffle built-in blockchain. 
 7. Project contains tests for React app in ```client/test``` package. From ```client``` directory run ```npm run test```.
