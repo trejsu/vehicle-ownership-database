@@ -41,7 +41,8 @@ export default class Content extends Component {
                 <div className={"col-sm-6"}>
                     <VehicleAddition
                         vehicleService={this.vehicleService}
-                        onChange={this.onAddingComponentChange.bind(this)}/>
+                        onChange={this.onAddingComponentChange.bind(this)}
+                        account={this.props.account}/>
                 </div>
                 <div className={"col-sm-6"}>
                     <MineVehicles
@@ -144,6 +145,5 @@ export default class Content extends Component {
             this.getProperComponents()
         );
     }
-
 
 }

@@ -1,35 +1,47 @@
 import React, {Component} from "react";
 
 export default class VehicleAddition extends Component {
-    state = {id: "", vehicleModel: "", vehicleType: "car", added: false};
+    state = {
+        id: "",
+        vehicleModel: "",
+        vehicleType: "car",
+        added: false
+    };
     vehicleService = this.props.vehicleService;
 
-    handleVehicleTypeChanged = (event) => {
+    componentWillReceiveProps(nextProps) {
+        if (this.accountChanged(nextProps)) {
+            this.setState({added: false});
+        }
+    }
+
+    accountChanged(nextProps) {
+        return this.props.account !== nextProps.account;
+    }
+
+    handleVehicleTypeChanged = (event) =>
         this.setState({
             vehicleType: event.target.value,
             added: false,
             error: false,
             alreadyExisting: false
         });
-    };
 
-    handleModelChanged = (event) => {
+    handleModelChanged = (event) =>
         this.setState({
             vehicleModel: event.target.value,
             added: false,
             error: false,
             alreadyExisting: false
-        })
-    };
+        });
 
-    handleIdChanged = (event) => {
+    handleIdChanged = (event) =>
         this.setState({
             id: event.target.value,
             added: false,
             error: false,
             alreadyExisting: false
-        })
-    };
+        });
 
     addVehicle = (vehicle) => {
         // this.setState({
@@ -46,9 +58,7 @@ export default class VehicleAddition extends Component {
                 });
                 this.props.onChange();
             })
-            .catch(error => {
-                console.log("Error occurred during adding vehicle", error)
-            })
+            .catch(error => console.log("Error occurred during adding vehicle", error))
     };
 
     handleRequestClicked = () => {
@@ -69,29 +79,26 @@ export default class VehicleAddition extends Component {
                     throw Error();
                 }
             })
-            .catch(() => {
+            .catch(() =>
                 this.setState({
                     error: true
                 })
-            })
-            .finally(() => {
+            )
+            .finally(() =>
                 this.setState({
                     blocked: false
-                });
-            });
+                })
+            );
     };
 
-    getIdInputWithPlaceholder = placeholder => {
-        return (
-            <div>
-                <input
-                    placeholder={placeholder}
-                    disabled={this.state.blocked}
-                    value={this.state.id}
-                    onChange={this.handleIdChanged}/>
-            </div>
-        )
-    };
+    getIdInputWithPlaceholder = placeholder =>
+        <div>
+            <input
+                placeholder={placeholder}
+                disabled={this.state.blocked}
+                value={this.state.id}
+                onChange={this.handleIdChanged}/>
+        </div>;
 
     getIdInput = () => {
         if (this.state.vehicleType === "car") {
@@ -107,37 +114,28 @@ export default class VehicleAddition extends Component {
         }
     };
 
-    getAlreadyExisting = () => {
-        return (
-            <div className="alert alert-danger" role="alert">
-                Vehicle with entered VIN / Serial number already exists.
-            </div>
-        );
-    };
+    getAlreadyExisting = () =>
+        <div className="alert alert-danger" role="alert">
+            Vehicle with entered VIN / Serial number already exists.
+        </div>;
 
-    getErrorMessage = () => {
-        return (
-            <div>
-                There was some error...
-            </div>
-        );
-    };
+    getErrorMessage = () =>
+        <div>
+            There was some error...
+        </div>;
 
-    getAdded = () => {
-        return <div className="alert alert-success" role="alert">
+    getAdded = () =>
+        <div className="alert alert-success" role="alert">
             Vehicle added to pending.
-        </div>
-    };
+        </div>;
 
-    getResult = () => {
-        return this.state.error ?
-            (this.state.alreadyExisting ?
-                this.getAlreadyExisting() :
-                this.getErrorMessage()) :
-            (this.state.added ?
-                this.getAdded() :
-                null);
-    };
+    getResult = () => this.state.error ?
+        (this.state.alreadyExisting ?
+            this.getAlreadyExisting() :
+            this.getErrorMessage()) :
+        (this.state.added ?
+            this.getAdded() :
+            null);
 
     render() {
         return (
