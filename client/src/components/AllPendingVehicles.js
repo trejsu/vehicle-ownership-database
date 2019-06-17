@@ -148,7 +148,7 @@ export default class AllPendingVehicles extends Component {
         </div>;
 
     getWait = () =>
-        <div>
+        <div className="alert alert-info" role="alert">
             Please wait...
         </div>;
 

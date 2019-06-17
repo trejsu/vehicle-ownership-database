@@ -110,7 +110,7 @@ export default class IncomingPendingTransfer extends Component {
 
     getWait = () => {
         return (
-            <div>
+            <div className="alert alert-info" role="alert">
                 Please wait...
             </div>
         )

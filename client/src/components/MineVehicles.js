@@ -201,7 +201,7 @@ export default class MineVehicles extends Component {
 
     getWait = () => {
         return (
-            <div>
+            <div className="alert alert-info" role="alert">
                 Please wait...
             </div>
         )
