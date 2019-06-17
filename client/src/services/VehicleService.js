@@ -205,7 +205,6 @@ export default class VehicleService {
         }
 
         const vehicleFromPendings = await this.contract.methods.waitingForApprovals(this.toBytes(id)).call();
-
         if (vehicleFromPendings[3]) {
             console.log('[VEHICLE SERVICE] Vehicle found in pendings: ', vehicleFromPendings);
 
@@ -213,13 +212,22 @@ export default class VehicleService {
 
             const isNotVehicleOwner = currentUser !== vehicleFromPendings[2];
 
-            const notApprovedByUser = await this.contract.methods
-                .notApprovingYet(this.toBytes(id))
+            const notApprovedByUser = await this.contract.methods.notApprovingYet(this.toBytes(id))
                 .call({from: currentUser});
 
             const isApprovable = isNotVehicleOwner && notApprovedByUser;
 
             return this.formatVehicle(id, vehicleFromPendings, isApprovable)
+        }
+
+        const vehiclesForUtilization = await this.contract.methods.vehicleForUtilization(this.toBytes(id)).call();
+        if (vehiclesForUtilization[3]) {
+            console.log('[VEHICLE SERVICE] Vehicle found in utilization: ', vehiclesForUtilization);
+
+            const currentUser = (await this.web3.eth.getAccounts())[0];
+            const isApprovable = currentUser !== vehiclesForUtilization[2];
+
+            return this.formatVehicle(id, vehiclesForUtilization, isApprovable)
         }
 
         console.log('[VEHICLE SERVICE] Vehicle %s not found!', id);
