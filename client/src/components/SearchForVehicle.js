@@ -62,10 +62,10 @@ export default class SearchForVehicle extends Component {
         let registeredIds;
         let pendingIds;
 
-        this.vehicleService.getRegisteredIdsWithReplaced()
+        this.vehicleService.getRegisteredIds()
             .then(response => {
                 registeredIds = response;
-                return this.vehicleService.getPendingIdsWithReplaced();
+                return this.vehicleService.getPendingIds();
             })
             .then(response => {
                 pendingIds = response;
