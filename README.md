@@ -16,7 +16,8 @@ app from Metamask
      - VIN number for cars
      - serial number for bikes
      - vehicle model
-   - after submitting new vehicle, it is stored in pending list, waiting for approval from two other users
+   - after submitting new vehicle, it is stored in pending list
+   - two users are required to approve vehicle registration
 2. Transferring vehicle:
    - user has ability to transfer owned vehicle to another existing user 
    - transfer has to be confirmed by vehicle receiver, until then it is stored in pending transfers list
@@ -31,7 +32,7 @@ app from Metamask
    
 ## For developers
 ### Requirements
-App is unboxed from [Drizzle](https://www.trufflesuite.com/boxes/drizzle) project. 
+App is unboxed from [React](https://www.trufflesuite.com/boxes/react) project. 
 1. Matamask 
 2. Ganache 
 3. Truffle framework
