@@ -19,7 +19,9 @@ export default class SearchForVehicle extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.propsChanged(nextProps)) {
-            this.search(this.state.id);
+            if (this.state.id !== "") {
+                this.search(this.state.id);
+            }
         }
     }
 
@@ -27,14 +29,13 @@ export default class SearchForVehicle extends Component {
         return this.props.change !== nextProps.change;
     }
 
-    handleIdChanged = (event) => {
+    handleIdChanged = event =>
         this.setState({
             id: event.target.value,
             downloaded: false,
             error: false,
             notFound: false
-        })
-    };
+        });
 
     getStatusByType = (id, registeredIds, utilizationIds, transferIds, pendingIds) => {
         if (utilizationIds.includes(id)) {
@@ -58,16 +59,17 @@ export default class SearchForVehicle extends Component {
                     vehicle: response
                 })
             })
-            .catch(() => {
+            .catch(error => {
+                console.log('Searching for vehicle failed', error);
                 this.setState({
                     error: true
                 });
             })
-            .finally(() => {
+            .finally(() =>
                 this.setState({
                     downloaded: true
-                });
-            });
+                })
+            );
     };
 
     handleRequestClicked = () => {
@@ -109,16 +111,17 @@ export default class SearchForVehicle extends Component {
                     throw Error();
                 }
             })
-            .catch(() => {
+            .catch(error => {
+                console.log(error);
                 this.setState({
                     error: true
                 })
             })
-            .finally(() => {
+            .finally(() =>
                 this.setState({
                     blocked: false
-                });
-            })
+                })
+            )
     };
 
     handleApproveClicked = (id) => {
@@ -130,36 +133,27 @@ export default class SearchForVehicle extends Component {
             });
     };
 
-    getVehicleInfo = () => {
-        return (
-            <div className={"found-vehicle"}>
-                Found vehicle
-                <VehicleInfo
-                    vehicle={this.state.vehicle}/>
-                {this.state.vehicle.approvable &&
-                <ApproveVehicle
-                    vehicleId={this.state.vehicle.id}
-                    handleApproveClicked={this.handleApproveClicked}/>
-                }
-            </div>
-        );
-    };
+    getVehicleInfo = () =>
+        <div className={"found-vehicle"}>
+            Found vehicle
+            <VehicleInfo
+                vehicle={this.state.vehicle}/>
+            {this.state.vehicle.approvable &&
+            <ApproveVehicle
+                vehicleId={this.state.vehicle.id}
+                handleApproveClicked={this.handleApproveClicked}/>
+            }
+        </div>;
 
-    getNotFound = () => {
-        return (
-            <div className="alert alert-warning" role="alert">
-                ID not found
-            </div>
-        );
-    };
+    getNotFound = () =>
+        <div className="alert alert-warning" role="alert">
+            ID not found
+        </div>;
 
-    getErrorMessage = () => {
-        return (
-            <div className="alert alert-danger" role="alert">
-                There was some error...
-            </div>
-        );
-    };
+    getErrorMessage = () =>
+        <div className="alert alert-danger" role="alert">
+            There was some error...
+        </div>;
 
     getVehicleResult() {
         return this.state.error ?
