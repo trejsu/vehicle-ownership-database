@@ -13,7 +13,7 @@ let contract;
 beforeAll(() => {
     console.log('Setting up ganache and web3...');
     const provider = ganache.provider();
-    provider.setMaxListeners(21);
+    provider.setMaxListeners(22);
     web3 = new Web3(provider);
 });
 
@@ -186,14 +186,52 @@ describe('VehicleService', () => {
             expect(pendingAfterApproval).toEqual([expectedVehicle]);
         });
 
+    it('getUserUtilizationPendings should return user vehicles requested for utilization', async () => {
+        jest.setTimeout(10000);
+        // given
+        const service = new VehicleService(web3, contract);
+        const vehicle = {
+            vehicleType: "car",
+            vehicleModel: "model",
+            id: "car123"
+        };
+        const expectedVehicle = {
+            id: 'car123',
+            model: "model",
+            owner: accounts[0],
+            type: "car"
+        };
+
+        await addVehicle(vehicle, accounts[0]);
+        await approveVehicle(vehicle.id, accounts[1]);
+        await approveVehicle(vehicle.id, accounts[2]);
+        await utilizeVehicle(vehicle.id, accounts[0]);
+
+        // when
+        const utilizationPendings = await service.getUserUtilizationPendings();
+
+        // then
+        expect(utilizationPendings).toEqual([expectedVehicle]);
+    });
+
 });
 
-async function addVehicle(vehicle, owner) {
+async function addVehicle(vehicle, user) {
     await contract.methods.addVehicle(
         web3.utils.fromAscii(vehicle.id),
         vehicle.vehicleModel,
         typeMapper.getVehicleCode(vehicle.vehicleType)
-    ).send({from: owner, gas: 3000000});
+    ).send({from: user, gas: 3000000});
+}
+
+async function approveVehicle(id, user) {
+    await contract.methods.approveVehicle(web3.utils.fromAscii(id))
+        .send({from: user, gas: 3000000});
+}
+
+async function utilizeVehicle(id, user) {
+    await contract.methods.utilizeVehicle(web3.utils.fromAscii(id))
+        .send({from: user, gas: 3000000});
 }
 
 const toBytes = x => web3.utils.fromAscii(x);

@@ -41,46 +41,7 @@ export default class VehicleService {
             });
     }
 
-    async getPendingApprovals() {
-        console.log('[VEHICLE SERVICE] Retrieving all registration pendings...');
-        return await this.getApprovals(
-            this.contract.methods.getPendingIds,
-            this.contract.methods.waitingForApprovals
-        );
-    }
-
-    async getUtilizationApprovals() {
-        console.log('[VEHICLE SERVICE] Retrieving all utilization pendings...');
-        return await this.getApprovals(
-            this.contract.methods.getUtilizationIds,
-            this.contract.methods.vehicleForUtilization
-        );
-    }
-
-    async getApprovals(getIds, getVehicle) {
-        const ids = (await getIds().call());
-        const vehicles = [];
-
-        for (let i = 0; i < ids.length; i++) {
-            const id = ids[i];
-            const vehicle = await getVehicle(id).call();
-            console.log('[VEHICLE SERVICE] Found vehicle waiting for approval', vehicle);
-            vehicles.push(this.getVehicleReturnObject(id, vehicle));
-        }
-        console.log("[VEHICLE SERVICE] Found %d vehicles waiting for approval", vehicles.length);
-        return vehicles;
-    }
-
-    getVehicleReturnObject(id, vehicle) {
-        return {
-            id: this.fromBytesWithReplace(id),
-            type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
-            model: vehicle[1],
-            owner: vehicle[2]
-        };
-    }
-
-    async getUserUtilizedVehicles() {
+    async getUserUtilizationPendings() {
         console.log('[VEHICLE SERVICE] Retrieving user utilization pendings...');
         return this.getUserVehicles(
             this.contract.methods.getUtilizationIds,
@@ -114,6 +75,15 @@ export default class VehicleService {
         }
         console.log("[VEHICLE SERVICE] Found %d vehicles", vehicles.length);
         return vehicles;
+    }
+
+    getVehicleReturnObject(id, vehicle) {
+        return {
+            id: this.fromBytesWithReplace(id),
+            type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
+            model: vehicle[1],
+            owner: vehicle[2]
+        };
     }
 
     async getCurrentUser() {
@@ -182,6 +152,28 @@ export default class VehicleService {
         return vehiclesToApprove;
     }
 
+    async getPendingApprovals() {
+        console.log('[VEHICLE SERVICE] Retrieving all registration pendings...');
+        return await this.getApprovals(
+            this.contract.methods.getPendingIds,
+            this.contract.methods.waitingForApprovals
+        );
+    }
+
+    async getApprovals(getIds, getVehicle) {
+        const ids = (await getIds().call());
+        const vehicles = [];
+
+        for (let i = 0; i < ids.length; i++) {
+            const id = ids[i];
+            const vehicle = await getVehicle(id).call();
+            console.log('[VEHICLE SERVICE] Found vehicle waiting for approval', vehicle);
+            vehicles.push(this.getVehicleReturnObject(id, vehicle));
+        }
+        console.log("[VEHICLE SERVICE] Found %d vehicles waiting for approval", vehicles.length);
+        return vehicles;
+    }
+
     async getAllUtilizationApprovalsPossibleToApprove() {
         console.log('[VEHICLE SERVICE] Retrieving utilization approvals possible to approve...');
 
@@ -207,6 +199,14 @@ export default class VehicleService {
 
         console.log("[VEHICLE SERVICE] Filtered %d approvals", vehiclesToApprove.length);
         return vehiclesToApprove;
+    }
+
+    async getUtilizationApprovals() {
+        console.log('[VEHICLE SERVICE] Retrieving all utilization pendings...');
+        return await this.getApprovals(
+            this.contract.methods.getUtilizationIds,
+            this.contract.methods.vehicleForUtilization
+        );
     }
 
     async searchForVehicle(id) {

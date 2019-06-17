@@ -99,7 +99,7 @@ export default class MineVehicles extends Component {
     }
 
     getUserUtilizedVehicles() {
-        this.vehicleService.getUserUtilizedVehicles()
+        this.vehicleService.getUserUtilizationPendings()
             .then(response => {
                 this.setState({
                     utilizedVehicles: response
