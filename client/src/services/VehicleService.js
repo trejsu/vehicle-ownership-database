@@ -276,14 +276,6 @@ export default class VehicleService {
             });
     }
 
-    async getTransferIds() {
-        console.log('[VEHICLE SERVICE] Retrieving all transfer id...');
-        return this.contract.methods.getTransferIds().call()
-            .then(response => {
-                return response.map(id => this.fromBytesWithReplace(id));
-            })
-    }
-
     async isTransferPossible(id, address) {
         console.log('[VEHICLE SERVICE] Check if transfer possible');
         const currentUser = (await this.web3.eth.getAccounts())[0];
@@ -309,6 +301,14 @@ export default class VehicleService {
 
     async getPendingIds() {
         return await this.getIds(this.contract.methods.getPendingIds);
+    }
+
+    async getTransferIds() {
+        return await this.getIds(this.contract.methods.getTransferIds);
+    }
+
+    async getUtilizationIds() {
+        return await this.getIds(this.contract.methods.getUtilizationIds);
     }
 
     async getIds(getIdsFunction) {

@@ -36,11 +36,24 @@ export default class SearchForVehicle extends Component {
         })
     };
 
-    search = (id) => {
+    getStatusByType = (id, registeredIds, utilizationIds, transferIds, pendingIds) => {
+        if (utilizationIds.includes(id)) {
+            return "utilize";
+        } else if (transferIds.includes(id)) {
+            return "transfer";
+        } else if (pendingIds.includes(id)) {
+            return "pending";
+        } else if (registeredIds.includes(id)) {
+            return "registered";
+        }
+    };
+
+    search = (id, status) => {
         console.log('[SEARCH FOR VEHICLE] Searching for %s', id);
         this.vehicleService.searchForVehicle(id)
             .then(response => {
                 console.log('[SEARCH FOR VEHICLE] Search for vehicle response', response);
+                response.status = status;
                 this.setState({
                     vehicle: response
                 })
@@ -65,17 +78,30 @@ export default class SearchForVehicle extends Component {
         });
 
         let registeredIds;
+        let utilizationIds;
+        let transferIds;
         let pendingIds;
 
         this.vehicleService.getRegisteredIds()
             .then(response => {
                 registeredIds = response;
+                return this.vehicleService.getUtilizationIds();
+            })
+            .then(response => {
+                utilizationIds = response;
+                return this.vehicleService.getTransferIds();
+            })
+            .then(response => {
+                transferIds = response;
                 return this.vehicleService.getPendingIds();
             })
             .then(response => {
                 pendingIds = response;
-                if (registeredIds.includes(id) || pendingIds.includes(id)) {
-                    return this.search(id);
+
+                let status = this.getStatusByType(id, registeredIds, utilizationIds, transferIds, pendingIds);
+
+                if (status) {
+                    return this.search(id, status);
                 } else {
                     this.setState({
                         notFound: true
