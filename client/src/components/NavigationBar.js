@@ -58,12 +58,7 @@ export default class NavigationBar extends Component {
         );
     };
 
-    getNavigationBar = () => {
-        return (
-            this.navigationOptions.map(option =>
-                this.getElement(option))
-        );
-    };
+    getNavigationBar = () => this.navigationOptions.map(this.getElement);
 
     render() {
         return (

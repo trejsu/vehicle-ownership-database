@@ -17,7 +17,7 @@ class App extends Component {
         this.state = {
             web3: null,
             vehicleService: null,
-            page: null,
+            page: 'private',
             account: null,
             intervalId: null
         };
@@ -70,7 +70,8 @@ class App extends Component {
                 <div className={"row"} id={"main"}>
                     <div className={"col-lg-8 offset-lg-2 col-md-8 offset-md-2 col-sm-10 offset-sm-1 col-xs-12"}>
                         <NavigationBar
-                            onNavigationChange={this.onNavigationChange.bind(this)}/>
+                            onNavigationChange={this.onNavigationChange.bind(this)}
+                            page={this.state.page}/>
                         <Content
                             vehicleService={this.state.vehicleService}
                             page={this.state.page}

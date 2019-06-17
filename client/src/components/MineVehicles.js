@@ -192,7 +192,7 @@ export default class MineVehicles extends Component {
     getDefault = () => {
         return (
             <div>
-                <div className={"mine-vehicles"}>
+                <div className="alert alert-info mine-vehicles" role="alert">
                     You don't have any vehicles registered yet.
                 </div>
             </div>
