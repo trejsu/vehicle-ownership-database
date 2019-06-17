@@ -197,19 +197,27 @@ export default class VehicleService {
 
     async searchForVehicle(id) {
         console.log('[VEHICLE SERVICE] Searching for vehicle %s', id);
-        const vehicleFromRegistry = await this.contract.methods.vehicleRegistry(this.toBytes(id)).call();
+        const currentUser = (await this.web3.eth.getAccounts())[0];
 
+        const vehicleFromRegistry = await this.contract.methods.vehicleRegistry(this.toBytes(id)).call();
         if (vehicleFromRegistry[3]) {
+            const transferIds = await this.contract.methods.getTransferIds().call();
+
+            if (transferIds.includes(this.toBytes(id))) {
+                const vehicleTransfer = await this.contract.methods.waitingForTransfers(this.toBytes(id)).call();
+
+                const isApprovable = currentUser === vehicleTransfer[1];
+
+                console.log('[VEHICLE SERVICE] Vehicle found in transfer: ', vehicleFromRegistry);
+                return this.formatVehicle(id, vehicleFromRegistry, isApprovable)
+            }
+
             console.log('[VEHICLE SERVICE] Vehicle found in registry: ', vehicleFromRegistry);
             return this.formatVehicle(id, vehicleFromRegistry, false)
         }
 
         const vehicleFromPendings = await this.contract.methods.waitingForApprovals(this.toBytes(id)).call();
         if (vehicleFromPendings[3]) {
-            console.log('[VEHICLE SERVICE] Vehicle found in pendings: ', vehicleFromPendings);
-
-            const currentUser = (await this.web3.eth.getAccounts())[0];
-
             const isNotVehicleOwner = currentUser !== vehicleFromPendings[2];
 
             const notApprovedByUser = await this.contract.methods.notApprovingYet(this.toBytes(id))
@@ -217,16 +225,15 @@ export default class VehicleService {
 
             const isApprovable = isNotVehicleOwner && notApprovedByUser;
 
+            console.log('[VEHICLE SERVICE] Vehicle found in pendings: ', vehicleFromPendings);
             return this.formatVehicle(id, vehicleFromPendings, isApprovable)
         }
 
         const vehiclesForUtilization = await this.contract.methods.vehicleForUtilization(this.toBytes(id)).call();
         if (vehiclesForUtilization[3]) {
-            console.log('[VEHICLE SERVICE] Vehicle found in utilization: ', vehiclesForUtilization);
-
-            const currentUser = (await this.web3.eth.getAccounts())[0];
             const isApprovable = currentUser !== vehiclesForUtilization[2];
 
+            console.log('[VEHICLE SERVICE] Vehicle found in utilization: ', vehiclesForUtilization);
             return this.formatVehicle(id, vehiclesForUtilization, isApprovable)
         }
 
