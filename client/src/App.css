@@ -153,6 +153,10 @@
     margin-left: 10px;
 }
 
+.vehicle-approve-action button {
+    width: 17%;
+}
+
 .vehicle-utilization-action {
     margin-left: 10px;
 }
