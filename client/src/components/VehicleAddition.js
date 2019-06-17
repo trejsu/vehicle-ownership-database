@@ -52,14 +52,11 @@ export default class VehicleAddition extends Component {
     };
 
     handleRequestClicked = () => {
-        // this.setState({
-        //     blocked: true
-        // });
-
         this.vehicleService.isIdAvailable(this.state.id)
-            .then(response => {
-                console.log(response);
-                if (response === true) {
+            .then(available => {
+                console.log("[VEHICLE ADDITION] %s VIN / Serial number is%s available.",
+                    this.state.id, available ? "" : " not");
+                if (available) {
                     return this.addVehicle(this.state);
                 } else {
                     this.setState({

@@ -30,10 +30,10 @@ export default class AllPendingVehicles extends Component {
 
     loadData() {
         this.vehicleService.getAllPendingApprovalsPossibleToApprove()
-            .then(response => {
-                console.log(response);
+            .then(vehicles => {
+                console.log('[ALL PENDING VEHICLES] Registration approvals possible to approve', vehicles);
                 this.setState({
-                    pendingApprovalVehicles: response
+                    pendingApprovalVehicles: vehicles
                 });
             })
             .catch(() => {
@@ -119,11 +119,10 @@ export default class AllPendingVehicles extends Component {
         const utilizeVehicles = this.state.utilizationApprovalVehicles
             .map(vehicle => ({...vehicle, status: "utilize"}));
 
-        console.log(pendingVehicles);
-        console.log(utilizeVehicles);
+        console.log('[ALL PENDING VEHICLES] Pending for registration: ', pendingVehicles);
+        console.log('[ALL PENDING VEHICLES] Pending for utilization:', utilizeVehicles);
 
         const vehicles = pendingVehicles.concat(utilizeVehicles);
-        console.log(vehicles);
         return (
             vehicles.map(vehicle => this.getVehicleToApprove(vehicle))
         );

@@ -70,13 +70,13 @@ export default class VehicleService {
     }
 
     async getUtilizationApprovals() {
-        console.log('[VEHICLE SERVICE] Retrieving all pending approvals...');
+        console.log('[VEHICLE SERVICE] Retrieving all utilization pendings...');
         const utilizedIds = (await this.contract.methods.getUtilizationIds().call());
         const vehicles = [];
 
         for (let i = 0; i < utilizedIds.length; i++) {
             const vehicle = await this.contract.methods.vehicleForUtilization(utilizedIds[i]).call();
-            console.log(vehicle);
+            console.log('[VEHICLE SERVICE] Found vehicle pending for utilization', vehicle);
             vehicles.push({
                 id: this.fromBytesWithReplace(utilizedIds[i]),
                 type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
@@ -85,7 +85,7 @@ export default class VehicleService {
             });
 
         }
-        console.log("[VEHICLE SERVICE] Found %d pending approvals", vehicles.length);
+        console.log("[VEHICLE SERVICE] Found %d utilization pendings", vehicles.length);
         return vehicles;
     }
 
@@ -193,7 +193,7 @@ export default class VehicleService {
         const currentUser = (await this.web3.eth.getAccounts())[0];
         const vehicles = (await this.getUtilizationApprovals());
 
-        console.log(vehicles);
+        console.log('[VEHICLE SERVICE] Vehicles pending for utilization:', vehicles);
 
         const vehiclesToApprove = [];
 
