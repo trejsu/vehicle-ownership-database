@@ -28,7 +28,12 @@ export default class SearchForVehicle extends Component {
     }
 
     handleIdChanged = (event) => {
-        this.setState({id: event.target.value})
+        this.setState({
+            id: event.target.value,
+            downloaded: false,
+            error: false,
+            notFound: false
+        })
     };
 
     search = (id) => {
@@ -37,13 +42,16 @@ export default class SearchForVehicle extends Component {
             .then(response => {
                 console.log('[SEARCH FOR VEHICLE] Search for vehicle response', response);
                 this.setState({
-                    vehicle: response,
-                    downloaded: true
+                    vehicle: response
                 })
             })
             .catch(() => {
                 this.setState({
-                    error: true,
+                    error: true
+                });
+            })
+            .finally(() => {
+                this.setState({
                     downloaded: true
                 });
             });
@@ -53,9 +61,6 @@ export default class SearchForVehicle extends Component {
         const id = this.state.id;
 
         this.setState({
-            vehicle: null,
-            error: false,
-            downloaded: false,
             blocked: true
         });
 
