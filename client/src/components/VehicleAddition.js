@@ -32,11 +32,6 @@ export default class VehicleAddition extends Component {
     };
 
     addVehicle = (vehicle) => {
-        this.setState({
-            vehicleModel: "",
-            id: ""
-        });
-
         return this.vehicleService.addVehicle(vehicle)
             .then(() => {
                 this.setState({
@@ -46,9 +41,7 @@ export default class VehicleAddition extends Component {
                 });
                 this.props.onChange();
             })
-            .catch(error => {
-                console.log("Error occurred during adding vehicle", error)
-            })
+            .catch(error => console.log("Error occurred during adding vehicle", error))
     };
 
     handleRequestClicked = () => {
