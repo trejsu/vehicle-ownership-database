@@ -14,12 +14,11 @@ let contract;
 beforeAll(() => {
     console.log('Setting up ganache and web3...');
     const provider = ganache.provider();
-    provider.setMaxListeners(24);
+    provider.setMaxListeners(25);
     web3 = new Web3(provider);
 });
 
 beforeEach(async () => {
-    console.log('Deploying contract...');
     accounts = await web3.eth.getAccounts();
     const contractInstance = new web3.eth.Contract(VehicleOwnershipDatabase['abi']);
     const contractDeployed = contractInstance.deploy({
@@ -269,6 +268,41 @@ describe('VehicleService', () => {
 
         // then
         expect(incomingTransfers).toEqual([expectedVehicle]);
+    });
+
+    it('getAllUtilizationRequestsPossibleToApprove should not return current user requests', async () => {
+        // given
+        const service = new VehicleService(web3, contract);
+        const vehicle1 = {
+            vehicleType: "car",
+            vehicleModel: "model",
+            id: "car123"
+        };
+        const vehicle2 = {
+            vehicleType: "car",
+            vehicleModel: "model",
+            id: "car456"
+        };
+        const expectedVehicle = {
+            id: 'car456',
+            model: "model",
+            owner: accounts[1],
+            type: "car"
+        };
+
+        // when
+        await register(vehicle1, accounts[0]);
+        await register(vehicle2, accounts[1]);
+        await approveRegistration(vehicle1.id, accounts[1]);
+        await approveRegistration(vehicle1.id, accounts[2]);
+        await approveRegistration(vehicle2.id, accounts[0]);
+        await approveRegistration(vehicle2.id, accounts[2]);
+        await utilize(vehicle1.id, accounts[0]);
+        await utilize(vehicle2.id, accounts[1]);
+        const utilizationRequests = await service.getAllUtilizationRequestsPossibleToApprove();
+
+        // then
+        expect(utilizationRequests).toEqual([expectedVehicle]);
     });
 
 });
