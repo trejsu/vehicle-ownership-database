@@ -109,7 +109,6 @@ export default class Content extends Component {
     }
 
     onPrivateComponentChange() {
-        console.log('onPrivateComponentChange');
         this.setState(prevState => ({
             privateComponentChange: !prevState.privateComponentChange
         }));

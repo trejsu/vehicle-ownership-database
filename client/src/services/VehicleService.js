@@ -131,21 +131,12 @@ export default class VehicleService {
             let vehicle = vehicles[i];
             let vehicleId = this.toBytes(vehicle.id);
 
-            console.log('[VEHICLE SERVICE] Checking if vehicle %s is approvable by %s', vehicle.id, currentUser);
-
             const notApprovedByCurrentUser = await this.contract.methods
                 .notApprovingYet(vehicleId)
                 .call({from: currentUser});
 
-            console.log('[VEHICLE SERVICE] Vehicle %s approved by %s already.',
-                notApprovedByCurrentUser ? 'was not' : 'was',
-                currentUser);
-
             if (notApprovedByCurrentUser && vehicle.owner !== currentUser) {
-                console.log('[VEHICLE SERVICE] Approve possible');
                 vehiclesToApprove.push(vehicle);
-            } else {
-                console.log('[VEHICLE SERVICE] Approve not possible');
             }
         }
 
@@ -168,7 +159,6 @@ export default class VehicleService {
         for (let i = 0; i < ids.length; i++) {
             const id = ids[i];
             const vehicle = await getVehicle(id).call();
-            console.log('[VEHICLE SERVICE] Found vehicle waiting for approval', vehicle);
             vehicles.push(this.getVehicleReturnObject(id, vehicle));
         }
         console.log("[VEHICLE SERVICE] Found %d vehicles waiting for approval", vehicles.length);
@@ -188,13 +178,8 @@ export default class VehicleService {
         for (let i = 0; i < vehicles.length; i++) {
             let vehicle = vehicles[i];
 
-            console.log('[VEHICLE SERVICE] Checking if vehicle %s is approvable by %s', vehicle.id, currentUser);
-
             if (vehicle.owner !== currentUser) {
-                console.log('[VEHICLE SERVICE] Approve possible');
                 vehiclesToApprove.push(vehicle);
-            } else {
-                console.log('[VEHICLE SERVICE] Approve not possible');
             }
         }
 

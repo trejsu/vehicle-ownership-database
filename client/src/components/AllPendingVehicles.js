@@ -113,70 +113,50 @@ export default class AllPendingVehicles extends Component {
         );
     };
 
-    getPendingApprovalVehicleInfos = () => {
+    getPendingVehicleInfos = () => {
         const pendingVehicles = this.state.pendingApprovalVehicles
             .map(vehicle => ({...vehicle, status: "pending"}));
         const utilizeVehicles = this.state.utilizationApprovalVehicles
             .map(vehicle => ({...vehicle, status: "utilize"}));
 
-        console.log('[ALL PENDING VEHICLES] Pending for registration: ', pendingVehicles);
-        console.log('[ALL PENDING VEHICLES] Pending for utilization:', utilizeVehicles);
-
-        const vehicles = pendingVehicles.concat(utilizeVehicles);
-        return (
-            vehicles.map(vehicle => this.getVehicleToApprove(vehicle))
-        );
+        return pendingVehicles
+            .concat(utilizeVehicles)
+            .map(this.getVehicleToApprove);
     };
 
-    getPendingApprovalVehiclesContent = () => {
-        return (
-            <div>
-                <div className={"all-pending-vehicles-title"}>
-                    List of all pending approvals
-                </div>
-                {this.getPendingApprovalVehicleInfos()}
+    getPendingVehiclesContent = () =>
+        <div>
+            <div className={"all-pending-vehicles-title"}>
+                List of all pending approvals
             </div>
-        );
-    };
+            {this.getPendingVehicleInfos()}
+        </div>;
 
-    getVehicles = () => {
-        const content = this.state.pendingApprovalVehicles &&
-        this.state.pendingApprovalVehicles.length > 0 ?
-            this.getPendingApprovalVehiclesContent() :
-            this.getDefault();
+    getVehicles = () => this.pendingVehiclesPresent() ?
+        this.getPendingVehiclesContent() :
+        this.getDefault();
 
-        return (
-            content
-        )
-    };
+    pendingVehiclesPresent = () =>
+        this.state.pendingApprovalVehicles.length > 0 ||
+        this.state.utilizationApprovalVehicles.length > 0;
 
-    getDefault = () => {
-        return (
-            <div>
-                <div className="alert alert-info mine-vehicles" role="alert">
-                    There are no pending approvals at the moment.
-                </div>
+    getDefault = () =>
+        <div>
+            <div className="alert alert-info mine-vehicles" role="alert">
+                There are no pending approvals at the moment.
             </div>
-        )
-    };
+        </div>;
 
-    getWait = () => {
-        return (
-            <div>
-                Please wait...
-            </div>
-        )
-    };
+    getWait = () =>
+        <div>
+            Please wait...
+        </div>;
 
     render() {
-        const content = this.state.downloadedPending && this.state.downloadedUtilization ?
+        return this.state.downloadedPending && this.state.downloadedUtilization ?
             (this.state.error ?
                 this.getAllPendingApprovalsDownloadError() :
                 this.getVehicles()) :
             this.getWait();
-
-        return (
-            content
-        );
     }
 }
