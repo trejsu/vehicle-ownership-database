@@ -32,7 +32,6 @@ export default class VehicleService {
             });
     }
 
-    // todo: validation of id
     addVehicle(vehicle) {
         console.log('[VEHICLE SERVICE] Adding vehicle', vehicle);
         return this.web3.eth.getAccounts()
@@ -82,11 +81,13 @@ export default class VehicleService {
     }
 
     getVehicleReturnObject(id, vehicle) {
+        console.log('vehicle', vehicle);
         return {
             id: this.fromBytesWithReplace(id),
             type: this.typeMapper.getVehicleName(parseInt(vehicle[0])),
             model: vehicle[1],
-            owner: vehicle[2]
+            owner: vehicle[2],
+            approvals: vehicle[4]
         };
     }
 

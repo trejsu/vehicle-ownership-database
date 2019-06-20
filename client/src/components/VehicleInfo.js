@@ -49,6 +49,11 @@ export default class VehicleInfo extends Component {
                 </div>
 
                 {this.getIdInfo()}
+
+                <div className={"approvals " + this.vehicle.status + "-label"}>
+                    {/*todo: extract */}
+                    {this.vehicle.status === 'pending' ? this.vehicle.approvals + " / 2 approvals" : ""}
+                </div>
             </div>
         );
     }

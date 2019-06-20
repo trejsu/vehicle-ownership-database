@@ -200,3 +200,7 @@
 .incoming-transfers {
     margin-top: 20px;
 }
+
+.approvals {
+    text-align: right;
+}
