@@ -1,9 +1,9 @@
 import VehicleOwnershipDatabase from "../contracts/VehicleOwnershipDatabase";
 import VehicleTypeMapper from "../utils/vehicleTypeMapper";
 
-export default class VehicleService {
-    GAS = "3000000";
+const GAS = "3000000";
 
+export default class VehicleService {
     constructor(web3, contract) {
         if (typeof web3 === 'undefined') {
             throw new Error('Cannot instantiate VehicleService directly. Use init function instead.');
@@ -259,7 +259,7 @@ export default class VehicleService {
         return this.web3.eth.getAccounts()
             .then(accounts => {
                 return this.contract.methods.transferVehicle(this.toBytes(id), address)
-                    .send({from: accounts[0], gas: this.GAS})
+                    .send({from: accounts[0], gas: GAS})
             });
     }
 
@@ -267,7 +267,7 @@ export default class VehicleService {
         return this.web3.eth.getAccounts()
             .then(accounts => {
                 return this.contract.methods.approveVehicle(this.toBytes(id))
-                    .send({from: accounts[0], gas: this.GAS})
+                    .send({from: accounts[0], gas: GAS})
             });
     }
 
@@ -275,7 +275,7 @@ export default class VehicleService {
         return this.web3.eth.getAccounts()
             .then(accounts => {
                 return this.contract.methods.approveUtilization(this.toBytes(id))
-                    .send({from: accounts[0], gas: this.GAS})
+                    .send({from: accounts[0], gas: GAS})
             });
     }
 
@@ -283,7 +283,7 @@ export default class VehicleService {
         return this.web3.eth.getAccounts()
             .then(accounts => {
                 return this.contract.methods.utilizeVehicle(this.toBytes(id))
-                    .send({from: accounts[0], gas: this.GAS})
+                    .send({from: accounts[0], gas: GAS})
             });
     }
 
@@ -291,20 +291,36 @@ export default class VehicleService {
         return this.web3.eth.getAccounts()
             .then(accounts => {
                 return this.contract.methods.approveTransfer(this.toBytes(id))
-                    .send({from: accounts[0], gas: this.GAS})
+                    .send({from: accounts[0], gas: GAS})
             });
     }
 
     async isTransferPossible(id, address) {
         console.log('[VEHICLE SERVICE] Check if transfer possible');
-        const currentUser = (await this.web3.eth.getAccounts())[0];
+        const currentUser = await this.getCurrentUser();
 
-        const registeredIds = (await this.contract.methods.getRegisteredIds().call());
-        const transferIds = (await this.contract.methods.getTransferIds().call());
+        const registeredIds = (await this.contract.methods.getRegisteredIds().call())
+            .map(this.fromBytesWithReplace);
+        const transferIds = (await this.contract.methods.getTransferIds().call())
+            .map(this.fromBytesWithReplace);
 
-        return registeredIds.includes(this.toBytes(id)) &&
-            !transferIds.includes(this.toBytes(id)) &&
-            currentUser !== address;
+        const requiredConditions = [{
+            condition: registeredIds.includes(id),
+            reason: `You do not own vehicle ${id}. You can transfer only your registered vehicles!`
+        }, {
+            condition: !transferIds.includes(id),
+            reason: `Vehicle ${id} is already in transfer!`
+        }, {
+            condition: currentUser !== address,
+            reason: `You cannot transfer vehicle to yourself!`
+        }];
+
+        const brokenCondition = requiredConditions.find(x => !x.condition);
+        const conditionsFulfilled = brokenCondition === undefined;
+
+        return conditionsFulfilled ?
+            {transferPossible: true, reason: ""} :
+            {transferPossible: false, reason: brokenCondition.reason};
     }
 
     async isIdAvailable(id) {

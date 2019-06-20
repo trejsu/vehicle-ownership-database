@@ -88,7 +88,7 @@ class App extends Component {
     render() {
         if (!this.state.web3) {
             return (
-                <div>
+                <div className="alert alert-info" role="alert">
                     Loading Web3, accounts, and contract...
                 </div>
             );

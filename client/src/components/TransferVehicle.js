@@ -33,9 +33,11 @@ export default class TransferVehicle extends Component {
                 });
                 this.props.onChange();
             })
-            .catch(() => {
+            .catch(error => {
+                console.log('transferVehicle error', error.message);
                 this.setState({
-                    error: true
+                    error: true,
+                    errorMessage: error.message
                 });
             })
             .finally(() => {
@@ -61,48 +63,53 @@ export default class TransferVehicle extends Component {
             blocked: true
         });
 
-
         this.vehicleService.isTransferPossible(id, address)
             .then((response) => {
                 console.log(response);
-                if (response === true) {
+                if (response.transferPossible) {
                     return this.transfer(id, address);
                 } else {
                     this.setState({
                         transferPossible: false,
-                        blocked: false
+                        blocked: false,
+                        transferNotPossibleReason: response.reason,
+                        error: true
                     });
-                    throw Error();
+                    // throw Error();
                 }
             })
-            .catch(() => {
+            .catch(error => {
+                console.log('isTransferPossible error', error);
                 this.setState({
-                    error: true
+                    error: true,
                 })
             });
     };
 
     getTransferPositiveInfo = () => {
         return (
-            <div>
-                Vehicle transferred
+            <div className="alert alert-success" role="alert">
+                Vehicle transfer requested successfully! Transaction will be finished after receiver approves the
+                transfer.
             </div>
         );
     };
 
-    getErrorMessage = () => {
-        return !this.state.transferPossible ?
-            (
-                <div>
-                    Cannot transfer vehicle {this.state.id}
-                </div>
-            ) :
-            (
-                <div>
-                    There was some error...
-                </div>
-            );
-    };
+    getErrorMessage = () => !this.state.transferPossible ?
+        this.getTransferNotPossibleError() :
+        this.getDefaultError();
+
+    getDefaultError = () =>
+        <div className="alert alert-danger" role="alert">
+            {this.state.errorMessage ?
+                this.state.errorMessage :
+                "Unexpected error occurred."}
+        </div>;
+
+    getTransferNotPossibleError = () =>
+        <div className="alert alert-danger" role="alert">
+            {this.state.transferNotPossibleReason}
+        </div>;
 
     getTransferResult() {
         return this.state.error ?
