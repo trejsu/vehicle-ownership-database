@@ -1,7 +1,10 @@
 import React, {Component} from "react";
 
 export default class NavigationBar extends Component {
-    state = {page: this.props.page};
+    state = {
+        account: this.props.account,
+        page: this.props.page
+    };
 
     navigationOptions = [{
         pageKey: "private",
@@ -16,6 +19,12 @@ export default class NavigationBar extends Component {
 
     componentDidMount() {
         this.onNavigationChange = this.props.onNavigationChange;
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        this.setState({
+            account: nextProps.account
+        });
     }
 
     onNavigationButtonClick = event => {
@@ -58,15 +67,36 @@ export default class NavigationBar extends Component {
         );
     };
 
-    getNavigationBar = () => this.navigationOptions.map(this.getElement);
+    getAccountInformation = () => {
+        return (
+            <div className={"col-xs-12"} title={this.state.account}>
+                <div>
+                    Current account id
+                </div>
+                <div>
+                    {this.state.account}
+                </div>
+            </div>
+        );
+    };
+
+    getNavigationBar = () => {
+        return (
+            <div className={"row"}>
+                {this.navigationOptions.map(this.getElement)}
+            </div>
+        );
+    };
 
     render() {
         return (
             <div className={"row navigation-panel"}>
+                <div className={'col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12 col-xs-12'}>
+                    {this.getAccountInformation()}
+                </div>
+
                 <div className={"col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12 col-xs-12"}>
-                    <div className={"row"}>
-                        {this.getNavigationBar()}
-                    </div>
+                    {this.getNavigationBar()}
                 </div>
             </div>
         );
