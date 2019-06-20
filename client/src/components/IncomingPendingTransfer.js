@@ -48,46 +48,36 @@ export default class IncomingPendingTransfer extends Component {
             });
     }
 
-    getVehiclesDownloadError = () => {
-        return (
-            <div>
-                Something went wrong ...
-            </div>
-        )
-    };
+    getVehiclesDownloadError = () =>
+        <div>
+            Something went wrong ...
+        </div>;
 
-    handleApproveClicked = (id) => {
+    handleApproveClicked = id =>
         this.vehicleService.approveTransfer(id)
             .then(() => {
                 console.log("transfer approved ", id);
                 this.props.onChange();
             });
-    };
 
-    getIncomingPendingTransferVehicleInfos = (vehicles) => {
-        return (
-            vehicles.map(vehicle =>
-                <div key={vehicle.id + vehicle.status}>
-                    <VehicleInfo
-                        vehicle={vehicle}/>
-                    <ApproveVehicle
-                        vehicleId={vehicle.id}
-                        handleApproveClicked={this.handleApproveClicked}/>
-                </div>
-            )
-        );
-    };
-
-    getVehiclesContent = (vehicles) => {
-        return (
-            <div>
-                <div className={"mine-vehicles-title"}>
-                    List of incoming pending transfer
-                </div>
-                {this.getIncomingPendingTransferVehicleInfos(vehicles)}
+    getIncomingPendingTransferVehicleInfos = vehicles =>
+        vehicles.map(vehicle =>
+            <div key={vehicle.id + vehicle.status}>
+                <VehicleInfo
+                    vehicle={vehicle}/>
+                <ApproveVehicle
+                    vehicleId={vehicle.id}
+                    handleApproveClicked={this.handleApproveClicked}/>
             </div>
         );
-    };
+
+    getVehiclesContent = vehicles =>
+        <div className={"incoming-transfers"}>
+            <div className={"mine-vehicles-title"}>
+                Incoming pending transfers
+            </div>
+            {this.getIncomingPendingTransferVehicleInfos(vehicles)}
+        </div>;
 
     getVehicles = () => {
         const vehicles = this.state.vehicles
@@ -98,23 +88,17 @@ export default class IncomingPendingTransfer extends Component {
             this.getDefault();
     };
 
-    getDefault = () => {
-        return (
-            <div>
-                <div className="alert alert-info incoming-pending-transfer-vehicles" role="alert">
-                    No transfers to approve at the moment.
-                </div>
+    getDefault = () =>
+        <div>
+            <div className="alert alert-info incoming-pending-transfer-vehicles" role="alert">
+                No transfers to approve at the moment.
             </div>
-        )
-    };
+        </div>;
 
-    getWait = () => {
-        return (
-            <div className="alert alert-info" role="alert">
-                Please wait...
-            </div>
-        )
-    };
+    getWait = () =>
+        <div className="alert alert-info" role="alert">
+            Please wait...
+        </div>;
 
     render() {
         return this.state.download ?

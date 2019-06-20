@@ -85,10 +85,7 @@ export default class NavigationBar extends Component {
         return (
             <div className={"col-xs-12"} title={this.state.account}>
                 <div>
-                    Current account id
-                </div>
-                <div>
-                    {this.state.account}
+                    Account: {this.state.account}
                 </div>
             </div>
         );
@@ -98,23 +95,14 @@ export default class NavigationBar extends Component {
         if (this.state.network) {
             return (
                 <div>
-                    <div>
-                        Current network
-                    </div>
-                    <div>
-                        {this.state.networkId}
-                    </div>
+                    Network: {this.state.networkId}
                 </div>
             );
         } else {
             return (
                 <div>
                     <div>
-                        Current network
-                    </div>
-
-                    <div>
-                        {this.state.networkId}
+                        Network: {this.state.networkId}
                     </div>
 
                     <div className={"wrong-neighborhood"}>
@@ -123,12 +111,8 @@ export default class NavigationBar extends Component {
                         </div>
 
                         <div>
-                            You came to the wrong neighborhood!
+                            Selected network is not supported!
                         </div>
-                    </div>
-
-                    <div>
-                        Change your network
                     </div>
                 </div>
             );
@@ -155,7 +139,7 @@ export default class NavigationBar extends Component {
 
     getContent = () => {
         return this.state.network &&
-            <div className={"col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12 col-xs-12"}>
+            <div className={"col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12 col-xs-12 navigation-bar"}>
                 {this.getNavigationBar()}
             </div>
     };

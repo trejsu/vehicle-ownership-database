@@ -3,7 +3,8 @@
 }
 
 .network-information {
-    background-color: lightgreen;
+    background-color: #64aaff;
+    color: white
 }
 
 .wrong-neighborhood {
@@ -15,7 +16,8 @@
 }
 
 .account-information {
-    background-color: #ffc107;
+    background-color: #545b62;
+    color: white
 }
 
 .navigation-panel {
@@ -172,6 +174,7 @@
 
 .vehicle-approve-action button {
     width: 17%;
+    min-width: 90px;
 }
 
 .vehicle-utilization-action {
@@ -188,4 +191,12 @@
 
 .incoming-pending-transfer-vehicles {
     margin-top: 30px;
+}
+
+.navigation-bar {
+    margin-top: 20px;
+}
+
+.incoming-transfers {
+    margin-top: 20px;
 }
