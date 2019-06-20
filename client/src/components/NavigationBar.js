@@ -1,8 +1,10 @@
 import React, {Component} from "react";
+import VehicleOwnershipDatabase from "../contracts/VehicleOwnershipDatabase";
 
 export default class NavigationBar extends Component {
     state = {
         account: this.props.account,
+        networkId: this.props.networkId,
         page: this.props.page
     };
 
@@ -19,11 +21,23 @@ export default class NavigationBar extends Component {
 
     componentDidMount() {
         this.onNavigationChange = this.props.onNavigationChange;
+        const network = VehicleOwnershipDatabase.networks[this.state.networkId];
+        this.setState({
+            network: network
+        })
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
+        if (nextProps.networkId !== this.state.networkId) {
+            const network = VehicleOwnershipDatabase.networks[nextProps.networkId];
+            this.setState({
+                network: network
+            })
+        }
+
         this.setState({
-            account: nextProps.account
+            account: nextProps.account,
+            networkId: nextProps.networkId
         });
     }
 
@@ -80,6 +94,57 @@ export default class NavigationBar extends Component {
         );
     };
 
+    getNetworkContent = () => {
+        if (this.state.network) {
+            return (
+                <div>
+                    <div>
+                        Current network
+                    </div>
+                    <div>
+                        {this.state.networkId}
+                    </div>
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <div>
+                        Current network
+                    </div>
+
+                    <div>
+                        {this.state.networkId}
+                    </div>
+
+                    <div className={"wrong-neighborhood"}>
+                        <div className={"caution"}>
+                            CAUTION
+                        </div>
+
+                        <div>
+                            You came to the wrong neighborhood!
+                        </div>
+                    </div>
+
+                    <div>
+                        Change your network
+                    </div>
+                </div>
+            );
+        }
+    };
+
+    getNetworkInformation = () => {
+        const content = this.getNetworkContent();
+
+        return this.state.networkId && (
+            <div className={"col-xs-12"} title={this.state.account}>
+                {content}
+            </div>
+        );
+    };
+
     getNavigationBar = () => {
         return (
             <div className={"row"}>
@@ -88,16 +153,25 @@ export default class NavigationBar extends Component {
         );
     };
 
+    getContent = () => {
+        return this.state.network &&
+            <div className={"col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12 col-xs-12"}>
+                {this.getNavigationBar()}
+            </div>
+    };
+
     render() {
         return (
             <div className={"row navigation-panel"}>
-                <div className={'col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12 col-xs-12'}>
+                <div className={'col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12 col-xs-12 network-information'}>
+                    {this.getNetworkInformation()}
+                </div>
+
+                <div className={'col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12 col-xs-12 account-information'}>
                     {this.getAccountInformation()}
                 </div>
 
-                <div className={"col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-sm-12 col-xs-12"}>
-                    {this.getNavigationBar()}
-                </div>
+                {this.getContent()}
             </div>
         );
     }

@@ -2,6 +2,22 @@
     margin: 0 15px;
 }
 
+.network-information {
+    background-color: lightgreen;
+}
+
+.wrong-neighborhood {
+    font-weight: bold;
+}
+
+.caution {
+    color: red;
+}
+
+.account-information {
+    background-color: #ffc107;
+}
+
 .navigation-panel {
     margin-top: 25px;
     margin-bottom: 30px;
@@ -28,6 +44,7 @@
 .pending {
     background-color: #ffc107;
 }
+
 .utilize {
     background: #a19da0;
     color: white;
@@ -118,7 +135,7 @@
 }
 
 .vehicle-type-label {
-    float:left;
+    float: left;
 }
 
 .vehicle-status-label {

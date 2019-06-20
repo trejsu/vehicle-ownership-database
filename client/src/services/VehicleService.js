@@ -19,13 +19,17 @@ export default class VehicleService {
     }
 
     static initContract(web3) {
-        return web3.eth.net.getId().then(networkId => {
-            const deployedNetwork = VehicleOwnershipDatabase.networks[networkId];
-            return new web3.eth.Contract(
-                VehicleOwnershipDatabase.abi,
-                deployedNetwork && deployedNetwork.address,
-            );
-        });
+        return web3.eth.net.getId()
+            .then(networkId => {
+                const deployedNetwork = VehicleOwnershipDatabase.networks[networkId];
+
+                if (deployedNetwork) {
+                    return new web3.eth.Contract(
+                        VehicleOwnershipDatabase.abi,
+                        deployedNetwork && deployedNetwork.address,
+                    );
+                }
+            });
     }
 
     // todo: validation of id
