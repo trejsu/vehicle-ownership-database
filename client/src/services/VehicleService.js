@@ -19,6 +19,10 @@ export default class VehicleService {
     }
 
     static initContract(web3) {
+
+        console.log("[CONTRACT INIT ] retrieved address: " + process.env.REACT_APP_VEHICLE_CONTRACT);
+        console.log(process.env);
+
         return web3.eth.net.getId()
             .then(networkId => {
                 const deployedNetwork = VehicleOwnershipDatabase.networks[networkId];
@@ -26,7 +30,7 @@ export default class VehicleService {
                 if (deployedNetwork) {
                     return new web3.eth.Contract(
                         VehicleOwnershipDatabase.abi,
-                        deployedNetwork && deployedNetwork.address,
+                        process.env.REACT_APP_VEHICLE_CONTRACT,
                     );
                 }
             });
