@@ -41,7 +41,7 @@ App is unboxed from [React](https://www.trufflesuite.com/boxes/react) project.
 ### Installation
 1. In the ```client``` directory we run React app. Type ```npm install``` to download project dependencies. 
 2. We simulate database with in-memory blockchain instance, so make sure that you have Ganache running on port 7547 with network id 5777. 
-2. Project has two contracts written in solidity. To compile and deploy it in network type ```truffle migrate --network develop``` from project root. 
+2. Project has two contracts written in solidity. To compile and deploy it in network type in project root firstly ```npm install```, then ```truffle migrate --network develop``` from project root. 
 5. If you have successfully deployed contract run the client app from ```client``` directory ```npm start```. 
 6. Project contains tests for contract VehicleOwnershipDatabase contract written in Javascript. 
    To run tests type ```truffle test ``` from ```root``` directory. Disconnect a running Ganache instance to use Truffle built-in blockchain. 
